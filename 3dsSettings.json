@@ -6,6 +6,7 @@
 			"link3dsToConsole": true
 		},
 		"libraries": [
+		"haxe3ds"
 		],
 		"defines": [],
 		"compileAsCIA": true,
