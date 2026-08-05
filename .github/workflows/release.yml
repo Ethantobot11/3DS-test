@@ -8,7 +8,7 @@ permissions:
 
 env:
   PROJECT_NAME: Deltarune-3DS
-  REPO_PATH: Ethantobot11/FNF-Silly-Singles-Android-Port-V1.0
+  REPO_PATH: Ethantobot11/3DS-test
 
 jobs:
   get-commit-hash:
