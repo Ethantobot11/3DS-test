@@ -128,17 +128,17 @@ jobs:
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
-          cd .haxelib/libncsnd/git
+          cd $GITHUB_WORKSPACE/.haxelib/libncsnd/git
           make install
           cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
           cp include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
 
-          cd ../../libcwav/git
+          cd $GITHUB_WORKSPACE/.haxelib/libcwav/git
           make install
-          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/
+          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
           cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
 
-          cd ../../../
+          cd $GITHUB_WORKSPACE
           haxelib run haxe3ds -c -Dnx -Dno_pch
 
       - name: Archive and Upload Workspace for Inspection
