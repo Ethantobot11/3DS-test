@@ -125,11 +125,16 @@ jobs:
           export RANLIB=arm-none-eabi-ranlib
 
           haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
-
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd --quiet
-
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
           
+          cd .haxelib/libncsnd/git
+          make install
+
+          cd ../../libcwav/git
+          make install
+
+          cd ../../../
           haxelib run haxe3ds -c -Dnx -Dno_pch
 
       - name: Archive and Upload Workspace for Inspection

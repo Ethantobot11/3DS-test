@@ -57,13 +57,20 @@ int getHashTableLength(int numEntries) {
 #include "haxe3ds_Utils.h"
 
 namespace FSD {
-FS_Archive sdmcRoot;
-FS_Archive get_sdmcRoot() {
-	if (sdmcRoot == 0) {
-		FSUSER_OpenArchive(&sdmcRoot, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
-	}
-	return sdmcRoot;
+    extern FS_Archive sdmcRoot;
+    FS_Archive get_sdmcRoot();
 }
+')
+
+@:cppFileCode('
+namespace FSD {
+    FS_Archive sdmcRoot = 0;
+    FS_Archive get_sdmcRoot() {
+        if (sdmcRoot == 0) {
+            FSUSER_OpenArchive(&sdmcRoot, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
+        }
+        return sdmcRoot;
+    }
 }
 ')
 class FS {
