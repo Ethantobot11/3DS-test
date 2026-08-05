@@ -6,7 +6,7 @@
 			"link3dsToConsole": true
 		},
 		"libraries": [
-		"haxe3ds"
+			"haxe3ds"
 		],
 		"defines": [],
 		"compileAsCIA": true,
@@ -18,7 +18,7 @@
 	},
 	"metadata": {
 		"title": "Deltarune",
-		"description": "Lol IDK fr",
+		"description": "I forgot old dec",
 		"author": "Ethantobot"
 	}
 }

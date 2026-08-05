@@ -10,7 +10,8 @@ import citro.math.CitroMath;
  * 
  * @since 1.1.0
  */
-@:include("citro/CitroGame.h")
+@:cppInclude("citro/CitroGame.h")
+@:cppInclude("3ds.h")
 class CitroCamera extends CitroObject {
 	/**
 	 * Don't use this.

@@ -21,6 +21,7 @@ using StringTools;
 #include <citro3d.h>
 #include "citro/CitroGame.h"
 #include "haxe3ds_Utils.h"
+#include "3ds.h"
 ')
 class CitroSprite extends CitroObject {
 	/**
