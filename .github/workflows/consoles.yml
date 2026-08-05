@@ -89,6 +89,11 @@ jobs:
 
       - name: Build HXCPP Runner and Tools
         run: |
+          mkdir -p .haxelib
+          haxelib setup .haxelib
+
+          haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet
+          
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp

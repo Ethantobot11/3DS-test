@@ -1,4 +1,4 @@
-package citro.cd2;
+package citro.c2d;
 
 import citro.backend.CitroColor;
 
