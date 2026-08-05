@@ -131,9 +131,9 @@ jobs:
           make install
           cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
           cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
-          if [ -f "libncsnd/lib/libncsnd.a" ]; then
-              cp libncsnd/lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
-              cp libncsnd/include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
+          if [ -f "$GITHUB_WORKSPACE/.haxelib/libcwav/git/libncsnd/lib/libncsnd.a" ]; then
+            cp libncsnd/lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
+            cp libncsnd/include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
           fi
           cd $GITHUB_WORKSPACE
           haxelib run haxe3ds -c -Dnx -Dno_pch
