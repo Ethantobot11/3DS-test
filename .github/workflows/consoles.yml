@@ -119,6 +119,18 @@ jobs:
           export PATH=/opt/devkitpro/tools/bin:$PATH
           python3 convert_assets.py
 
+      - name: Check Assets in Export Directory Before Packaging
+        if: inputs.name == 'Nintendo 3DS'
+        run: |
+          echo "=== Scanning for RomFS / Assets in export folder ==="
+          if [ -d "export" ]; then
+            find export -type f \( -name "*.cea" -o -name "*.png" -o -name "*.json" -o -name "*.ogg" \) || echo "No specific asset files found matching filters."
+            echo "=== Full tree of export folder ==="
+            find export -maxdepth 3 -type d || true
+          else
+            echo "export directory does not exist yet."
+          fi
+
       - name: Build and Install 3DS Audio Libraries
         if: inputs.name == 'Nintendo 3DS'
         run: |
@@ -134,6 +146,17 @@ jobs:
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
           haxelib run haxe3ds -c -Dnx -Dno_pch
+
+      - name: Verify RomFS Inside Built CIA
+        if: always() && inputs.name == 'Nintendo 3DS'
+        run: |
+          export PATH=/opt/devkitpro/tools/bin:$PATH
+          if [ -f "buildFiles/output.cia" ]; then
+            echo "=== Inspecting CIA RomFS Structure ==="
+            ls -lh buildFiles/output.cia
+          else
+            echo "output.cia not found!"
+          fi
 
       - name: Archive and Upload Workspace for Inspection
         if: always()
