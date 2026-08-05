@@ -9,6 +9,15 @@ import citro.util.CitroStringUtil;
 import citro.CitroG;
 import citro.backend.CitroColor;
 
+import Player;
+import Noelle;
+import DialogueBox;
+import Rudinn;
+import DarkDoor;
+import DarkWorldTransition;
+import DarkWorldTransitionLine;
+import BattleState;
+
 class PlayState extends CitroState
 {
     var rudinn:Rudinn;

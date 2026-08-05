@@ -35,7 +35,7 @@ class Rudinn extends CitroAnimate
         if (movingRight)
         {
             x += (moveSpeed / 24);
-            flipX = true;
+            scale.x = -1;
 
             if (x >= startX + patrolDistance)
             {
@@ -46,7 +46,7 @@ class Rudinn extends CitroAnimate
         else
         {
             x -= (moveSpeed / 24);
-            flipX = false;
+            scale.x = 1;
 
             if (x <= startX)
             {
