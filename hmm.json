@@ -1,0 +1,22 @@
+{
+  "dependencies": [
+    {
+      "name": "haxe3ds",
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/Ethantobot11/Haxe3DS.git"
+    },
+    {
+      "name": "citroengine",
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/Ethantobot11/CitroEngine"
+    },
+    {
+      "name": "hxcpp",
+      "type": "git",
+      "ref": null,
+      "url": "https://github.com/PsychEngine-report/hxcpp"
+    }
+  ]
+}

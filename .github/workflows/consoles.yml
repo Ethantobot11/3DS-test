@@ -48,11 +48,8 @@ jobs:
           haxelib setup .haxelib
 
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
-            haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet --always
-            haxelib git citroengine https://github.com/Ethantobot11/CitroEngine --quiet --always
-            haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet --always
-            haxelib git reflaxe https://github.com/SomeRanDev/reflaxe --quiet
-            haxelib git reflaxe.cpp https://github.com/SomeRanDev/reflaxe.cpp --quiet
+            haxelib install hmm --quiet
+            haxelib run hmm install --quiet
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             haxelib git hxu_wut https://github.com/Haxe-WiiU/HxU_WUT --quiet || true
             haxelib git hxu_libnotifications https://github.com/Haxe-WiiU/HxU_LibNotifications --quiet || true
