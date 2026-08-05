@@ -5,10 +5,24 @@ import citro.backend.CitroColor;
 /**
  * Cool objects utility for making new styles.
  */
+ @:headerCode('
+#include <citro2d.h>
+#include <citro3d.h>
+')
+
 @:cppFileCode('
 #include <citro2d.h>
 #include "citro/CitroGame.h"
 #include "citro/object/CitroSprite.h"
+
+static inline u32 colorConvert(int color) {
+    return C2D_Color32(
+        (color >> 16) & 0xFF,
+        (color >> 8) & 0xFF,
+        color & 0xFF,
+        (color >> 24) & 0xFF
+    );
+}
 ')
 
 class CitroObjectDraw {
