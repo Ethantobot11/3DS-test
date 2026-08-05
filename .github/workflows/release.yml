@@ -66,10 +66,10 @@ jobs:
         uses: actions/download-artifact@main
         with:
            name: 3DSBuild
-           path: /buildFiles/
+           path: buildFiles/
 
-      - name: Move Android File
-        run: mv /buildFiles/output.cia /buildFiles/${{ env.PROJECT_NAME }}.cia
+      - name: Move 3DS CIA
+        run: mv buildFiles/output.cia buildFiles/${{ env.PROJECT_NAME }}.cia
 
       - name: Publish The Release
         uses: softprops/action-gh-release@v2
@@ -79,4 +79,4 @@ jobs:
           make_latest: true
           #prerelease: false
           files: |
-            /buildFiles/*cia
+            buildFiles/*cia
