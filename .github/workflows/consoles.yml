@@ -93,7 +93,7 @@ jobs:
           haxelib setup .haxelib
 
           haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet
-          
+
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp
@@ -123,6 +123,8 @@ jobs:
           export CC=arm-none-eabi-gcc
           export AR=arm-none-eabi-ar
           export RANLIB=arm-none-eabi-ranlib
+
+          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
           
           haxelib run haxe3ds -c -Dnx -Dno_pch
 
