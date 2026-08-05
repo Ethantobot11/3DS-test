@@ -10,7 +10,7 @@
 			"citroengine"
 		],
 		"defines": [],
-		"compileAsCIA": yes,
+		"compileAsCIA": true,
 		"optimizations": {
 			"o2Flag": false,
 			"gFlag": false
