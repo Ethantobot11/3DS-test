@@ -119,6 +119,14 @@ jobs:
           export DEVKITPRO=/opt/devkitpro
           export DEVKITARM=${DEVKITPRO}/devkitARM
           export PATH=${DEVKITARM}/bin:${DEVKITPRO}/tools/bin:$PATH
+          export CXX=arm-none-eabi-g++
+          export CC=arm-none-eabi-gcc
+          export AR=arm-none-eabi-ar
+          export RANLIB=arm-none-eabi-ranlib
+
+          haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
+          haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
+          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
           cd .haxelib/libncsnd/git
           make install
