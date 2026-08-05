@@ -3,6 +3,9 @@ package;
 import cpp.RawPointer;
 import CWAV;
 
+@:headerCode('
+#include "cwav.h"
+')
 class SoundPlayer
 {
     private static var initialized:Bool = false;
