@@ -126,6 +126,8 @@ jobs:
 
           haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
 
+          haxelib git libncsnd https://github.com/PabloMK7/libncsnd --quiet
+
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
           
           haxelib run haxe3ds -c -Dnx -Dno_pch
