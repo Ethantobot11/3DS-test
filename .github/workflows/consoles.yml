@@ -113,26 +113,22 @@ jobs:
           export PATH=/opt/devkitpro/tools/bin:$PATH
           python3 convert_assets.py
 
-      - name: Compile for 3DS via Haxe3DS (Safe Check)
+      - name: Build and Install 3DS Audio Libraries
         if: inputs.name == 'Nintendo 3DS'
         run: |
           export DEVKITPRO=/opt/devkitpro
           export DEVKITARM=${DEVKITPRO}/devkitARM
           export PATH=${DEVKITARM}/bin:${DEVKITPRO}/tools/bin:$PATH
-          export CXX=arm-none-eabi-g++
-          export CC=arm-none-eabi-gcc
-          export AR=arm-none-eabi-ar
-          export RANLIB=arm-none-eabi-ranlib
 
-          haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
-          haxelib git libncsnd https://github.com/PabloMK7/libncsnd --quiet
-          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
-          
           cd .haxelib/libncsnd/git
           make install
+          cp lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/
+          cp include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
 
           cd ../../libcwav/git
           make install
+          cp lib/libcwav.a /opt/devkitpro/portlibs/3ds/lib/
+          cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
 
           cd ../../../
           haxelib run haxe3ds -c -Dnx -Dno_pch
