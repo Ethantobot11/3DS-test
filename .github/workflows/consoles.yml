@@ -130,7 +130,7 @@ jobs:
 
           cd .haxelib/libncsnd/git
           make install
-          cp lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/
+          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
           cp include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
 
           cd ../../libcwav/git
