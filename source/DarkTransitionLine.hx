@@ -28,7 +28,7 @@ class DarkTransitionLine extends CitroSprite
         var elapsed:Float = CitroG.deltaTime / 1000.0;
         y -= moveSpeed * elapsed;
 
-        if (y < -100 || y > CitroG.height + 100)
+        if (y < -100 || y > CitroG.HEIGHT + 100)
         {
             destroy();
             return false;

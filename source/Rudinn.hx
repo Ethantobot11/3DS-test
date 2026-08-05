@@ -32,10 +32,15 @@ class Rudinn extends CitroAnimate
 
     function handlePatrol()
     {
+        var walkAnim = "spr_diamondm_walk"; 
+        var idleAnim = "spr_diamondm_idle";
+
         if (movingRight)
         {
             x += (moveSpeed / 24);
             scale.x = -1;
+            
+            play(walkAnim);
 
             if (x >= startX + patrolDistance)
             {
@@ -47,6 +52,8 @@ class Rudinn extends CitroAnimate
         {
             x -= (moveSpeed / 24);
             scale.x = 1;
+
+            play(walkAnim);
 
             if (x <= startX)
             {

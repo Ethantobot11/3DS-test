@@ -20,7 +20,7 @@ class DialogueBox extends citro.object.CitroObject
     var fullText:String = "";
     var currentText:String = "";
     var charIndex:Int = 0;
-    var soundAsset:String = "snd_txtnoe.wav";
+    var soundAsset:String = "snd_txtnoe.cwav";
 
     public var isFinished:Bool = false;
     public var hasChoices:Bool = false;
@@ -46,13 +46,13 @@ class DialogueBox extends citro.object.CitroObject
         textDisplay.color = CitroColor.WHITE;
 
         soulCursor = new CitroSprite(0, 0);
-        
-        if (citro.util.CitroAssetUtil.exists("soul/iconOG.png"))
-        {
-            soulCursor.loadGraphic("soul/iconOG.png");
-        }
-        else
-        {
+        try {
+            if (sys.FileSystem.exists("romfs:/assets/images/soul/iconOG.png")) {
+                soulCursor.loadGraphic("romfs:/assets/images/soul/iconOG.png");
+            } else {
+                soulCursor.makeGraphic(8, 8, CitroColor.RED);
+            }
+        } catch (e:Dynamic) {
             soulCursor.makeGraphic(8, 8, CitroColor.RED);
         }
         soulCursor.visible = false;
@@ -68,7 +68,7 @@ class DialogueBox extends citro.object.CitroObject
         visible = false;
     }
 
-    public function startDialogue(text:String, faceAtlas:String = null, expressionFrame:String = null, style:String = "light", withChoices:Bool = false, snd:String = "snd_txtnoe.wav")
+    public function startDialogue(text:String, faceAtlas:String = null, expressionFrame:String = null, style:String = "light", withChoices:Bool = false, snd:String = "snd_txtnoe.cwav")
     {
         boxBorder.makeGraphic(280, 68, (style == "dark") ? 0xFF000080 : CitroColor.WHITE);
 
@@ -112,7 +112,7 @@ class DialogueBox extends citro.object.CitroObject
 
             if (char != " " && char != "\n")
             {
-                CitroG.sound.play('romfs:/assets/sounds/${soundAsset}', 0.6);
+                SoundPlayer.playSound('romfs:/assets/sounds/${soundAsset}');
             }
 
             charIndex++;
@@ -160,13 +160,13 @@ class DialogueBox extends citro.object.CitroObject
         if (up && selectedIndex > 0)
         {
             selectedIndex = 0;
-            CitroG.sound.play("romfs:/assets/sounds/snd_text.wav", 0.5);
+            SoundPlayer.playSound("romfs:/assets/sounds/snd_text.cwav");
             updateCursorPosition();
         }
         else if (down && selectedIndex < 1)
         {
             selectedIndex = 1;
-            CitroG.sound.play("romfs:/assets/sounds/snd_text.wav", 0.5);
+            SoundPlayer.playSound("romfs:/assets/sounds/snd_text.cwav");
             updateCursorPosition();
         }
     }

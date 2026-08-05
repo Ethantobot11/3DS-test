@@ -9,14 +9,14 @@ import citro.util.CitroStringUtil;
 import citro.CitroG;
 import citro.backend.CitroColor;
 
+import haxe3ds.services.HID;
+
 import Player;
 import Noelle;
 import DialogueBox;
 import Rudinn;
 import DarkDoor;
 import DarkWorldTransition;
-import DarkWorldTransitionLine;
-import BattleState;
 
 class PlayState extends CitroState
 {
@@ -37,7 +37,7 @@ class PlayState extends CitroState
         add(camera);
 
         var background = new CitroSprite(0, 0);
-        background.makeGraphic(1280, 720, CitroColor.fromHex(0xff1d1d24));
+        background.makeGraphic(1280, 720, 0xff1d1d24);
         add(background);
         camera.add(background);
 
@@ -61,16 +61,16 @@ class PlayState extends CitroState
         camera.add(closetDoor);
     }
 
-    override public function update(elapsed:Float):Bool
+    override public function update(delta:Int):Void
     {
-        super.update(elapsed);
+        super.update(delta);
 
         separate(kris, noelle, !noelle.isFollowing);
         separate(kris, closetDoor, true);
 
-        var interactPressed = haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HIDKey.A) || 
-                              haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HIDKey.START) || 
-                              haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HIDKey.R);
+        var interactPressed = HID.keyPressed(HIDKey.A) || 
+                              HID.keyPressed(HIDKey.START) || 
+                              HID.keyPressed(HIDKey.R);
 
         if (interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor) && kris.facingDir == "up")
         {
@@ -98,8 +98,6 @@ class PlayState extends CitroState
         handleInputs();
 
         camera.update();
-
-        return true;
     }
 
     private function separate(obj1:CitroObject, obj2:CitroObject, condition:Bool = true):Bool
@@ -164,9 +162,9 @@ class PlayState extends CitroState
 
     private function handleInputs()
     {
-        var interactPressed:Bool = haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.A) || haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.START);
-        var upPressed:Bool = haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.UP) || haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.DPAD_UP);
-        var downPressed:Bool = haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.DOWN) || haxe3ds.services.HID.keyJustPressed(haxe3ds.services.HID.HIDKey.DPAD_DOWN);
+        var interactPressed:Bool = HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START);
+        var upPressed:Bool = HID.keyPressed(HIDKey.UP);
+        var downPressed:Bool = HID.keyPressed(HIDKey.DOWN);
 
         if (dialogueBox.isChoosing)
         {

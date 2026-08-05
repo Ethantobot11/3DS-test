@@ -7,6 +7,7 @@ import citro.backend.CitroTimer;
 import citro.CitroG;
 import citro.c2d.CitroObjectDraw;
 import haxe3ds.services.HID;
+import citro.state.CitroState;
 
 enum BattlePhase
 {
@@ -17,7 +18,7 @@ enum BattlePhase
     VICTORY;
 }
 
-class BattleState extends citro.object.CitroObject
+class BattleState extends CitroState
 {
     var currentPhase:BattlePhase = MENU;
     
@@ -63,7 +64,7 @@ class BattleState extends citro.object.CitroObject
         updateMenuText();
     }
 
-    override public function update():Bool
+    override public function update(delta:Int):Void
     {
         var elapsed:Float = CitroG.deltaTime / 1000.0;
 
@@ -75,12 +76,12 @@ class BattleState extends citro.object.CitroObject
             case TARGET_SELECT:
                 infoText.text = "* Select target: Rudinn";
                 
-                if (HID.keyJustPressed(HIDKey.A) || HID.keyJustPressed(HIDKey.START) || CitroG.isTouching(soul) || HID.keyJustPressed(HIDKey.TOUCH))
+                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START) || CitroG.isTouching(soul) || HID.keyPressed(HIDKey.TOUCH))
                 {
                     currentPhase = PLAYER_ATTACK;
                     attackTimerStarted = false;
                 }
-                else if (HID.keyJustPressed(HIDKey.B) || HID.keyJustPressed(HIDKey.SELECT))
+                else if (HID.keyPressed(HIDKey.B) || HID.keyPressed(HIDKey.SELECT))
                 {
                     currentPhase = MENU;
                     infoText.text = "* Choose an action.";
@@ -107,7 +108,7 @@ class BattleState extends citro.object.CitroObject
                 }
 
             case VICTORY:
-                if (HID.keyJustPressed(HIDKey.A) || HID.keyJustPressed(HIDKey.START) || HID.keyJustPressed(HIDKey.TOUCH))
+                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START) || HID.keyPressed(HIDKey.TOUCH))
                 {
                     destroy();
                 }
@@ -126,14 +127,14 @@ class BattleState extends citro.object.CitroObject
             soul.update();
         }
 
-        return super.update();
+        super.update(delta);
     }
 
     function handleMenuInput():Void
     {
-        var leftPressed = HID.keyJustPressed(HIDKey.LEFT) || HID.keyJustPressed(HIDKey.DPAD_LEFT);
-        var rightPressed = HID.keyJustPressed(HIDKey.RIGHT) || HID.keyJustPressed(HIDKey.DPAD_RIGHT);
-        var confirmPressed = HID.keyJustPressed(HIDKey.A) || HID.keyJustPressed(HIDKey.START);
+        var leftPressed = HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.DLEFT);
+        var rightPressed = HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.DRIGHT);
+        var confirmPressed = HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START);
 
         if (leftPressed)
         {
@@ -160,7 +161,7 @@ class BattleState extends citro.object.CitroObject
                         selectedOption = i;
                         updateMenuText();
                     }
-                    if (HID.keyJustPressed(HIDKey.TOUCH))
+                    if (HID.keyPressed(HIDKey.TOUCH))
                     {
                         confirmPressed = true;
                     }
@@ -246,10 +247,10 @@ class BattleState extends citro.object.CitroObject
         var vx:Float = 0;
         var vy:Float = 0;
 
-        if (HID.keyHeld(HIDKey.UP) || HID.keyHeld(HIDKey.DPAD_UP)) vy = -speed;
-        if (HID.keyHeld(HIDKey.DOWN) || HID.keyHeld(HIDKey.DPAD_DOWN)) vy = speed;
-        if (HID.keyHeld(HIDKey.LEFT) || HID.keyHeld(HIDKey.DPAD_LEFT)) vx = -speed;
-        if (HID.keyHeld(HIDKey.RIGHT) || HID.keyHeld(HIDKey.DPAD_RIGHT)) vx = speed;
+        if (HID.keyHeld(HIDKey.UP)) vy = -speed;
+        if (HID.keyHeld(HIDKey.DOWN)) vy = speed;
+        if (HID.keyHeld(HIDKey.LEFT)) vx = -speed;
+        if (HID.keyHeld(HIDKey.RIGHT)) vx = speed;
 
         var elapsed:Float = CitroG.deltaTime / 1000.0;
         soul.x += vx * elapsed;

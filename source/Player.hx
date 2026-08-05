@@ -3,6 +3,7 @@ package;
 import citro.CitroG;
 import citro.object.CitroAnimate;
 import haxe3ds.services.HID;
+using StringTools;
 
 typedef PositionFrame = {
     var x:Float;
@@ -18,25 +19,67 @@ class Player extends CitroAnimate
     public var isDarkWorld:Bool = false;
     public var pathHistory:Array<PositionFrame> = [];
 
-    public function new(x:Float, y:Float)
+    public function new(x:Float, y:Float, darkWorld:Bool = false)
     {
-        super("romfs:/assets/images/chars/Kris_Light.cea", "idle_down");
+        isDarkWorld = darkWorld;
+        var ceaPath = isDarkWorld ? "romfs:/assets/images/chars/Kris_Dark.cea" : "romfs:/assets/images/chars/Kris_Light.cea";
+        
+        super(ceaPath, "idle_down");
+        
         this.x = x;
         this.y = y;
-
-        loadLightWorld();
     }
 
-    public function loadLightWorld():Void
+    public function setDarkWorld(darkWorld:Bool):Void
     {
-        super("romfs:/assets/images/chars/Kris_Light.cea", "idle_down");
-        isDarkWorld = false;
-    }
+        if (isDarkWorld == darkWorld) return;
+        isDarkWorld = darkWorld;
 
-    public function loadDarkWorld():Void
-    {
-        super("romfs:/assets/images/chars/Kris_Dark.cea", "idle_down");
-        isDarkWorld = true;
+        if (sprites != null) {
+            for (key => header in sprites) {
+                if (header != null && header.sprite != null) {
+                    header.sprite.destroy();
+                }
+            }
+            sprites.clear();
+        }
+
+        var ceaPath = isDarkWorld ? "romfs:/assets/images/chars/Kris_Dark.cea" : "romfs:/assets/images/chars/Kris_Light.cea";
+        var file:String = sys.io.File.getContent(ceaPath);
+        var dir:String = ceaPath.substr(0, ceaPath.lastIndexOf("/"));
+        
+        if (file != "") {
+            var i:Int = 0;
+            var animationList:Array<String> = [];
+            for (line in file.split("\n")) {
+                var row:Array<String> = line.split("?");
+                if (row.length < 3) break;
+                row[3] = row[3].trim();
+
+                if (!animationList.join(" ").contains(row[3])) {
+                    animationList.push(row[3]);
+                    i = -1;
+                }
+                i++;
+
+                var n:String = '${row[3]}-$i';
+                var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
+                if (!sprite.loadGraphic('$dir/${row[0]}')) {
+                    i--;
+                    sprite.destroy();
+                    continue;
+                }
+
+                var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
+                sprites.set(n, {
+                    frameX: resultParse[0] == null ? 0 : resultParse[0],
+                    frameY: resultParse[1] == null ? 0 : resultParse[1],
+                    sprite: sprite
+                });
+            }
+        }
+
+        play("idle_down");
     }
 
     public function updatePlayer(delta:Float):Bool
@@ -72,10 +115,10 @@ class Player extends CitroAnimate
 
     private function handleMovement()
     {
-        var up:Bool = HID.keyHeld(HIDKey.DUP) || HID.keyHeld(HIDKey.CPAD_UP);
-        var down:Bool = HID.keyHeld(HIDKey.DDOWN) || HID.keyHeld(HIDKey.CPAD_DOWN);
-        var left:Bool = HID.keyHeld(HIDKey.DLEFT) || HID.keyHeld(HIDKey.CPAD_LEFT);
-        var right:Bool = HID.keyHeld(HIDKey.DRIGHT) || HID.keyHeld(HIDKey.CPAD_RIGHT);
+        var up:Bool = HID.keyHeld(HIDKey.UP);
+        var down:Bool = HID.keyHeld(HIDKey.DOWN);
+        var left:Bool = HID.keyHeld(HIDKey.LEFT);
+        var right:Bool = HID.keyHeld(HIDKey.RIGHT);
 
         if (up && down) up = down = false;
         if (left && right) left = right = false;

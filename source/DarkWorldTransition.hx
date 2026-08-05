@@ -48,7 +48,7 @@ class DarkWorldTransition extends CitroAnimate
     {
         statePhase = 1; 
         play("spr_krisu_run");
-        velocity.y = -50; 
+        acceleration.y = -50; 
     }
 
     override public function update():Bool
@@ -164,7 +164,7 @@ class DarkWorldTransition extends CitroAnimate
                     player.x = x;
                     player.y = y;
                     
-                    player.loadDarkWorld();
+                    player.setDarkWorld(true);
                     player.visible = true;
                     player.isBusy = false;
 

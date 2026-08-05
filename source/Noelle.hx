@@ -49,7 +49,7 @@ class Noelle extends CitroAnimate
             }
         }
 
-        if (target.velocity.x == 0 && target.velocity.y == 0)
+        if (target.acceleration.x == 0 && target.acceleration.y == 0)
         {
             if (curAnim != "")
             {
