@@ -67,6 +67,12 @@ jobs:
             git clone https://github.com/PabloMK7/libcwav.git --recursive
             cd libcwav
             make install
+            cp lib/libcwav.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
+            cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
+            if [ -f "libncsnd/lib/libncsnd.a" ]; then
+                cp libncsnd/lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
+                cp libncsnd/include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
+            fi
             cd ..
             rm -rf libcwav
             mkdir -p /opt/devkitpro/tools/bin
@@ -124,21 +130,9 @@ jobs:
           export AR=arm-none-eabi-ar
           export RANLIB=arm-none-eabi-ranlib
 
-          haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
-          cd $GITHUB_WORKSPACE/.haxelib/libncsnd/git
-          make install
-          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
-          cp include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
-
-          cd $GITHUB_WORKSPACE/.haxelib/libcwav/git
-          make install
-          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
-          cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
-
-          cd $GITHUB_WORKSPACE
           haxelib run haxe3ds -c -Dnx -Dno_pch
 
       - name: Archive and Upload Workspace for Inspection
