@@ -123,16 +123,21 @@ jobs:
           export CC=arm-none-eabi-gcc
           export AR=arm-none-eabi-ar
           export RANLIB=arm-none-eabi-ranlib
+
           haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
+
+          cd $GITHUB_WORKSPACE/.haxelib/libncsnd/git
+          make install
+          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
+          cp include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
+
           cd $GITHUB_WORKSPACE/.haxelib/libcwav/git
-          git submodule update --init --recursive
           make install
           cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
           cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
-          cp libncsnd/lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
-          cp libncsnd/include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
+
           cd $GITHUB_WORKSPACE
           haxelib run haxe3ds -c -Dnx -Dno_pch
 
