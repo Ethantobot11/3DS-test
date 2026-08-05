@@ -1,0 +1,25 @@
+{
+	"settings": {
+		"linkOptions": {
+			"ip": "",
+			"openEmuIfTransferFailed": false,
+			"link3dsToConsole": true
+		},
+		"libraries": [
+			"haxe3ds",
+			"citroengine"
+		],
+		"defines": [],
+		"compileAsCIA": yes,
+		"optimizations": {
+			"o2Flag": false,
+			"gFlag": false
+		},
+		"deleteTempFiles": true
+	},
+	"metadata": {
+		"title": "Deltarune",
+		"description": "Lol IDK fr",
+		"author": "Ethantobot"
+	}
+}
