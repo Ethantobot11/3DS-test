@@ -7,7 +7,7 @@ import citro.backend.CitroColor;
  */
 @:cppFileCode('
 #include <citro2d.h>
-#include "citro/CitroGame.h.h"
+#include "citro/CitroGame.h"
 #include "citro/object/CitroSprite.h"
 ')
 
