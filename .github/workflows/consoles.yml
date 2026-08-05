@@ -43,10 +43,8 @@ jobs:
           apt-get update && apt-get install -y build-essential git wget curl
 
       - name: Install Libraries & Fix Hxcpp
-        run: |
-          
+        run: | 
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
-            haxelib remove hxcpp
             haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet --always
             haxelib git citroengine https://github.com/Ethantobot11/CitroEngine --quiet --always
             haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet --always
