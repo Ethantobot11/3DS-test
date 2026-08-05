@@ -135,7 +135,7 @@ jobs:
 
           cd ../../libcwav/git
           make install
-          cp lib/libcwav.a /opt/devkitpro/portlibs/3ds/lib/
+          cp lib/git.a /opt/devkitpro/portlibs/3ds/lib/
           cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
 
           cd ../../../
