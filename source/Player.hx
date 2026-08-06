@@ -23,14 +23,15 @@ class Player extends CitroAnimate
     {
         isDarkWorld = darkWorld;
         
-        // Pass a dummy or initial CEA file to super, then load our split files manually
         super("romfs:/assets/images/chars/spr_krisd_dark.cea", "spr_krisd_dark");
         
         this.x = x;
         this.y = y;
+        framerate = 6;
+        looped = true;
         
         loadAllAnimations();
-        play("spr_kris_down"); // Initial play call
+        play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
     }
 
     private function loadAllAnimations():Void
@@ -44,11 +45,8 @@ class Player extends CitroAnimate
             sprites.clear();
         }
 
-        // Define the prefix based on Dark World vs Light World
-        var prefix = isDarkWorld ? "kris" : "kris"; // adjust if light world files have different naming
         var suffix = isDarkWorld ? "_dark" : "";
 
-        // List of all directional CEA files we generated for Kris
         var ceaFiles = [
             'spr_krisd${suffix}.cea',
             'spr_krisl${suffix}.cea',
@@ -64,18 +62,11 @@ class Player extends CitroAnimate
             var dir:String = "romfs:/assets/images/chars";
 
             if (file != "") {
-                var i:Int = 0;
-                var currentAnimBase:String = "";
-                
                 for (line in file.split("\n")) {
                     if (line.trim() == "") continue;
                     var row:Array<String> = line.split("?");
                     if (row.length < 3) break;
                     row[3] = row[3].trim();
-
-                    var lastDash = row[3].lastIndexOf("-");
-                    var animName = row[3].substring(0, lastDash);
-                    var frameIdx = Std.parseInt(row[3].substring(lastDash + 1));
 
                     var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
                     if (!sprite.loadGraphic('$dir/${row[0]}')) {
@@ -99,22 +90,27 @@ class Player extends CitroAnimate
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
         loadAllAnimations();
-        play("spr_krisd_dark-0");
+        play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
     }
 
-    public function updatePlayer(delta:Float):Bool
+    override public function update():Bool
     {
         var oldX = x;
         var oldY = y;
 
         if (!isBusy)
+        {
             handleMovement();
-
-        var result = super.update();
+        }
+        else
+        {
+            animation.stop();
+            frame = 0;
+        }
 
         if (x != oldX || y != oldY)
         {
-            var curAnimName = (curAnim != "") ? curAnim : "spr_krisd_dark";
+            var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
             pathHistory.unshift({x: x, y: y, anim: curAnimName});
 
             if (pathHistory.length > 100)
@@ -122,15 +118,8 @@ class Player extends CitroAnimate
                 pathHistory.pop();
             }
         }
-        else
-        {
-            if (facingDir == "up") play("spr_krisu_dark");
-            else if (facingDir == "down") play("spr_krisd_dark");
-            else if (facingDir == "left") play("spr_krisl_dark");
-            else if (facingDir == "right") play("spr_krisr_dark");
-        }
 
-        return result;
+        return super.update();
     }
 
     private function handleMovement()
@@ -145,6 +134,7 @@ class Player extends CitroAnimate
 
         var vx:Float = 0;
         var vy:Float = 0;
+        var suffix = isDarkWorld ? "_dark" : "";
 
         if (up || down || left || right)
         {
@@ -158,17 +148,15 @@ class Player extends CitroAnimate
             x += vx * dt;
             y += vy * dt;
 
-            if (up) play("spr_krisu_dark");
-            else if (down) play("spr_krisd_dark");
-            else if (left) play("spr_krisl_dark");
-            else if (right) play("spr_krisr_dark");
+            if (up) play('spr_krisu$suffix');
+            else if (down) play('spr_krisd$suffix');
+            else if (left) play('spr_krisl$suffix');
+            else if (right) play('spr_krisr$suffix');
         }
         else
         {
-            if (facingDir == "up") play("spr_krisu_dark");
-            else if (facingDir == "down") play("spr_krisd_dark");
-            else if (facingDir == "left") play("spr_krisl_dark");
-            else if (facingDir == "right") play("spr_krisr_dark");
+            animation.stop();
+            frame = 0;
         }
     }
 }

@@ -64,6 +64,16 @@ class Noelle extends CitroAnimate
 
     override public function update():Bool
     {
+        if (!isFollowing)
+        {
+            animation.stop();
+            frame = 0; 
+        }
+        else
+        {
+            updateFollowingMovement();
+        }
+
         if (isFollowing && target != null)
         {
             followPathTrail();

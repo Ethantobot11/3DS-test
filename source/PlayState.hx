@@ -75,12 +75,14 @@ class PlayState extends CitroState
         if (interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor) && kris.facingDir == "up")
         {
             kris.isBusy = true;
+            
             var transition = new DarkWorldTransition(kris, closetDoor, camera);
             transition.onComplete = function() {
                 spawnDarkWorldEntities();
             };
             add(transition);
             camera.add(transition);
+            return;
         }
 
         if (rudinn != null)
@@ -96,8 +98,6 @@ class PlayState extends CitroState
         }
 
         handleInputs();
-
-        camera.update();
     }
 
     private function separate(obj1:CitroObject, obj2:CitroObject, condition:Bool = true):Bool
