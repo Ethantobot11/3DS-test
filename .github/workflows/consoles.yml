@@ -37,6 +37,21 @@ jobs:
         with:
           haxe-version: ${{ env.HAXE_VERSION }}
 
+      - name: Restore cache for android builds
+        uses: actions/cache@v4
+        with:
+          key: cache-build-${{ inputs.name }}
+          path: |
+            .haxelib/
+            /home/runner/haxelib/
+            /Users/runner/haxelib/
+            C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
+            ~/.haxelib/
+            export/
+            .haxelib\
+          restore-keys: |
+            cache-build-${{ inputs.name }}
+
       - name: Install System Dependencies (Wii U)
         if: inputs.name == 'Wii U'
         run: |
@@ -146,6 +161,21 @@ jobs:
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
           haxelib run haxe3ds -c -Dnx -Dno_pch
+
+      - name: Restore cache for android builds
+        uses: actions/cache@v4
+        with:
+          key: cache-build-${{ inputs.name }}
+          path: |
+            .haxelib/
+            /home/runner/haxelib/
+            /Users/runner/haxelib/
+            C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
+            ~/.haxelib/
+            export/
+            .haxelib\
+          restore-keys: |
+            cache-build-${{ inputs.name }}
 
       - name: Verify RomFS Inside Built CIA
         if: always() && inputs.name == 'Nintendo 3DS'
