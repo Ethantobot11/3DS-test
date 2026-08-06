@@ -24,7 +24,7 @@ class Player extends CitroAnimate
         isDarkWorld = darkWorld;
         
         // Pass a dummy or initial CEA file to super, then load our split files manually
-        super("romfs:/assets/images/chars/krisd_dark.cea", "spr_krisd_dark");
+        super("romfs:/assets/images/chars/spr_krisd_dark.cea", "spr_krisd_dark");
         
         this.x = x;
         this.y = y;
@@ -50,10 +50,10 @@ class Player extends CitroAnimate
 
         // List of all directional CEA files we generated for Kris
         var ceaFiles = [
-            'krisd${suffix}.cea',
-            'krisl${suffix}.cea',
-            'krisr${suffix}.cea',
-            'krisu${suffix}.cea'
+            'spr_krisd${suffix}.cea',
+            'spr_krisl${suffix}.cea',
+            'spr_krisr${suffix}.cea',
+            'spr_krisu${suffix}.cea'
         ];
 
         for (ceaFile in ceaFiles) {

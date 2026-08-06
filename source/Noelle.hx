@@ -11,7 +11,7 @@ class Noelle extends CitroAnimate
 
     public function new(x:Float, y:Float)
     {
-        super("romfs:/assets/images/chars/noelle_walk_down_lw.cea", "spr_noelle_walk_down_lw");
+        super("romfs:/assets/images/chars/spr_noelle_walk_down_lw.cea", "spr_noelle_walk_down_lw");
         
         this.x = x;
         this.y = y;
@@ -25,10 +25,10 @@ class Noelle extends CitroAnimate
     private function loadNoelleAnimations():Void
     {
         var ceaFiles = [
-            "noelle_walk_down_lw.cea",
-            "noelle_walk_up_lw.cea",
-            "noelle_walk_left_lw.cea",
-            "noelle_walk_right_lw.cea"
+            "spr_noelle_walk_down_lw.cea",
+            "spr_noelle_walk_up_lw.cea",
+            "spr_noelle_walk_left_lw.cea",
+            "spr_noelle_walk_right_lw.cea"
         ];
 
         for (ceaFile in ceaFiles) {
