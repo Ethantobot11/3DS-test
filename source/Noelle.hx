@@ -1,6 +1,7 @@
 package;
 
 import citro.object.CitroAnimate;
+using StringTools;
 
 class Noelle extends CitroAnimate
 {

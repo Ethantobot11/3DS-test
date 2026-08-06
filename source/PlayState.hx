@@ -212,7 +212,6 @@ class PlayState extends CitroState
                 "* Hi Kris!\n* Want me to come with you?", 
                 "noelle_face",
                 "spr_face_n_matome", 
-                "spr_face_n_matome-0", 
                 "light",
                 true
             );

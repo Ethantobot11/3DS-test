@@ -5,6 +5,7 @@ import citro.object.CitroText;
 import citro.backend.CitroColor;
 import citro.backend.CitroTimer;
 import citro.CitroG;
+using StringTools;
 
 class DialogueBox extends citro.object.CitroObject
 {
