@@ -5,7 +5,7 @@
 
 package leafy.filesystem;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import leafy.system.console.SDCard;
 import leafy.backend.LeafyDebug;

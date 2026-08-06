@@ -5,7 +5,7 @@
 
 package leafy.audio;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import leafy.backend.internal.LfAudioManagerInternal;
 

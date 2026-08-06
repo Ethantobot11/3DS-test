@@ -5,7 +5,7 @@
 
 package leafy.filesystem;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 @:cppFileCode("
 #include <iostream>

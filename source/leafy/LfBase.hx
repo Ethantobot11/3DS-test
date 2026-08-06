@@ -9,7 +9,7 @@ package leafy;
  * Base class for Leafy objects
  */
 
- #if !haxe3ds
+ #if (!haxe3ds || !nx)
 class LfBase {
     /**
      * Function to be executed when creating this class

@@ -5,7 +5,7 @@
 
 package leafy.tweens;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import haxe.Exception;
 import Std;

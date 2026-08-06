@@ -1,6 +1,6 @@
 package leafy.objects;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import Std;
 import haxe.Xml;

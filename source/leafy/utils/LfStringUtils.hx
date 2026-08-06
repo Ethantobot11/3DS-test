@@ -1,6 +1,6 @@
 package leafy.utils;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 /**
  * A class for string utility functions, code from Haxe library
  * 

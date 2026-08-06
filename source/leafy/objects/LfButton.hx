@@ -5,7 +5,7 @@
 
 package leafy.objects;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 /**
  * A button object, used to perform actions when clicked. Based on `LfSprite`

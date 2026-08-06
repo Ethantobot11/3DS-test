@@ -5,7 +5,7 @@
 
 package leafy.states;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import Std;
 

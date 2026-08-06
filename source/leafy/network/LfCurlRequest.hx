@@ -5,7 +5,7 @@
 
 package leafy.network;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 @:cppFileCode("
 #include <curl/curl.h>

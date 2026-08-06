@@ -5,7 +5,7 @@
 
 package leafy.system.console;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import wut.coreinit.Screen;
 import wut.coreinit.Cache;

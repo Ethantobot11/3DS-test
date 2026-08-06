@@ -5,7 +5,7 @@
 
 package leafy.backend.sdl;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import Std;
 

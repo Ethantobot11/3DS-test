@@ -5,7 +5,7 @@
 
 package leafy;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import cxx.*;
 import cxx.num.*;

@@ -5,7 +5,7 @@
 
 package leafy.utils;
 
-#if !haxe3ds
+#if (!haxe3ds || !nx)
 
 import leafy.objects.LfObject;
 import Std;
