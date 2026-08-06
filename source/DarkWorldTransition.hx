@@ -104,20 +104,6 @@ class DarkWorldTransition extends CitroAnimate
         var elapsed:Float = CitroG.deltaTime / 1000.0;
         timer += elapsed;
 
-        if (camera != null) {
-            camera.follow(this);
-        }
-
-        if (statePhase >= 3 && statePhase <= 7)
-        {
-            lineSpawnTimer += elapsed;
-            if (lineSpawnTimer >= 0.035) 
-            {
-                lineSpawnTimer = 0;
-                var line = new DarkTransitionLine(x, y + 200);
-            }
-        }
-
         switch (statePhase)
         {
             case 1:
@@ -194,7 +180,7 @@ class DarkWorldTransition extends CitroAnimate
                 }
 
             case 7:
-                y += 15; 
+                y += 600 * elapsed;
                 if (y >= targetLandingY) 
                 {
                     y = targetLandingY;
@@ -228,6 +214,20 @@ class DarkWorldTransition extends CitroAnimate
 
                     destroy();
                 }
+        }
+
+        if (statePhase >= 3 && statePhase <= 7)
+        {
+            lineSpawnTimer += elapsed;
+            if (lineSpawnTimer >= 0.035) 
+            {
+                lineSpawnTimer = 0;
+                var line = new DarkTransitionLine(x, y + 200);
+            }
+        }
+
+        if (camera != null) {
+            camera.follow(this);
         }
 
         return super.update();

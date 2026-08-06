@@ -96,8 +96,11 @@ class CitroGame {
 			}
 
 			untyped __cpp__('C3D_FrameEnd(0)');
-			var calculatedDt = OS.time.toInt() - old.toInt();
-            CitroG.deltaTime = (calculatedDt < 1) ? 1 : calculatedDt;
+			CitroG.deltaTime = {
+				dt = OS.time.toInt() - old.toInt();
+				if (dt < 1) dt = 1;
+				dt;
+			};
 		}
 
 		untyped __cpp__('
