@@ -1,3 +1,5 @@
 export/
 assets/xml_to_cea.py
 .haxelib/
+assets/romfs/haxe3ds/
+build.hxml
