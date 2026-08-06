@@ -109,12 +109,9 @@ class OptionsState extends CitroState {
      * Simple utility to calculate and draw a basic text/frame update indicator on the top left.
      */
     private function renderFpsCounter(delta:Int) {
-        // Calculate current FPS from delta time safely
         var currentFps:Int = delta > 0 ? Std.int(1000 / delta) : 60;
         
-        // Note: If your engine has a text rendering utility (like CitroText), 
-        // you would draw `currentFps` at coordinates X: 4, Y: 4 here.
-        Example: CitroG.renderText('FPS: $currentFps', 4, 4, 0xFFFFFFFF);
+        citro.object.CitroText.text('FPS: $currentFps', 4, 4, 0xFFFFFFFF);
     }
 
     override public function destroy() {
