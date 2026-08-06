@@ -69,20 +69,31 @@ class DarkWorldTransition extends CitroAnimate
             var dir:String = "romfs:/assets/images/trans";
 
             if (file != "") {
+                var i:Int = 0;
+                final animationList:Array<String> = [];
+
                 for (line in file.split("\n")) {
                     if (line.trim() == "") continue;
                     var row:Array<String> = line.split("?");
                     if (row.length < 3) break;
                     row[3] = row[3].trim();
 
+                    if (!animationList.join(" ").contains(row[3])) {
+                        animationList.push(row[3]);
+                        i = -1;
+                    }
+                    i++;
+
+                    final n:String = '${row[3]}-$i';
                     var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
                     if (!sprite.loadGraphic('$dir/${row[0]}')) {
+                        i--;
                         sprite.destroy();
                         continue;
                     }
 
                     var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
-                    sprites.set(row[3], {
+                    sprites.set(n, {
                         frameX: resultParse[0] == null ? 0 : resultParse[0],
                         frameY: resultParse[1] == null ? 0 : resultParse[1],
                         sprite: sprite

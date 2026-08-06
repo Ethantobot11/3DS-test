@@ -39,20 +39,31 @@ class Noelle extends CitroAnimate
             var dir:String = "romfs:/assets/images/chars";
 
             if (file != "") {
+                var i:Int = 0;
+                final animationList:Array<String> = [];
+
                 for (line in file.split("\n")) {
                     if (line.trim() == "") continue;
                     var row:Array<String> = line.split("?");
                     if (row.length < 3) break;
                     row[3] = row[3].trim();
 
+                    if (!animationList.join(" ").contains(row[3])) {
+                        animationList.push(row[3]);
+                        i = -1;
+                    }
+                    i++;
+
+                    final n:String = '${row[3]}-$i';
                     var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
                     if (!sprite.loadGraphic('$dir/${row[0]}')) {
+                        i--;
                         sprite.destroy();
                         continue;
                     }
 
                     var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
-                    sprites.set(row[3], {
+                    sprites.set(n, {
                         frameX: resultParse[0] == null ? 0 : resultParse[0],
                         frameY: resultParse[1] == null ? 0 : resultParse[1],
                         sprite: sprite
@@ -85,16 +96,20 @@ class Noelle extends CitroAnimate
         {
             var targetFrame = target.pathHistory[trailDelay - 1];
 
-            if (x != targetFrame.x || y != targetFrame.y)
+            if (x != targetFrame.x || y != targetFrame.y || curAnim != targetFrame.anim)
             {
                 x = targetFrame.x;
                 y = targetFrame.y;
 
-                if (targetFrame.anim.indexOf("up") != -1) play("spr_noelle_walk_up_lw");
-                else if (targetFrame.anim.indexOf("down") != -1) play("spr_noelle_walk_down_lw");
-                else if (targetFrame.anim.indexOf("left") != -1) play("spr_noelle_walk_left_lw");
-                else if (targetFrame.anim.indexOf("right") != -1) play("spr_noelle_walk_right_lw");
+                if (targetFrame.anim.indexOf("u") != -1) play("spr_noelle_walk_up_lw");
+                else if (targetFrame.anim.indexOf("d") != -1) play("spr_noelle_walk_down_lw");
+                else if (targetFrame.anim.indexOf("l") != -1) play("spr_noelle_walk_left_lw");
+                else if (targetFrame.anim.indexOf("r") != -1) play("spr_noelle_walk_right_lw");
             }
+        }
+        else
+        {
+            frame = 0;
         }
     }
 }

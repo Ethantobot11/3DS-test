@@ -65,6 +65,11 @@ class PlayState extends CitroState
     {
         super.update(delta);
 
+        if (!kris.isBusy && camera != null)
+        {
+           camera.follow(kris);
+        }
+
         separate(kris, noelle, !noelle.isFollowing);
         separate(kris, closetDoor, true);
 
@@ -72,7 +77,7 @@ class PlayState extends CitroState
                               HID.keyPressed(HIDKey.START) || 
                               HID.keyPressed(HIDKey.R);
 
-        if (interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor) && kris.facingDir == "up")
+        if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
             kris.isBusy = true;
             
