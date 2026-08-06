@@ -29,18 +29,6 @@ class CrashHandler {
             var msg = '${infos.fileName}:${infos.lineNumber}: $v\n';
             appendLog(msg);
         };
-
-        untyped __cpp__(`
-            std::set_terminate([]() {
-                try {
-                    std::rethrow_exception(std::current_exception());
-                } catch (const std::exception& e) {
-                    hx::SetException(HX_CSTRING(e.what()));
-                } catch (...) {
-                    hx::SetException(HX_CSTRING("Unknown C++ Exception"));
-                }
-            });
-        `);
     }
 
     /**
