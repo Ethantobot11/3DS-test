@@ -49,13 +49,13 @@ class MainMenuState extends CitroState {
     override public function update(delta:Int) {
         super.update(delta);
 
-        if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.DPAD_UP)) {
+        if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             selectedIndex--;
             if (selectedIndex < 0) selectedIndex = TOTAL_MENU_ITEMS - 1;
             updateSelectionLog();
         }
         
-        if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.DPAD_DOWN)) {
+        if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             selectedIndex++;
             if (selectedIndex >= TOTAL_MENU_ITEMS) selectedIndex = 0;
             updateSelectionLog();
@@ -76,11 +76,6 @@ class MainMenuState extends CitroState {
 
         if (HID.keyPressed(HIDKey.Y)) {
             CitroG.switchState(new OptionsState());
-        }
-
-        if (HID.keyPressed(HIDKey.START)) {
-            CitroGame._shouldQuit = true;
-            CitroG.exitGame();
         }
     }
 

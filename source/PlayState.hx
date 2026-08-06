@@ -1,4 +1,4 @@
-package citro.state;
+package;
 
 import citro.state.CitroState;
 import citro.object.CitroSprite;

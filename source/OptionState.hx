@@ -53,13 +53,13 @@ class OptionsState extends CitroState {
     override public function update(delta:Int) {
         super.update(delta);
 
-        if (HID.keyPressed(HIDKey.KEY_UP) || HID.keyPressed(HIDKey.DPAD_UP)) {
+        if (HID.keyPressed(HIDKey.KEY_UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             selectedIndex--;
             if (selectedIndex < 0) selectedIndex = MAX_OPTIONS - 1;
             trace('Selected Option Index: $selectedIndex');
         }
 
-        if (HID.keyPressed(HIDKey.KEY_DOWN) || HID.keyPressed(HIDKey.DPAD_DOWN)) {
+        if (HID.keyPressed(HIDKey.KEY_DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             selectedIndex++;
             if (selectedIndex >= MAX_OPTIONS) selectedIndex = 0;
             trace('Selected Option Index: $selectedIndex');
