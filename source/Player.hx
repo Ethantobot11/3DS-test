@@ -29,22 +29,13 @@ class Player extends CitroAnimate
         this.y = y;
         framerate = 6;
         looped = true;
-        
-        loadAllAnimations();
+
+        loadPlayerAnimations();
         play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
     }
 
-    private function loadAllAnimations():Void
+    private function loadPlayerAnimations():Void
     {
-        if (sprites != null) {
-            for (key => header in sprites) {
-                if (header != null && header.sprite != null) {
-                    header.sprite.destroy();
-                }
-            }
-            sprites.clear();
-        }
-
         var suffix = isDarkWorld ? "_dark" : "";
 
         var ceaFiles = [
@@ -89,7 +80,7 @@ class Player extends CitroAnimate
     {
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
-        loadAllAnimations();
+        loadPlayerAnimations();
         play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
     }
 
