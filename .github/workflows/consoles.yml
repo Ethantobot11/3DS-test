@@ -185,6 +185,7 @@ jobs:
           export DEVKITPRO=/opt/devkitpro
           export DEVKITPPC=${DEVKITPRO}/devkitPPC
           export PATH=${DEVKITPPC}/bin:${DEVKITPRO}/tools/bin:$PATH
+          haxelib install hxcpp
           git clone https://github.com/PsychEngine-report/hxCompileU.git
           cd hxCompileU
           haxe build.hxml
