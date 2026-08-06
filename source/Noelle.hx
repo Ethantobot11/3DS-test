@@ -39,31 +39,21 @@ class Noelle extends CitroAnimate
             var dir:String = "romfs:/assets/images/chars";
 
             if (file != "") {
-                var i:Int = 0;
-                final animationList:Array<String> = [];
-
                 for (line in file.split("\n")) {
                     if (line.trim() == "") continue;
                     var row:Array<String> = line.split("?");
-                    if (row.length < 3) break;
-                    row[3] = row[3].trim();
-
-                    if (!animationList.join(" ").contains(row[3])) {
-                        animationList.push(row[3]);
-                        i = -1;
-                    }
-                    i++;
-
-                    final n:String = '${row[3]}-$i';
+                    if (row.length < 4) continue;
+                    
+                    final frameKey:String = row[3].trim();
+                    
                     var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
                     if (!sprite.loadGraphic('$dir/${row[0]}')) {
-                        i--;
                         sprite.destroy();
                         continue;
                     }
 
                     var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
-                    sprites.set(n, {
+                    sprites.set(frameKey, {
                         frameX: resultParse[0] == null ? 0 : resultParse[0],
                         frameY: resultParse[1] == null ? 0 : resultParse[1],
                         sprite: sprite
@@ -92,9 +82,10 @@ class Noelle extends CitroAnimate
 
     private function followPathTrail()
     {
-        if (target.pathHistory.length >= trailDelay)
+        if (target != null && target.pathHistory.length > 0)
         {
-            var targetFrame = target.pathHistory[trailDelay - 1];
+            var indexToUse = (target.pathHistory.length >= trailDelay) ? (trailDelay - 1) : (target.pathHistory.length - 1);
+            var targetFrame = target.pathHistory[indexToUse];
 
             x = targetFrame.x;
             y = targetFrame.y;
