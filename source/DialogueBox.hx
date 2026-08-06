@@ -43,11 +43,9 @@ class DialogueBox extends citro.object.CitroObject
         // Portrait is now an animated sprite inheriting/using CitroAnimate capabilities via portrait object or frame-switching
         portrait = new CitroSprite(8, 6);
         portrait.visible = false;
-        add(portrait);
 
         textDisplay = new CitroText(15, 10, "");
         textDisplay.color = CitroColor.WHITE;
-        add(textDisplay);
 
         soulCursor = new CitroSprite(0, 0);
         try {
@@ -64,12 +62,10 @@ class DialogueBox extends citro.object.CitroObject
         optionYesText = new CitroText(210, 18, "YES");
         optionYesText.color = CitroColor.WHITE;
         optionYesText.visible = false;
-        add(optionYesText);
 
         optionNoText = new CitroText(210, 36, "NO");
         optionNoText.color = CitroColor.WHITE;
         optionNoText.visible = false;
-        add(optionNoText);
 
         visible = false;
     }
