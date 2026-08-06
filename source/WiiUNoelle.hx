@@ -5,7 +5,7 @@ import leafy.objects.LfSprite;
 class WiiUNoelle extends LfSprite
 {
     public var isFollowing:Bool = false;
-    public var target:Player;
+    public var target:WiiUPlayer;
     
     public var trailDelay:Int = 18; 
 

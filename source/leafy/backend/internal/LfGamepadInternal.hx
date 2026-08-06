@@ -87,6 +87,9 @@ void CPP_stopVibration() {
  * It is not meant to be used directly, but rather through the `LfGamepad` class.
  */
 class LfGamepadInternal {
+    
+    #if (!haxe3ds || !nx)
+
     /**
      * The current state of the DRC
      */
@@ -418,6 +421,8 @@ return mode");
     public static function isHomeMenuButtonEnabled():Bool {
         return Systeminfo.OSIsHomeButtonMenuEnabled();
     }
+
+    #end
 }
 
 #end

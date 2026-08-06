@@ -8,7 +8,7 @@ import leafy.Leafy;
 
 class PlayState extends LfState
 {
-    var rudinn:Rudinn;
+    var rudinn:WiiURudinn;
     public var kris:WiiUPlayer;
     public var noelle:WiiUNoelle;
     public var dialogueBox:WiiUDialogueBox;
@@ -25,17 +25,17 @@ class PlayState extends LfState
 
         worldGroup = new LfGroup();
 
-        kris = new Player(1280 / 2, 720 / 2);
+        kris = new WiiUPlayer(1280 / 2, 720 / 2);
         worldGroup.add(kris);
 
-        noelle = new Noelle(1280 / 2 + 60, 720 / 2);
+        noelle = new WiiUNoelle(1280 / 2 + 60, 720 / 2);
         noelle.target = kris;
         worldGroup.add(noelle);
 
-        dialogueBox = new DialogueBox(20, 720 - 70);
+        dialogueBox = new WiiUDialogueBox(20, 720 - 70);
         worldGroup.add(dialogueBox);
 
-        closetDoor = new DarkDoor(300, 100);
+        closetDoor = new WiUDarkDoor(300, 100);
         worldGroup.add(closetDoor);
 
         worldGroup.create();
@@ -69,19 +69,19 @@ class PlayState extends LfState
         worldGroup.render();
     }
 
-    function startBattle(targetEnemy:Rudinn):Void
+    function startBattle(targetEnemy:WiiURudinn):Void
     {
         LeafyDebug.log('[startBattle()] Entering startBattle function...', DEBUG);
         kris.isBusy = true;
         
-        Leafy.switchState(new BattleState(kris, targetEnemy));
+        //Leafy.switchState(new BattleState(kris, targetEnemy));
     }
 
     function spawnDarkWorldEntities()
     {
         LeafyDebug.log('[spawnDarkWorldEntities] Unfreezing Kris and spawning Rudinn.', DEBUG);
         kris.isBusy = false;
-        rudinn = new Rudinn(kris.x + 100, kris.y, 150);
+        rudinn = new WiiURudinn(kris.x + 100, kris.y, 150);
         worldGroup.add(rudinn);
         rudinn.create();
     }

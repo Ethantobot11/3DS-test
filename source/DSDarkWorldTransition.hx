@@ -6,10 +6,10 @@ import citro.object.CitroCamera;
 import citro.CitroG;
 using StringTools;
 
-class 3DSDarkWorldTransition extends CitroAnimate
+class DSDarkWorldTransition extends CitroAnimate
 {
-    var player:3DSPlayer;
-    var door:3DSDarkDoor;
+    var player:DSPlayer;
+    var door:DSDarkDoor;
     var camera:CitroCamera;
     var statePhase:Int = 0;
     var timer:Float = 0;
@@ -21,7 +21,7 @@ class 3DSDarkWorldTransition extends CitroAnimate
 
     public var onComplete:Void->Void;
 
-    public function new(player:Player, door:DarkDoor = null, camera:CitroCamera = null)
+    public function new(player:DSPlayer, door:DSDarkDoor = null, camera:CitroCamera = null)
     {
         super("romfs:/assets/images/trans/spr_krisu_run.cea", "spr_krisu_run");
 
@@ -110,7 +110,7 @@ class 3DSDarkWorldTransition extends CitroAnimate
                 if (timer >= 0.4)
                 {
                     if (door != null) {
-                        door.setDoorState(DarkDoor.STATE_OPEN_FRAME);
+                        door.setDoorState(DSDarkDoor.STATE_OPEN_FRAME);
                     }
 
                     framerate = 8;
@@ -123,7 +123,7 @@ class 3DSDarkWorldTransition extends CitroAnimate
                 if (timer >= 0.6)
                 {
                     if (door != null) {
-                        door.setDoorState(DarkDoor.STATE_DARK_VOID);
+                        door.setDoorState(DSDarkDoor.STATE_DARK_VOID);
                     }
 
                     bgOverlay = new CitroSprite(0, 0);

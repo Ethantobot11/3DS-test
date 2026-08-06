@@ -2,7 +2,7 @@ package;
 
 import citro.object.CitroSprite;
 
-class 3DSDarkDoor extends CitroSprite
+class DSDarkDoor extends CitroSprite
 {
     public static inline var STATE_CLOSED:Int = 0;
     public static inline var STATE_OPEN_FRAME:Int = 1;

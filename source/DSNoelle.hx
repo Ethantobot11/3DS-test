@@ -3,10 +3,10 @@ package;
 import citro.object.CitroAnimate;
 using StringTools;
 
-class 3DSNoelle extends CitroAnimate
+class DSNoelle extends CitroAnimate
 {
     public var isFollowing:Bool = false;
-    public var target:Player;
+    public var target:DSPlayer;
     public var trailDelay:Int = 18; 
 
     public function new(x:Float, y:Float)

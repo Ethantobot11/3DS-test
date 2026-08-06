@@ -7,8 +7,8 @@ import leafy.filesystem.LfSystemPaths;
 
 class DarkWorldTransition extends LfSprite
 {
-    var player:Player;
-    var door:DarkDoor;
+    var player:WiiUPlayer;
+    var door:WiiUDarkDoor;
     var statePhase:Int = 0;
     var timer:Float = 0;
     
@@ -19,7 +19,7 @@ class DarkWorldTransition extends LfSprite
 
     public var onComplete:Void->Void;
 
-    public function new(player:Player, door:DarkDoor = null)
+    public function new(player:WiiUPlayer, door:WiiUDarkDoor = null)
     {
         super(Std.int(player.x), Std.int(player.y));
         this.player = player;
@@ -81,7 +81,7 @@ class DarkWorldTransition extends LfSprite
                 if (timer >= 0.4)
                 {
                     if (door != null)
-                        door.setDoorState(DarkDoor.STATE_OPEN_FRAME);
+                        door.setDoorState(WiUDarkDoor.STATE_OPEN_FRAME);
 
                     velocity = {x: 0, y: -70};
                     playAnimation("fall_lw");
@@ -93,7 +93,7 @@ class DarkWorldTransition extends LfSprite
                 if (timer >= 0.6)
                 {
                     if (door != null)
-                        door.setDoorState(DarkDoor.STATE_DARK_VOID);
+                        door.setDoorState(WiUDarkDoor.STATE_DARK_VOID);
 
                     bgOverlay = new LfSprite(0, 0);
                     bgOverlay.createGraphic(1280 * 4, 720 * 16, [0, 0, 0, 255]);

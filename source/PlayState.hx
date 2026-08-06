@@ -13,11 +13,11 @@ import haxe3ds.services.HID;
 
 class PlayState extends CitroState
 {
-    var rudinn:3DSRudinn;
-    public var kris:3DSPlayer;
-    public var noelle:3DSNoelle;
-    public var dialogueBox:3DSDialogueBox;
-    var closetDoor:3DSDarkDoor;
+    var rudinn:DSRudinn;
+    public var kris:DSPlayer;
+    public var noelle:DSNoelle;
+    public var dialogueBox:DSDialogueBox;
+    var closetDoor:DSDarkDoor;
 
     var dialogueStage:Int = 0;
     var camera:CitroCamera;
@@ -34,11 +34,11 @@ class PlayState extends CitroState
         add(background);
         camera.add(background);
 
-        kris = new Player(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
+        kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
         add(kris);
         camera.add(kris);
 
-        noelle = new Noelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
+        noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
         noelle.target = kris;
         add(noelle);
         camera.add(noelle);
@@ -46,11 +46,11 @@ class PlayState extends CitroState
         camera.follow(kris, true);
         camera.target = kris;
 
-        dialogueBox = new DialogueBox(20, CitroG.HEIGHT - 70);
+        dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
         add(dialogueBox);
         camera.add(dialogueBox);
 
-        closetDoor = new DarkDoor(300, 100);
+        closetDoor = new DSDarkDoor(300, 100);
         add(closetDoor);
         camera.add(closetDoor);
     }
@@ -70,7 +70,7 @@ class PlayState extends CitroState
         {
             kris.isBusy = true;
             
-            var transition = new DarkWorldTransition(kris, closetDoor, camera);
+            var transition = new DSDarkWorldTransition(kris, closetDoor, camera);
             transition.onComplete = function() {
                 spawnDarkWorldEntities();
             };
@@ -135,7 +135,7 @@ class PlayState extends CitroState
         return true;
     }
 
-    function startBattle(targetEnemy:Rudinn):Void
+    function startBattle(targetEnemy:DSRudinn):Void
     {
         trace('[startBattle()] Entering startBattle function...');
         kris.isBusy = true;

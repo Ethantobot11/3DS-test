@@ -2,7 +2,7 @@ package;
 
 import citro.object.CitroAnimate;
 
-class 3DSRudinn extends CitroAnimate
+class DSRudinn extends CitroAnimate
 {
     public var moveSpeed:Float = 40;
     public var startX:Float;

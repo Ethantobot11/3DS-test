@@ -18,7 +18,7 @@ class Main
         
         trace("Starting Citro 3DS Application...");
 
-        CitroGame.start(new MainMenuState());
+        CitroGame.start(new ThreeDSMainMenuState());
         #else
         LfEngine.initEngine("Deltarune", LfRenderType.DRC, new MainMenuState());
         #end

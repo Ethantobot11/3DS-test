@@ -11,7 +11,7 @@ typedef PositionFrame = {
     var anim:String;
 }
 
-class 3DSPlayer extends CitroAnimate
+class DSPlayer extends CitroAnimate
 {
     public var moveSpeed:Float = 120;
     public var facingDir:String = "down";

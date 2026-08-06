@@ -33,11 +33,11 @@ class BattleState extends CitroState
     var arenaH:Float = 100;
 
     var soul:CitroSprite;
-    var enemy:Rudinn;
+    var enemy:DSRudinn;
     var enemyTurnTimer:Float = 0;
     var attackTimerStarted:Bool = false;
 
-    public function new(enemy:Rudinn)
+    public function new(enemy:DSRudinn)
     {
         super();
         this.enemy = enemy;

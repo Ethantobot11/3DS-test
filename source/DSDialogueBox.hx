@@ -7,7 +7,7 @@ import citro.backend.CitroTimer;
 import citro.CitroG;
 using StringTools;
 
-class 3DSDialogueBox extends citro.object.CitroObject
+class DSDialogueBox extends citro.object.CitroObject
 {
     var boxBg:CitroSprite;
     var boxBorder:CitroSprite;

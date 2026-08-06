@@ -6,7 +6,7 @@ import citro.object.CitroSprite;
 import citro.state.CitroState;
 import haxe3ds.services.HID;
 
-class MainMenuState extends CitroState {
+class ThreeDSMainMenuState extends CitroState {
     
     /**
      * Currently selected index (0 to 2 for save slots, 3 for Options menu).

@@ -81,7 +81,8 @@ class MainMenuState extends LfState {
         }
 
         if (Leafy.wiiuGamepad.justPressed(BUTTON_Y)) {
-            Leafy.switchState(new OptionsState());
+            trace("Opening Options Menu...");
+            //Leafy.switchState(new OptionsState());
         }
     }
 

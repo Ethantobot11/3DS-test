@@ -101,7 +101,7 @@ class OptionsState extends CitroState {
 
             case 2:
                 trace("Returning to Main Menu...");
-                CitroG.switchState(new MainMenuState());
+                CitroG.switchState(new ThreeDSMainMenuState());
         }
     }
 
