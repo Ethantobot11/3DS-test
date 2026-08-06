@@ -5,6 +5,8 @@
 
 package leafy.filesystem;
 
+#if !haxe3ds
+
 import leafy.system.console.SDCard;
 import leafy.backend.LeafyDebug;
 
@@ -190,3 +192,5 @@ class LfSystemPaths {
         return untyped __cpp__("CPP_listDirectory({0});", path);
     }
 }
+
+#end

@@ -1,5 +1,6 @@
 package leafy.utils;
 
+#if !haxe3ds
 /**
  * A class for string utility functions, code from Haxe library
  * 
@@ -40,3 +41,4 @@ class LfStringUtils {
 		return (slen >= elen && str.indexOf(ending, (slen - elen)) == (slen - elen));
     }
 }
+#end

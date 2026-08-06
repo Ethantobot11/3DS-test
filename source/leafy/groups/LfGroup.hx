@@ -5,6 +5,8 @@
 
 package leafy.groups;
 
+#if !haxe3ds
+
 import Std;
 import leafy.objects.LfObject;
 
@@ -109,3 +111,5 @@ class LfGroup<T:LfObject> extends LfObject {
         }
     }
 }
+
+#end

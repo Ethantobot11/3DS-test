@@ -5,6 +5,8 @@
 
 package leafy.states;
 
+#if !haxe3ds
+
 import Std;
 
 import leafy.objects.LfObject;
@@ -140,3 +142,5 @@ for (size_t i = 0; i < subStateObjects->size(); i++) {
         ");
     }
 }
+
+#end

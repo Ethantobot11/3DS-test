@@ -5,6 +5,8 @@
 
 package leafy.audio;
 
+#if !haxe3ds
+
 import leafy.backend.internal.LfAudioManagerInternal;
 
 /**
@@ -85,3 +87,5 @@ class LfAudioEngine {
         LfAudioManagerInternal.setCurrentTime(time);
     }
 }
+
+#end

@@ -5,6 +5,8 @@
 
 package leafy.utils;
 
+#if !haxe3ds
+
 import leafy.objects.LfObject;
 import Std;
 import leafy.objects.LfSprite;
@@ -65,3 +67,5 @@ class LfCollision {
 }
 
 }
+
+#end

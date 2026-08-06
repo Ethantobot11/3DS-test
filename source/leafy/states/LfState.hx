@@ -5,6 +5,8 @@
 
 package leafy.states;
 
+#if !haxe3ds
+
 import haxe.Unserializer.TypeResolver;
 import Std;
 
@@ -180,3 +182,5 @@ for (size_t i = 0; i < stateObjects->size(); i++) {
         return this.subState;
     }
 }
+
+#end

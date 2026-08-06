@@ -5,6 +5,8 @@
 
 package leafy.backend;
 
+#if !haxe3ds
+
 import Std;
 import jansson.Jansson;
 import leafy.filesystem.LfSystemPaths;
@@ -384,3 +386,5 @@ class LfJson {
         return jsonResult;
     }
 }
+
+#end

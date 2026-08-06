@@ -5,7 +5,11 @@
 
 package leafy;
 
+#if !haxe3ds
+
 import cxx.*;
 import cxx.num.*;
 
 import leafy.backend.LeafyDebug;
+
+#end

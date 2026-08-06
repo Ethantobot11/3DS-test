@@ -5,6 +5,8 @@
 
 package leafy.backend.internal;
 
+#if !haxe3ds
+
 import wut.coreinit.Debug;
 import Std;
 
@@ -482,3 +484,5 @@ class LfAudioManagerInternal {
         }
     }
 }
+
+#end

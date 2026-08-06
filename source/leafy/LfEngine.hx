@@ -5,6 +5,8 @@
 
 package leafy;
 
+#if !haxe3ds
+
 import Std;
 
 import cxx.std.Exception;
@@ -210,3 +212,5 @@ class LfEngine {
     }
 
 }
+
+#end

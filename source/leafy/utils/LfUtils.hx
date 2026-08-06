@@ -5,6 +5,8 @@
 
 package leafy.utils;
 
+#if !haxe3ds
+
 import Std;
 
 import leafy.system.console.SDCard;
@@ -180,3 +182,5 @@ class LfUtils {
     // }
 
 }
+
+#end

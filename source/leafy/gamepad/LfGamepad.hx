@@ -5,6 +5,8 @@
 
 package leafy.gamepad;
 
+#if !haxe3ds
+
 import Std;
 
 import wut.vpad.Input.VPADButtons;
@@ -304,3 +306,5 @@ class LfGamepad {
         return VPADButtons.VPAD_BUTTON_A;
     }
 }
+
+#end

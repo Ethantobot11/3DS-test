@@ -5,6 +5,8 @@
 
 package leafy.filesystem;
 
+#if !haxe3ds
+
 @:cppFileCode("
 #include <iostream>
 #include <fstream>
@@ -77,3 +79,5 @@ class LfFile {
         return untyped __cpp__("CPP_readFile({0})", path);
     }
 }
+
+#end

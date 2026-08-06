@@ -5,6 +5,8 @@
 
 package leafy;
 
+#if !haxe3ds
+
 import sdl2.SDL_Render;
 
 import leafy.audio.LfAudioEngine;
@@ -83,3 +85,4 @@ class Leafy {
         LfStateHandler.updateState(deltaTime);
     }
 }
+#end

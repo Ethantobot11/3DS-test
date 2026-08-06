@@ -5,6 +5,8 @@
 
 package leafy.backend;
 
+#if !haxe3ds
+
 import Std;
 import leafy.backend.internal.LfGamepadInternal;
 import leafy.states.LfState;
@@ -72,3 +74,5 @@ class LfStateHandler {
         }
     }
 }
+
+#end

@@ -5,6 +5,8 @@
 
 package leafy.audio;
 
+#if !haxe3ds
+
 import sdl2.SDL_Error;
 
 import vorbis.VorbisFile;
@@ -134,3 +136,5 @@ class LfAudio {
         if (file != null) VorbisFile.ov_clear(file);
     }
 }
+
+#end

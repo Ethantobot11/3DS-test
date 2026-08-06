@@ -5,6 +5,8 @@
 
 package leafy.objects;
 
+#if !haxe3ds
+
 import Std;
 
 import sdl2.SDL_TTF;
@@ -273,3 +275,5 @@ class LfText extends LfObject {
         LeafyDebug.log("Text destroyed: " + this.name, DEBUG);
     }
 }
+
+#end

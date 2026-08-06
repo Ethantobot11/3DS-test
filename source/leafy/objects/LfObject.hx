@@ -5,6 +5,8 @@
 
 package leafy.objects;
 
+#if !haxe3ds
+
 import Std;
 
 import sdl2.SDL_Render.SDL_Texture;
@@ -464,3 +466,5 @@ class LfObject extends LfBase {
         destroy();
     }
 }
+
+#end

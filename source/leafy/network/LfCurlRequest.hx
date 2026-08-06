@@ -5,6 +5,8 @@
 
 package leafy.network;
 
+#if !haxe3ds
+
 @:cppFileCode("
 #include <curl/curl.h>
 #include <iostream>
@@ -105,4 +107,6 @@ enum HttpMethod {
     DELETE;
     PATCH;
 }
+
+#end
 

@@ -1,5 +1,7 @@
 package leafy.objects;
 
+#if !haxe3ds
+
 import Std;
 import haxe.Xml;
 import haxe.ds.StringMap;
@@ -289,3 +291,5 @@ class LfSprite extends LfObject {
         LeafyDebug.log("Sprite destroyed: " + this.name, DEBUG);
     }
 }
+
+#end

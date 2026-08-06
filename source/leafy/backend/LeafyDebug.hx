@@ -5,6 +5,8 @@
 
 package leafy.backend;
 
+#if !haxe3ds
+
 import leafy.utils.LfUtils;
 import Std;
 
@@ -430,3 +432,5 @@ class LeafyDebug {
         LfFile.appendToFile(currentLogFilePath, "---------------------\n");
     }
 }
+
+#end

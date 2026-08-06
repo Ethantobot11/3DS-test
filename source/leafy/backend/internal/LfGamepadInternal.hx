@@ -5,6 +5,8 @@
 
 package leafy.backend.internal;
 
+#if !haxe3ds
+
 import Std;
 
 import wut.vpad.Input;
@@ -417,3 +419,5 @@ return mode");
         return Systeminfo.OSIsHomeButtonMenuEnabled();
     }
 }
+
+#end

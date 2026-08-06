@@ -5,6 +5,8 @@
 
 package leafy.tweens;
 
+#if !haxe3ds
+
 import haxe.Exception;
 import Std;
 import leafy.objects.LfObject;
@@ -441,3 +443,5 @@ for (size_t i = 0; i < _tweens->size(); i++) {
         return Math.pow(2, -10 * (t -= 0.5)) * Math.sin((t - (0.4 / 4)) * (2 * Math.PI) / 0.4) * 0.5 + 1;
     }
 }
+
+#end

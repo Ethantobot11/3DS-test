@@ -89,8 +89,21 @@ jobs:
             chmod +x /opt/devkitpro/tools/bin/makerom
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools
+            mkdir -p .haxelib
+            haxelib setup .haxelib
+            haxelib git hxu_wut https://github.com/Haxe-WiiU/HxU_WUT --quiet || true
+            haxelib git hxu_libnotifications https://github.com/Haxe-WiiU/HxU_LibNotifications --quiet || true
+            haxelib git hxu_libmappedmemory https://github.com/Haxe-WiiU/HxU_LibMappedMemory --quiet || true
+            haxelib git slushiutilsU https://github.com/Haxe-WiiU/SlushiUtilsU --quiet || true
+            haxelib git hxu_sdl2 https://github.com/Haxe-WiiU/HxU_SDL2 --quiet || true
+            haxelib git hxu_sdl_fontcache https://github.com/Haxe-WiiU/HxU_SDL_FontCache --quiet || true
+            haxelib git hxu_jansson https://github.com/Haxe-WiiU/HxU_Jansson --quiet || true
+            haxelib git hxu_vorbis https://github.com/Haxe-WiiU/HxU_Vorbis --quiet || true
+            haxelib git reflaxe https://github.com/SomeRanDev/reflaxe --quiet
+            haxelib git reflaxe.cpp https://github.com/Ethantobot11/reflaxe.CPP --quiet
+            haxelib dev reflaxe .haxelib/reflaxe/git
+            haxelib dev reflaxe.cpp .haxelib/reflaxe.cpp/git
           fi
-
       - name: Build HXCPP Runner and Tools
         run: |
           mkdir -p .haxelib

@@ -8,6 +8,8 @@ package leafy;
 /**
  * Base class for Leafy objects
  */
+
+ #if !haxe3ds
 class LfBase {
     /**
      * Function to be executed when creating this class
@@ -42,3 +44,4 @@ class LfBase {
         // Destroy logic here
     }
 }
+#end

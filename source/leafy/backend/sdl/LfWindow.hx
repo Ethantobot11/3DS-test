@@ -5,6 +5,8 @@
 
 package leafy.backend.sdl;
 
+#if !haxe3ds
+
 import wut.coreinit.Debug;
 import Std;
 
@@ -141,3 +143,5 @@ class LfWindow {
         return height;
     }
 }
+
+#end

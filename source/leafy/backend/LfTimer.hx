@@ -5,6 +5,8 @@
 
 package leafy.backend;
 
+#if !haxe3ds
+
 import sdl2.SDL_Timer;
 
 typedef LfTimerObject = {
@@ -62,3 +64,5 @@ class LfTimer {
         }
     }
 }
+
+#end

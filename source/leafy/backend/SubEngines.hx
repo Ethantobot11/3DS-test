@@ -5,6 +5,8 @@
 
 package leafy.backend;
 
+#if !haxe3ds
+
 import sdl2.SDL_TTF;
 import sdl2.SDL_Image;
 import sdl2.SDL_Error;
@@ -74,3 +76,5 @@ class SubEngines {
         LeafyDebug.log("SDL shutdown", INFO);
     }
 }
+
+#end

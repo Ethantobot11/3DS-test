@@ -5,6 +5,8 @@
 
 package leafy.system.console;
 
+#if !haxe3ds
+
 import Std;
 import wut.whb.Sdcard;
 
@@ -45,3 +47,4 @@ class SDCard {
         return Std.string(Sdcard.WHBGetSdCardMountPath());
     }
 }
+#end

@@ -5,6 +5,8 @@
 
 package leafy.backend.sdl;
 
+#if !haxe3ds
+
 import Std;
 
 import sdl2.SDL_Render;
@@ -47,3 +49,5 @@ class LfWindowRender {
         }
     }
 }
+
+#end

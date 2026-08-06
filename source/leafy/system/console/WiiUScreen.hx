@@ -5,6 +5,8 @@
 
 package leafy.system.console;
 
+#if !haxe3ds
+
 import wut.coreinit.Screen;
 import wut.coreinit.Cache;
 
@@ -149,3 +151,5 @@ class WiiUScreen {
         }
     }
 }
+
+#end
