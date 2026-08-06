@@ -48,6 +48,7 @@ jobs:
             C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
             ~/.haxelib/
             export/
+            output/
             .haxelib\
           restore-keys: |
             cache-build-${{ inputs.name }}
@@ -56,24 +57,6 @@ jobs:
         if: inputs.name == 'Wii U'
         run: |
           apt-get update && apt-get install -y build-essential git wget curl       
-
-      - name: Inject HxCU_Meta.json for Haxelibs
-        if: inputs.name == 'Wii U'
-        run: |
-          for libDir in .haxelib/*/; do
-            if [ -d "$libDir" ] && [ ! -f "${libDir}HxCU_Meta.json" ]; then
-              libName=$(basename "$libDir")
-              echo "{
-                \"libVersion\": \"1.0.0\",
-                \"customUDPPort\": \"\",
-                \"haxeLibs\": [],
-                \"wiiuLibs\": [],
-                \"mainDefines\": [],
-                \"cDefines\": [],
-                \"cppDefines\": []
-              }" > "${libDir}HxCU_Meta.json"
-            fi
-          done
 
       - name: Install Console Toolchains & Audio Dependencies
         run: |
@@ -235,6 +218,7 @@ jobs:
             C:/hostedtoolcache/windows/haxe/4.3.6/x64/lib/
             ~/.haxelib/
             export/
+            output/
             .haxelib\
           restore-keys: |
             cache-build-${{ inputs.name }}

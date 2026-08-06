@@ -114,7 +114,7 @@ class OptionsState extends CitroState {
         
         // Note: If your engine has a text rendering utility (like CitroText), 
         // you would draw `currentFps` at coordinates X: 4, Y: 4 here.
-        Example: CitroG.renderText('FPS: $currentFps', 4, 4, 0xFFFFFFFF);
+        //CitroG.renderText('FPS: $currentFps', 4, 4, 0xFFFFFFFF);
     }
 
     override public function destroy() {

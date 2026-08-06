@@ -11,20 +11,13 @@ import citro.backend.CitroColor;
 
 import haxe3ds.services.HID;
 
-import Player;
-import Noelle;
-import DialogueBox;
-import Rudinn;
-import DarkDoor;
-import DarkWorldTransition;
-
 class PlayState extends CitroState
 {
-    var rudinn:Rudinn;
-    public var kris:Player;
-    public var noelle:Noelle;
-    public var dialogueBox:DialogueBox;
-    var closetDoor:DarkDoor;
+    var rudinn:3DSRudinn;
+    public var kris:3DSPlayer;
+    public var noelle:3DSNoelle;
+    public var dialogueBox:3DSDialogueBox;
+    var closetDoor:3DSDarkDoor;
 
     var dialogueStage:Int = 0;
     var camera:CitroCamera;

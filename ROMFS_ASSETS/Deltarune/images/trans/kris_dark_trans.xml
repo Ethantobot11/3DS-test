@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="kris_dark_trans.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="spr_kris_dw_landed_0000" x="22" y="123" width="27" height="33" frameX="0" frameY="-8" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_kris_dw_landed_0001" x="0" y="164" width="25" height="34" frameX="-1" frameY="-7" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_kris_dw_landed_0002" x="23" y="82" width="23" height="41" frameX="-2" frameY="0" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_kris_fall_ball_0000" x="50" y="164" width="25" height="26" frameX="-1" frameY="-13" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_ball_0001" x="49" y="123" width="26" height="25" frameX="-1" frameY="-13" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_ball_0002" x="25" y="164" width="25" height="26" frameX="-3" frameY="-13" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_ball_0003" x="75" y="123" width="26" height="25" frameX="-3" frameY="-13" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_dw_0000" x="122" y="40" width="23" height="41" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_dw_0001" x="99" y="0" width="23" height="42" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_dw_0002" x="146" y="0" width="22" height="42" frameX="-4" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_lw_0000" x="99" y="42" width="23" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_lw_0001" x="0" y="82" width="23" height="41" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_lw_0002" x="92" y="82" width="22" height="41" frameX="-4" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_smear_0000" x="28" y="0" width="23" height="43" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_smear_0001" x="0" y="39" width="25" height="43" frameX="-3" frameY="-6" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_smear_0002" x="0" y="0" width="28" height="39" frameX="0" frameY="-8" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_turnaround_0000" x="76" y="42" width="23" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_turnaround_0001" x="0" y="123" width="22" height="41" frameX="-6" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_turnaround_0002" x="168" y="0" width="22" height="40" frameX="-6" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_turnaround_0003" x="122" y="0" width="24" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_turnaround_0004" x="99" y="42" width="23" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_fall_lw_0000" x="76" y="42" width="23" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_fall_lw_0001" x="69" y="82" width="23" height="41" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_fall_lw_0002" x="114" y="82" width="22" height="41" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_run_0000" x="28" y="43" width="23" height="37" frameX="-3" frameY="-3" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_krisu_run_0001" x="51" y="0" width="25" height="39" frameX="-2" frameY="0" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_krisu_run_0002" x="190" y="0" width="23" height="37" frameX="-3" frameY="-3" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_krisu_run_0003" x="51" y="39" width="25" height="39" frameX="-2" frameY="0" frameWidth="29" frameHeight="40"/>
+	<SubTexture name="spr_krisu_fall_lw_0003" x="76" y="42" width="23" height="40" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_fall_lw_0004" x="69" y="82" width="23" height="41" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_krisu_fall_lw_0005" x="114" y="82" width="22" height="41" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_white_00000" x="46" y="82" width="23" height="41" frameX="-3" frameY="-5" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_white_10000" x="76" y="0" width="23" height="42" frameX="-3" frameY="-4" frameWidth="29" frameHeight="50"/>
+	<SubTexture name="spr_kris_fall_d_white_20000" x="146" y="42" width="22" height="42" frameX="-4" frameY="-4" frameWidth="29" frameHeight="50"/>
+</TextureAtlas>

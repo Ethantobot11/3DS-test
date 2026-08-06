@@ -1,0 +1,26 @@
+{
+	"extraLibs": [
+	],
+	"programVersion": ">=1.5.3",
+	"projectDefines": [],
+	"haxeConfig": {
+		"errorReportingStyle": "pretty",
+		"othersOptions": [],
+		"hxMain": "source.Main",
+		"outDir": "output",
+		"debugMode": false,
+		"sourceDir": "source"
+	},
+	"wiiuConfig": {
+		"convertToWUHB": true,
+		"wuhbConfig": {
+			"shortName": "DELTARUNE",
+			"name": "Deltarune",
+			"author": "Ethantobot"
+		},
+		"projectName": "Deltarune",
+		"isAPlugin": false,
+		"consoleIP": "0.0.0.0"
+	},
+	"deleteTempFiles": false
+}
