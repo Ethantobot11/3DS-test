@@ -67,11 +67,12 @@ class PlayState extends CitroState
 
         if (!kris.isBusy && camera != null)
         {
-           camera.follow(kris);
+            camera.follow(kris);
         }
 
         separate(kris, noelle, !noelle.isFollowing);
-        separate(kris, closetDoor, true);
+        //separate(kris, closetDoor, true)
+        separate(noelle, closetDoor, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                               HID.keyPressed(HIDKey.START) || 

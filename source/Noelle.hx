@@ -67,7 +67,9 @@ class Noelle extends CitroAnimate
     {
         if (!isFollowing)
         {
-            play("spr_noelle_walk_down_lw");
+            if (curAnim != "spr_noelle_walk_down_lw") {
+                play("spr_noelle_walk_down_lw");
+            }
         }
         else
         {
@@ -90,10 +92,15 @@ class Noelle extends CitroAnimate
             x = targetFrame.x;
             y = targetFrame.y;
 
-            if (targetFrame.anim.indexOf("u") != -1) play("spr_noelle_walk_up_lw");
-            else if (targetFrame.anim.indexOf("d") != -1) play("spr_noelle_walk_down_lw");
-            else if (targetFrame.anim.indexOf("l") != -1) play("spr_noelle_walk_left_lw");
-            else if (targetFrame.anim.indexOf("r") != -1) play("spr_noelle_walk_right_lw");
+            var desiredAnim = "spr_noelle_walk_down_lw";
+            if (targetFrame.anim.indexOf("u") != -1) desiredAnim = "spr_noelle_walk_up_lw";
+            else if (targetFrame.anim.indexOf("d") != -1) desiredAnim = "spr_noelle_walk_down_lw";
+            else if (targetFrame.anim.indexOf("l") != -1) desiredAnim = "spr_noelle_walk_left_lw";
+            else if (targetFrame.anim.indexOf("r") != -1) desiredAnim = "spr_noelle_walk_right_lw";
+
+            if (curAnim != desiredAnim) {
+                play(desiredAnim);
+            }
         }
     }
 }

@@ -128,20 +128,21 @@ class Player extends CitroAnimate
 
         if (up || down || left || right)
         {
-            if (up) { vy = -moveSpeed; facingDir = "up"; }
-            else if (down) { vy = moveSpeed; facingDir = "down"; }
+            var desiredAnim = "";
 
-            if (left) { vx = -moveSpeed; facingDir = "left"; }
-            else if (right) { vx = moveSpeed; facingDir = "right"; }
+            if (up) { vy = -moveSpeed; facingDir = "up"; desiredAnim = 'spr_krisu$suffix'; }
+            else if (down) { vy = moveSpeed; facingDir = "down"; desiredAnim = 'spr_krisd$suffix'; }
+
+            if (left) { vx = -moveSpeed; facingDir = "left"; desiredAnim = 'spr_krisl$suffix'; }
+            else if (right) { vx = moveSpeed; facingDir = "right"; desiredAnim = 'spr_krisr$suffix'; }
 
             var dt = CitroG.deltaTime / 1000; 
             x += vx * dt;
             y += vy * dt;
 
-            if (up) play('spr_krisu$suffix');
-            else if (down) play('spr_krisd$suffix');
-            else if (left) play('spr_krisl$suffix');
-            else if (right) play('spr_krisr$suffix');
+            if (curAnim != desiredAnim) {
+                play(desiredAnim);
+            }
         }
         else
         {
@@ -150,7 +151,9 @@ class Player extends CitroAnimate
             else if (facingDir == "left") currentStanding = isDarkWorld ? "spr_krisl_dark" : "spr_krisl";
             else if (facingDir == "right") currentStanding = isDarkWorld ? "spr_krisr_dark" : "spr_krisr";
             
-            play(currentStanding);
+            if (curAnim != currentStanding) {
+                play(currentStanding);
+            }
         }
     }
 }
