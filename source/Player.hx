@@ -32,6 +32,11 @@ class Player extends CitroAnimate
 
         loadPlayerAnimations();
         play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
+
+        var initialAnim = isDarkWorld ? "spr_krisd_dark" : "spr_krisd";
+        for (i in 0...25) {
+            pathHistory.push({x: x, y: y, anim: initialAnim});
+        }
     }
 
     private function loadPlayerAnimations():Void
@@ -97,9 +102,6 @@ class Player extends CitroAnimate
 
     override public function update():Bool
     {
-        var oldX = x;
-        var oldY = y;
-
         if (!isBusy)
         {
             handleMovement();
@@ -109,15 +111,12 @@ class Player extends CitroAnimate
             frame = 0;
         }
 
-        if (x != oldX || y != oldY)
-        {
-            var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
-            pathHistory.unshift({x: x, y: y, anim: curAnimName});
+        var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
+        pathHistory.unshift({x: x, y: y, anim: curAnimName});
 
-            if (pathHistory.length > 100)
-            {
-                pathHistory.pop();
-            }
+        if (pathHistory.length > 100)
+        {
+            pathHistory.pop();
         }
 
         return super.update();
@@ -156,7 +155,12 @@ class Player extends CitroAnimate
         }
         else
         {
-            frame = 0;
+            var currentStanding = isDarkWorld ? "spr_krisd_dark" : "spr_krisd";
+            if (facingDir == "up") currentStanding = isDarkWorld ? "spr_krisu_dark" : "spr_krisu";
+            else if (facingDir == "left") currentStanding = isDarkWorld ? "spr_krisl_dark" : "spr_krisl";
+            else if (facingDir == "right") currentStanding = isDarkWorld ? "spr_krisr_dark" : "spr_krisr";
+            
+            play(currentStanding);
         }
     }
 }
