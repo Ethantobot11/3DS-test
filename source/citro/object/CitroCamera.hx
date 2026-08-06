@@ -5,10 +5,8 @@ import citro.math.CitroMath;
 
 /**
  * A backend for camera only, useful if you wanna make a camera like view.
- * 
- * Note: It is a object, so it must be added from this state!
- * 
- * @since 1.1.0
+ * * Note: It is a object, so it must be added from this state!
+ * * @since 1.1.0
  */
 @:cppInclude("citro/CitroGame.h")
 @:cppInclude("3ds.h")
@@ -20,6 +18,11 @@ class CitroCamera extends CitroObject {
 	var curY:Float = 0;
 	var bottomCam:Bool = false;
 	var scX:Int = 0;
+
+	/**
+	 * Target object for the camera to continuously follow automatically.
+	 */
+	public var target:CitroObject = null;
 
 	/**
 	 * Lists of members currently added in this Camera.
@@ -48,6 +51,12 @@ class CitroCamera extends CitroObject {
 	}
 
 	override function update():Bool {
+		// Automatically track the target every frame if one is set
+		if (target != null) {
+			x = target.x - (bottomCam ? 160 : 200) + (target.width / 2);
+			y = target.y - 120 + (target.height / 2);
+		}
+
 		super.update();
 
 		curX = CitroMath.lerp(curX, x, lerp);
@@ -102,12 +111,18 @@ class CitroCamera extends CitroObject {
 
 	/**
 	 * Follows the object and sets the position to the object's position.
+	 * Can also be used to assign a persistent tracking target if desired.
 	 * @param object Object to use and set the camera's position.
 	 * @since 1.1.0
 	 */
-	public function follow(object:CitroObject) {
-		x = object.x - (bottomCam ? 160 : 200) + (object.width / 2);
-		y = object.y - 120 + (object.height / 2);
+	public function follow(object:CitroObject, persistent:Bool = false) {
+		if (object != null) {
+			x = object.x - (bottomCam ? 160 : 200) + (object.width / 2);
+			y = object.y - 120 + (object.height / 2);
+		}
+		if (persistent) {
+			target = object;
+		}
 	}
 
 	/**
