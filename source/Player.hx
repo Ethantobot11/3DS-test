@@ -95,7 +95,6 @@ class Player extends CitroAnimate
         }
         else
         {
-            animation.stop();
             frame = 0;
         }
 
@@ -146,7 +145,6 @@ class Player extends CitroAnimate
         }
         else
         {
-            animation.stop();
             frame = 0;
         }
     }

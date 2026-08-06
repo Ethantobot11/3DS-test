@@ -66,17 +66,14 @@ class Noelle extends CitroAnimate
     {
         if (!isFollowing)
         {
-            animation.stop();
             frame = 0; 
         }
         else
         {
-            updateFollowingMovement();
-        }
-
-        if (isFollowing && target != null)
-        {
-            followPathTrail();
+            if (target != null)
+            {
+                followPathTrail();
+            }
         }
         
         return super.update();
