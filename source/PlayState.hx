@@ -155,9 +155,9 @@ class PlayState extends CitroState
     {
         trace('[spawnDarkWorldEntities] Transition done. Unfreezing Kris and spawning Rudinn.');
         kris.isBusy = false;
-        rudinn = new Rudinn(kris.x + 100, kris.y, 150);
-        add(rudinn);
-        camera.add(rudinn);
+        //rudinn = new Rudinn(kris.x + 100, kris.y, 150);
+        //add(rudinn);
+        //camera.add(rudinn);
     }
 
     private function handleInputs()
@@ -178,12 +178,12 @@ class PlayState extends CitroState
                 if (dialogueBox.selectedIndex == 0)
                 {
                     noelle.isFollowing = true;
-                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* great! let's go!"), "noelle_face", "spr_face_n_matome_00000", "light", false);
+                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* great! let's go!"), "spr_face_n_matome", "spr_face_n_matome-0", "light", false);
                     dialogueStage = 2;
                 }
                 else
                 {
-                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* oh... okay, maybe later!"), "noelle_face", "spr_face_n_matome_10000", "light", false);
+                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* oh... okay, maybe later!"), "spr_face_n_matome", "spr_face_n_matome-1", "light", false);
                     dialogueStage = 2;
                 }
             }
@@ -210,8 +210,9 @@ class PlayState extends CitroState
             
             dialogueBox.startDialogue(
                 "* Hi Kris!\n* Want me to come with you?", 
-                "noelle_face", 
-                "spr_face_n_matome_00000", 
+                "noelle_face",
+                "spr_face_n_matome", 
+                "spr_face_n_matome-0", 
                 "light",
                 true
             );

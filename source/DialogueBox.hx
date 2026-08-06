@@ -39,6 +39,7 @@ class DialogueBox extends citro.object.CitroObject
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
 
+        // Portrait is now an animated sprite inheriting/using CitroAnimate capabilities via portrait object or frame-switching
         portrait = new CitroSprite(8, 6);
         portrait.visible = false;
 
@@ -87,15 +88,28 @@ class DialogueBox extends citro.object.CitroObject
 
         if (faceAtlas != null && expressionFrame != null)
         {
-            portrait.loadGraphic('romfs:/assets/images/${faceAtlas}.t3x');
+            var ceaPath = 'romfs:/assets/images/${faceAtlas}.cea';
+            if (sys.FileSystem.exists(ceaPath))
+            {
+                var file:String = sys.io.File.getContent(ceaPath);
+                var dir:String = "romfs:/assets/images/chars";
+                
+                for (line in file.split("\n"))
+                {
+                    if (line.trim() == "") continue;
+                    var row:Array<String> = line.split("?");
+                    if (row.length < 3) continue;
+                    var frameKey = row[3].trim();
+                    
+                    if (frameKey == expressionFrame || frameKey.indexOf(expressionFrame) != -1)
+                    {
+                        portrait.loadGraphic('$dir/${row[0]}');
+                        break;
+                    }
+                }
+            }
             portrait.visible = true;
-
             textDisplay.x = x + 68;
-        }
-        else
-        {
-            portrait.visible = false;
-            textDisplay.x = x + 15;
         }
 
         textDisplay.text = "";

@@ -22,19 +22,19 @@ class Player extends CitroAnimate
     public function new(x:Float, y:Float, darkWorld:Bool = false)
     {
         isDarkWorld = darkWorld;
-        var ceaPath = isDarkWorld ? "romfs:/assets/images/chars/Kris_Dark.cea" : "romfs:/assets/images/chars/Kris_Light.cea";
         
-        super(ceaPath, "idle_down");
+        // Pass a dummy or initial CEA file to super, then load our split files manually
+        super("romfs:/assets/images/chars/krisd_dark.cea", "spr_krisd_dark");
         
         this.x = x;
         this.y = y;
+        
+        loadAllAnimations();
+        play("spr_kris_down"); // Initial play call
     }
 
-    public function setDarkWorld(darkWorld:Bool):Void
+    private function loadAllAnimations():Void
     {
-        if (isDarkWorld == darkWorld) return;
-        isDarkWorld = darkWorld;
-
         if (sprites != null) {
             for (key => header in sprites) {
                 if (header != null && header.sprite != null) {
@@ -44,42 +44,62 @@ class Player extends CitroAnimate
             sprites.clear();
         }
 
-        var ceaPath = isDarkWorld ? "romfs:/assets/images/chars/Kris_Dark.cea" : "romfs:/assets/images/chars/Kris_Light.cea";
-        var file:String = sys.io.File.getContent(ceaPath);
-        var dir:String = ceaPath.substr(0, ceaPath.lastIndexOf("/"));
-        
-        if (file != "") {
-            var i:Int = 0;
-            var animationList:Array<String> = [];
-            for (line in file.split("\n")) {
-                var row:Array<String> = line.split("?");
-                if (row.length < 3) break;
-                row[3] = row[3].trim();
+        // Define the prefix based on Dark World vs Light World
+        var prefix = isDarkWorld ? "kris" : "kris"; // adjust if light world files have different naming
+        var suffix = isDarkWorld ? "_dark" : "";
 
-                if (!animationList.join(" ").contains(row[3])) {
-                    animationList.push(row[3]);
-                    i = -1;
+        // List of all directional CEA files we generated for Kris
+        var ceaFiles = [
+            'krisd${suffix}.cea',
+            'krisl${suffix}.cea',
+            'krisr${suffix}.cea',
+            'krisu${suffix}.cea'
+        ];
+
+        for (ceaFile in ceaFiles) {
+            var ceaPath = 'romfs:/assets/images/chars/$ceaFile';
+            if (!sys.FileSystem.exists(ceaPath)) continue;
+
+            var file:String = sys.io.File.getContent(ceaPath);
+            var dir:String = "romfs:/assets/images/chars";
+
+            if (file != "") {
+                var i:Int = 0;
+                var currentAnimBase:String = "";
+                
+                for (line in file.split("\n")) {
+                    if (line.trim() == "") continue;
+                    var row:Array<String> = line.split("?");
+                    if (row.length < 3) break;
+                    row[3] = row[3].trim();
+
+                    var lastDash = row[3].lastIndexOf("-");
+                    var animName = row[3].substring(0, lastDash);
+                    var frameIdx = Std.parseInt(row[3].substring(lastDash + 1));
+
+                    var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
+                    if (!sprite.loadGraphic('$dir/${row[0]}')) {
+                        sprite.destroy();
+                        continue;
+                    }
+
+                    var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
+                    sprites.set(row[3], {
+                        frameX: resultParse[0] == null ? 0 : resultParse[0],
+                        frameY: resultParse[1] == null ? 0 : resultParse[1],
+                        sprite: sprite
+                    });
                 }
-                i++;
-
-                var n:String = '${row[3]}-$i';
-                var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
-                if (!sprite.loadGraphic('$dir/${row[0]}')) {
-                    i--;
-                    sprite.destroy();
-                    continue;
-                }
-
-                var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
-                sprites.set(n, {
-                    frameX: resultParse[0] == null ? 0 : resultParse[0],
-                    frameY: resultParse[1] == null ? 0 : resultParse[1],
-                    sprite: sprite
-                });
             }
         }
+    }
 
-        play("idle_down");
+    public function setDarkWorld(darkWorld:Bool):Void
+    {
+        if (isDarkWorld == darkWorld) return;
+        isDarkWorld = darkWorld;
+        loadAllAnimations();
+        play("spr_krisd_dark-0");
     }
 
     public function updatePlayer(delta:Float):Bool
@@ -94,7 +114,7 @@ class Player extends CitroAnimate
 
         if (x != oldX || y != oldY)
         {
-            var curAnimName = (curAnim != "") ? curAnim : "walk_down";
+            var curAnimName = (curAnim != "") ? curAnim : "spr_krisd_dark";
             pathHistory.unshift({x: x, y: y, anim: curAnimName});
 
             if (pathHistory.length > 100)
@@ -104,10 +124,10 @@ class Player extends CitroAnimate
         }
         else
         {
-            if (facingDir == "up") play("idle_up");
-            else if (facingDir == "down") play("idle_down");
-            else if (facingDir == "left") play("idle_left");
-            else if (facingDir == "right") play("idle_right");
+            if (facingDir == "up") play("spr_krisu_dark");
+            else if (facingDir == "down") play("spr_krisd_dark");
+            else if (facingDir == "left") play("spr_krisl_dark");
+            else if (facingDir == "right") play("spr_krisr_dark");
         }
 
         return result;
@@ -138,17 +158,17 @@ class Player extends CitroAnimate
             x += vx * dt;
             y += vy * dt;
 
-            if (up) play("walk_up");
-            else if (down) play("walk_down");
-            else if (left) play("walk_left");
-            else if (right) play("walk_right");
+            if (up) play("spr_krisu_dark");
+            else if (down) play("spr_krisd_dark");
+            else if (left) play("spr_krisl_dark");
+            else if (right) play("spr_krisr_dark");
         }
         else
         {
-            if (facingDir == "up") play("idle_up");
-            else if (facingDir == "down") play("idle_down");
-            else if (facingDir == "left") play("idle_left");
-            else if (facingDir == "right") play("idle_right");
+            if (facingDir == "up") play("spr_krisu_dark");
+            else if (facingDir == "down") play("spr_krisd_dark");
+            else if (facingDir == "left") play("spr_krisl_dark");
+            else if (facingDir == "right") play("spr_krisr_dark");
         }
     }
 }

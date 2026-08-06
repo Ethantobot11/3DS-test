@@ -22,7 +22,7 @@ class DarkWorldTransition extends CitroAnimate
 
     public function new(player:Player, door:DarkDoor = null, camera:CitroCamera = null)
     {
-        super("romfs:/assets/images/trans/kris_dark_trans.cea", "spr_krisu_run");
+        super("romfs:/assets/images/trans/spr_krisu_run.cea", "spr_krisu_run");
 
         this.x = player.x;
         this.y = player.y;
@@ -34,6 +34,8 @@ class DarkWorldTransition extends CitroAnimate
         this.framerate = 8; 
         this.looped = true;
 
+        loadTransitionAnimations();
+
         player.visible = false;
         player.isBusy = true;
 
@@ -42,6 +44,51 @@ class DarkWorldTransition extends CitroAnimate
         }
 
         startTransition();
+    }
+
+    private function loadTransitionAnimations():Void
+    {
+        var ceaFiles = [
+            "spr_krisu_run.cea",
+            "spr_krisu_fall_lw.cea",
+            "spr_kris_fall_turnaround.cea",
+            "spr_kris_fall_d_lw.cea",
+            "spr_kris_fall_d_white.cea",
+            "spr_kris_fall_d_dw.cea",
+            "spr_kris_fall_smear.cea",
+            "spr_kris_fall_ball.cea",
+            "spr_kris_dw_landed.cea"
+        ];
+
+        for (ceaFile in ceaFiles) {
+            var ceaPath = 'romfs:/assets/images/trans/$ceaFile';
+            if (!sys.FileSystem.exists(ceaPath)) continue;
+
+            var file:String = sys.io.File.getContent(ceaPath);
+            var dir:String = "romfs:/assets/images/trans";
+
+            if (file != "") {
+                for (line in file.split("\n")) {
+                    if (line.trim() == "") continue;
+                    var row:Array<String> = line.split("?");
+                    if (row.length < 3) break;
+                    row[3] = row[3].trim();
+
+                    var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
+                    if (!sprite.loadGraphic('$dir/${row[0]}')) {
+                        sprite.destroy();
+                        continue;
+                    }
+
+                    var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
+                    sprites.set(row[3], {
+                        frameX: resultParse[0] == null ? 0 : resultParse[0],
+                        frameY: resultParse[1] == null ? 0 : resultParse[1],
+                        sprite: sprite
+                    });
+                }
+            }
+        }
     }
 
     function startTransition()
