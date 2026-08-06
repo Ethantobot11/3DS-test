@@ -1,4 +1,4 @@
-package citro.backend;
+package;
 
 import haxe.CallStack;
 import sys.io.File;

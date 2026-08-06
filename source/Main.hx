@@ -16,7 +16,7 @@ class Main
             CitroGame.start(new MainMenuState());
         } catch (e:Dynamic) {
             CrashHandler.logException(e, "Fatal error during CitroGame execution!");
-            rethrow;
+            throw e;
         }
     }
 }

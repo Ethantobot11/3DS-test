@@ -1,9 +1,10 @@
-package citro.state;
+package;
 
 import citro.CitroG;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
 import haxe3ds.services.HID;
+import citro.state.CitroState;
 
 class OptionsState extends CitroState {
 

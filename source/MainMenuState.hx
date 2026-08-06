@@ -1,8 +1,9 @@
-package citro.state;
+package;
 
 import citro.CitroG;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
+import citro.state.CitroState;
 import haxe3ds.services.HID;
 
 class MainMenuState extends CitroState {
