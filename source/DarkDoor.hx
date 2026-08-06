@@ -11,19 +11,26 @@ class DarkDoor extends CitroSprite
     public function new(x:Float, y:Float)
     {
         super(x, y);
-        loadGraphic("romfs:/assets/images/trans/spr_darkdoor_0.t3x");
+        if (!loadGraphic("romfs:/assets/images/trans/spr_darkdoor_0.t3x")) {
+            trace("ERROR: Failed to load initial door graphic!");
+        }
     }
 
     public function setDoorState(state:Int)
     {
+        trace('Setting Door State to: $state');
         switch (state)
         {
             case STATE_CLOSED:
                 loadGraphic("romfs:/assets/images/trans/spr_darkdoor_0.t3x");
             case STATE_OPEN_FRAME:
-                loadGraphic("romfs:/assets/images/trans/spr_darkdoor_1.t3x");
+                if (!loadGraphic("romfs:/assets/images/trans/spr_darkdoor_1.t3x")) {
+                    trace("ERROR: Failed to load spr_darkdoor_1.t3x");
+                }
             case STATE_DARK_VOID:
-                loadGraphic("romfs:/assets/images/trans/spr_darkdoor_2.t3x");
+                if (!loadGraphic("romfs:/assets/images/trans/spr_darkdoor_2.t3x")) {
+                    trace("ERROR: Failed to load spr_darkdoor_2.t3x");
+                }
         }
     }
 }

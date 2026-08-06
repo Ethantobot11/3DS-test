@@ -109,8 +109,9 @@ class DarkWorldTransition extends CitroAnimate
             case 1:
                 if (timer >= 0.4)
                 {
-                    if (door != null)
+                    if (door != null) {
                         door.setDoorState(DarkDoor.STATE_OPEN_FRAME);
+                    }
 
                     framerate = 8;
                     play("spr_krisu_fall_lw");
@@ -121,8 +122,9 @@ class DarkWorldTransition extends CitroAnimate
             case 2:
                 if (timer >= 0.6)
                 {
-                    if (door != null)
+                    if (door != null) {
                         door.setDoorState(DarkDoor.STATE_DARK_VOID);
+                    }
 
                     bgOverlay = new CitroSprite(0, 0);
                     bgOverlay.makeGraphic(CitroG.WIDTH * 4, CitroG.HEIGHT * 16, 0xFF000000);
@@ -224,10 +226,6 @@ class DarkWorldTransition extends CitroAnimate
                 lineSpawnTimer = 0;
                 var line = new DarkTransitionLine(x, y + 200);
             }
-        }
-
-        if (camera != null) {
-            camera.follow(this);
         }
 
         return super.update();

@@ -1,4 +1,4 @@
-package;
+package citro.state;
 
 import citro.state.CitroState;
 import citro.object.CitroSprite;
@@ -50,7 +50,8 @@ class PlayState extends CitroState
         add(noelle);
         camera.add(noelle);
 
-        camera.follow(kris);
+        camera.follow(kris, true);
+        camera.target = kris;
 
         dialogueBox = new DialogueBox(20, CitroG.HEIGHT - 70);
         add(dialogueBox);
@@ -65,17 +66,12 @@ class PlayState extends CitroState
     {
         super.update(delta);
 
-        if (camera != null && kris != null && !kris.isBusy)
-        {
-            camera.follow(kris);
-        }
-
         separate(kris, noelle, !noelle.isFollowing);
         separate(noelle, closetDoor, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
-                              HID.keyPressed(HIDKey.START) || 
-                              HID.keyPressed(HIDKey.R);
+                            HID.keyPressed(HIDKey.START) || 
+                            HID.keyPressed(HIDKey.R);
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
@@ -160,9 +156,6 @@ class PlayState extends CitroState
     {
         trace('[spawnDarkWorldEntities] Transition done. Unfreezing Kris and spawning Rudinn.');
         kris.isBusy = false;
-        //rudinn = new Rudinn(kris.x + 100, kris.y, 150);
-        //add(rudinn);
-        //camera.add(rudinn);
     }
 
     private function handleInputs()
