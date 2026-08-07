@@ -226,7 +226,7 @@ class DSDarkWorldTransition extends CitroAnimate
             if (lineSpawnTimer >= 0.035) 
             {
                 lineSpawnTimer = 0;
-                var line = new DarkTransitionLine(x, y + 200);
+                var line = new DSDarkTransitionLine(x, y + 200);
             }
         }
 
