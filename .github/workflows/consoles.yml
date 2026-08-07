@@ -72,7 +72,7 @@ jobs:
             find makerom_extracted -type f -name "makerom" -exec cp {} /opt/devkitpro/tools/bin/ \;
             chmod +x /opt/devkitpro/tools/bin/makerom
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
-            dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools
+            dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools wiiu-dev
             mkdir -p .haxelib
             haxelib setup .haxelib
             haxelib install hxcpp
