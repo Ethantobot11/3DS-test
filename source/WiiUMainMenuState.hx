@@ -111,7 +111,7 @@ class WiiUMainMenuState extends LfState {
 
         Leafy.save.flush();
 
-        //Leafy.switchState(new WiiUPlayState());
+        Leafy.switchState(new WiiUPlayState());
     }
 
     private function eraseSlot(slotIndex:Int):Void {

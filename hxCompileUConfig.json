@@ -2,7 +2,6 @@
 	"extraLibs": [
         "hxu_vorbis",
         "hxu_jansson",
-        "hxu_jansson",
         "hxu_sdl_fontcache",
         "hxu_sdl2",
         "slushiutilsU",
