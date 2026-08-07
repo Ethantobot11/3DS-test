@@ -1,6 +1,9 @@
 package;
 
-typedef ConstCharPtr = cxx.ConstCharPtr;
-typedef UInt32 = Int;
-typedef UInt16 = Int;
-typedef Int32 = Int;
+import cxx.ConstCharPtr;
+
+class GlobalTypes {
+    public static typealias UInt32 = Int;
+    public static typealias UInt16 = Int;
+    public static typealias Int32 = Int;
+}
