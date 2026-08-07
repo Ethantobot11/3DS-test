@@ -99,7 +99,6 @@ jobs:
             haxelib git hxu_sdl_fontcache https://github.com/Haxe-WiiU/HxU_SDL_FontCache --quiet
             haxelib git hxu_jansson https://github.com/Haxe-WiiU/HxU_Jansson --quiet
             haxelib git hxu_vorbis https://github.com/Haxe-WiiU/HxU_Vorbis --quiet
-            haxelib git reflaxe https://github.com/SomeRanDev/reflaxe --quiet
             haxelib git reflaxe.cpp https://github.com/SomeRanDev/reflaxe.CPP nightly --quiet
           fi
       - name: Build HXCPP Runner and Tools
