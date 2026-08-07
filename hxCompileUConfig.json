@@ -1,6 +1,5 @@
 {
 	"extraLibs": [
-        "hxu_wut",
         "hxu_vorbis",
         "hxu_jansson",
         "hxu_jansson",
