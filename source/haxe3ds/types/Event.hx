@@ -1,5 +1,7 @@
 package haxe3ds.types;
 
+#if (!wiiu || !cafe)
+
 /**
  * Event Handling for Functions that has been added to this event.
  * @since 1.7.0
@@ -47,3 +49,5 @@ class Event<Args> {
 		listeners = [];
 	}
 }
+
+#end

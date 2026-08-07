@@ -2,7 +2,7 @@
 	"extraLibs": [
         "hxu_wut",
         "hxu_vorbis",
-        "hxu_jansson hxu_sdl_fontcache",
+        "hxu_jansson",
         "hxu_jansson",
         "hxu_sdl_fontcache",
         "hxu_sdl2",
@@ -15,7 +15,7 @@
 	"haxeConfig": {
 		"errorReportingStyle": "pretty",
 		"othersOptions": [],
-		"hxMain": "source.Main",
+		"hxMain": "Main",
 		"outDir": "output",
 		"debugMode": false,
 		"sourceDir": "source"

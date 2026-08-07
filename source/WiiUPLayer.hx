@@ -1,4 +1,4 @@
-package objects;
+package;
 
 import leafy.objects.LfSprite;
 import leafy.gamepad.LfGamepad;
@@ -10,7 +10,7 @@ typedef PositionFrame = {
     var anim:String;
 }
 
-class Player extends LfSprite
+class WiiUPlayer extends LfSprite
 {
     public var moveSpeed:Float = 120;
     public var facingDir:String = "down";

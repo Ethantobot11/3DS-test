@@ -1,5 +1,7 @@
 package haxe3ds.types;
 
+#if (!wiiu || !cafe)
+
 import cpp.UInt32;
 
 /**
@@ -344,3 +346,5 @@ enum abstract Result(UInt32) from UInt32 to UInt32 {
 		return out;
 	}
 }
+
+#end

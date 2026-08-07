@@ -1,12 +1,14 @@
-package states;
+package;
 
 import leafy.states.LfState;
 import leafy.groups.LfGroup;
 import leafy.backend.LeafyDebug;
 import leafy.filesystem.LfSystemPaths;
+import leafy.objects.LfObject;
+import leafy.gamepad.LfGamepad;
 import leafy.Leafy;
 
-class PlayState extends LfState
+class WiiUPlayState extends LfState
 {
     var rudinn:WiiURudinn;
     public var kris:WiiUPlayer;
@@ -23,7 +25,7 @@ class PlayState extends LfState
         super.create();
         LeafyDebug.log("Initializing PlayState...", INFO);
 
-        worldGroup = new LfGroup();
+        worldGroup = new LfGroup<LfObject>();
 
         kris = new WiiUPlayer(1280 / 2, 720 / 2);
         worldGroup.add(kris);
@@ -35,7 +37,7 @@ class PlayState extends LfState
         dialogueBox = new WiiUDialogueBox(20, 720 - 70);
         worldGroup.add(dialogueBox);
 
-        closetDoor = new WiUDarkDoor(300, 100);
+        closetDoor = new WiiUDarkDoor(300, 100);
         worldGroup.add(closetDoor);
 
         worldGroup.create();
@@ -77,9 +79,9 @@ class PlayState extends LfState
         //Leafy.switchState(new BattleState(kris, targetEnemy));
     }
 
-    function spawnDarkWorldEntities()
+    private function spawnDarkWorldEntities():Void
     {
-        LeafyDebug.log('[spawnDarkWorldEntities] Unfreezing Kris and spawning Rudinn.', DEBUG);
+        LeafyDebug.log("[spawnDarkWorldEntities] Unfreezing Kris and spawning Rudinn.", DEBUG);
         kris.isBusy = false;
         rudinn = new WiiURudinn(kris.x + 100, kris.y, 150);
         worldGroup.add(rudinn);
@@ -91,6 +93,8 @@ class PlayState extends LfState
         var interactPressed:Bool = false;
         var upPressed:Bool = false;
         var downPressed:Bool = false;
+        var gamepad:LfGamepad = Leafy.wiiuGamepad;
+        if (gamepad == null) return;
 
         interactPressed = gamepad.justPressed(BUTTON_A) || gamepad.justPressed(BUTTON_PLUS);
         upPressed = gamepad.justPressed(BUTTON_UP);
@@ -128,7 +132,6 @@ class PlayState extends LfState
             }
             else if (dialogueStage == 2)
             {
-                dialogueBox.visible = false;
                 kris.isBusy = false;
                 dialogueStage = 0;
             }

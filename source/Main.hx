@@ -20,7 +20,7 @@ class Main
 
         CitroGame.start(new ThreeDSMainMenuState());
         #else
-        LfEngine.initEngine("Deltarune", LfRenderType.DRC, new MainMenuState());
+        LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
         #end
     }
 }

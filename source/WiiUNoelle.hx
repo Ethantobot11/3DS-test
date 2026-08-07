@@ -1,4 +1,4 @@
-package objects;
+package;
 
 import leafy.objects.LfSprite;
 
@@ -47,8 +47,8 @@ class WiiUNoelle extends LfSprite
 
             if (x != targetFrame.x || y != targetFrame.y)
             {
-                x = targetFrame.x;
-                y = targetFrame.y;
+                x = Std.int(targetFrame.x);
+                y = Std.int(targetFrame.y);
 
                 sdlRect.x = Std.int(x);
                 sdlRect.y = Std.int(y);

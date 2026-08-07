@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.CitroG;
 import citro.object.CitroAnimate;
 import haxe3ds.services.HID;
@@ -157,3 +159,5 @@ class DSPlayer extends CitroAnimate
         }
     }
 }
+
+#end

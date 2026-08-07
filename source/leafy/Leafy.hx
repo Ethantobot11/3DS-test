@@ -14,6 +14,7 @@ import leafy.backend.sdl.LfWindow;
 import leafy.backend.LfTimer;
 import leafy.backend.internal.LfGamepadInternal;
 import leafy.backend.LfStateHandler;
+import leafy.backend.LfSave;
 import leafy.gamepad.LfGamepad;
 import leafy.objects.LfSprite;
 import leafy.tweens.LfTween;
@@ -64,7 +65,13 @@ class Leafy {
      */
     public static var paused:Bool = false;
 
+    public static var save:leafy.backend.LfSave = new leafy.backend.LfSave();
+
     //////////////////////////////////
+
+    public static function initSave(saveFileName:String = "deltarune_save.dat"):Void {
+        save.bind(saveFileName);
+    }
 
     /**
      * Switches to a new state

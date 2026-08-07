@@ -1,5 +1,7 @@
 package haxe3ds;
 
+#if (!wiiu || !cafe)
+
 import cpp.UInt64;
 import cpp.UInt8;
 using StringTools;
@@ -287,3 +289,5 @@ class OS {
 		};
 	}
 }
+
+#end

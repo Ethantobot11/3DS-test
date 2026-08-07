@@ -1,5 +1,7 @@
 package haxe3ds.types;
 
+#if (!wiiu || !cafe)
+
 /**
  * A Custom Exception that says that the expected value was Out of Bounds.
  * 
@@ -9,3 +11,5 @@ package haxe3ds.types;
  * @since 1.8.0
  */
 class OutOfBoundsException extends haxe.Exception {}
+
+#end

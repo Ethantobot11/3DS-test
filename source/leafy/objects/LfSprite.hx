@@ -1,9 +1,9 @@
 package leafy.objects;
+using StringTools;
 
 #if (!haxe3ds || !nx)
 
-import Std;
-import haxe.Xml;
+import haxe.xml.Parser;
 import haxe.ds.StringMap;
 
 import sdl2.SDL_Image;
@@ -51,7 +51,7 @@ class LfAnimation {
 
 /**
  * A sprite object, used to display images and animations on the screen
- * * Author: Slushi
+ * Author: Slushi
  */
 class LfSprite extends LfObject {
     public var imagePath:String;
@@ -155,7 +155,6 @@ class LfSprite extends LfObject {
      * @param xmlPath Path to the matching .xml configuration
      */
     public function loadGraphicFromXml(imgPath:String, xmlPath:String):Void {
-        // 1. Load the texture via standard PNG loader
         loadImage(imgPath);
 
         var fullXmlPath = LfSystemPaths.getConsolePath() + xmlPath;
@@ -171,23 +170,68 @@ class LfSprite extends LfObject {
         }
 
         try {
-            var xml = Xml.parse(xmlString);
+            var xml = Parser.parse(xmlString);
             var textureAtlas = xml.firstElement();
 
             for (subTexture in textureAtlas.elementsNamed("SubTexture")) {
-                var name = subTexture.get("name");
-                var x = Std.parseInt(subTexture.get("x"));
-                var y = Std.parseInt(subTexture.get("y"));
-                var w = Std.parseInt(subTexture.get("width"));
-                var h = Std.parseInt(subTexture.get("height"));
+                var name:String = subTexture.get("name");
+                if (name == null) name = "";
+                
+                var rawX:String = subTexture.get("x");
+                var rawY:String = subTexture.get("y");
+                var rawW:String = subTexture.get("width");
+                var rawH:String = subTexture.get("height");
 
-                // Store frame dimensions and coordinates inside framesMap
-                framesMap.set(name, {x: x, y: y, width: w, height: h});
+                var x:Int = parseXmlInt(rawX);
+                var y:Int = parseXmlInt(rawY);
+                var w:Int = parseXmlInt(rawW);
+                var h:Int = parseXmlInt(rawH);
+
+                var frameRect:LfFrameRect = {x: x, y: y, width: w, height: h};
+                framesMap.set(name, frameRect);
             }
             LeafyDebug.log("Successfully parsed XML frames for atlas: " + imgPath, DEBUG);
         } catch (e:Dynamic) {
-            LeafyDebug.log("Error parsing XML structure: " + Std.string(e), ERROR);
+            LeafyDebug.log("Error parsing XML structure.", ERROR);
         }
+    }
+
+    /**
+     * Helper function to safely parse XML attribute strings to Int on C++ console targets
+     */
+    private function parseXmlInt(val:String):Int {
+        if (val == null || val == "") return 0;
+        var parsed = 0;
+        try {
+            parsed = untyped __cpp__("std::stoi({0})", cxx.ConstCharStar.fromString(val));
+        } catch(err:Dynamic) {
+            parsed = 0;
+        }
+        return parsed;
+    }
+
+    public function createGraphic(width:Int, height:Int, colorArray:Array<Int>):Void {
+        this.width = width;
+        this.height = height;
+        sdlRect.w = width;
+        sdlRect.h = height;
+        
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+        sourceRect.w = width;
+        sourceRect.h = height;
+
+        cleanupTextures();
+
+        // Create a blank surface and texture using SDL
+        sdlSurfacePtr = sdl2.SDL_Surface.SDL_SurfaceClass.SDL_CreateRGBSurface(0, width, height, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+        if (sdlSurfacePtr != null) {
+            // Optional: Basic color fill representation could be added here depending on colorArray
+            sdlTexturePtr = SDL_Render.SDL_CreateTextureFromSurface(LfWindow.currentRenderer, sdlSurfacePtr);
+            sdl2.SDL_Surface.SDL_SurfaceClass.SDL_FreeSurface(sdlSurfacePtr);
+            sdlSurfacePtr = null;
+        }
+        readyToRender = (sdlTexturePtr != null);
     }
 
     /**
@@ -203,7 +247,7 @@ class LfSprite extends LfObject {
         }
 
         if (matchingFrames.length == 0) {
-            LeafyDebug.log("No frames found for animation prefix: " + prefix, WARN);
+            LeafyDebug.log("No frames found for animation prefix: " + prefix, WARNING);
             return;
         }
 

@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroAnimate;
 using StringTools;
 
@@ -104,3 +106,5 @@ class DSNoelle extends CitroAnimate
         }
     }
 }
+
+#end

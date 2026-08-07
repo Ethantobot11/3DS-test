@@ -145,7 +145,7 @@ class LfJson {
 
         var result:Float = Jansson.json_is_real(jsonValue) == 1
             ? Jansson.json_real_value(jsonValue)
-            : Jansson.json_integer_value(jsonValue) * 1.0;
+            : Std.parseFloat(Std.string(Jansson.json_integer_value(jsonValue)));
 
         if (freeAfterUse) {
             Jansson.json_decref(jsonValue);
@@ -221,7 +221,7 @@ class LfJson {
         for (i in 0...arrayLength) {
             var item:Ptr<Json_t> = Jansson.json_array_get(jsonValue, i);
             if (Jansson.json_is_integer(item) == 1) {
-                result.push(Jansson.json_integer_value(item));
+                result.push(Std.int(Jansson.json_integer_value(item)));
             }
         }
 

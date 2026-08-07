@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import haxe.CallStack;
 import sys.io.File;
 import sys.FileSystem;
@@ -54,3 +56,5 @@ class CrashHandler {
         appendLog(fullLog);
     }
 }
+
+#end

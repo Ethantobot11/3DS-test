@@ -1,11 +1,13 @@
-package objects;
+package;
+
+#if (!haxe3ds || !nx)
 
 import leafy.objects.LfSprite;
 import leafy.backend.LeafyDebug;
 import leafy.backend.sdl.LfWindow;
 import leafy.filesystem.LfSystemPaths;
 
-class DarkWorldTransition extends LfSprite
+class WiiUDarkWorldTransition extends LfSprite
 {
     var player:WiiUPlayer;
     var door:WiiUDarkDoor;
@@ -71,7 +73,7 @@ class DarkWorldTransition extends LfSprite
             if (lineSpawnTimer >= 0.035) 
             {
                 lineSpawnTimer = 0;
-                var line = new DarkTransitionLine(Std.int(x), Std.int(y + 200));
+                var line = new WiiUDarkTransitionLine(Std.int(x), Std.int(y + 200));
             }
         }
 
@@ -81,7 +83,7 @@ class DarkWorldTransition extends LfSprite
                 if (timer >= 0.4)
                 {
                     if (door != null)
-                        door.setDoorState(WiUDarkDoor.STATE_OPEN_FRAME);
+                        door.setDoorState(WiiUDarkDoor.STATE_OPEN_FRAME);
 
                     velocity = {x: 0, y: -70};
                     playAnimation("fall_lw");
@@ -93,7 +95,7 @@ class DarkWorldTransition extends LfSprite
                 if (timer >= 0.6)
                 {
                     if (door != null)
-                        door.setDoorState(WiUDarkDoor.STATE_DARK_VOID);
+                        door.setDoorState(WiiUDarkDoor.STATE_DARK_VOID);
 
                     bgOverlay = new LfSprite(0, 0);
                     bgOverlay.createGraphic(1280 * 4, 720 * 16, [0, 0, 0, 255]);
@@ -181,3 +183,5 @@ class DarkWorldTransition extends LfSprite
         }
     }
 }
+
+#end

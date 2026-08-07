@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import cpp.RawPointer;
 import cpp.ConstCharStar;
 
@@ -36,3 +38,5 @@ class CWAVHelper
         untyped __cpp__("cwavFileFree({0})", cwav);
     }
 }
+
+#end

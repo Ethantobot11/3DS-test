@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroSprite;
 
 class DSDarkDoor extends CitroSprite
@@ -34,3 +36,5 @@ class DSDarkDoor extends CitroSprite
         }
     }
 }
+
+#end

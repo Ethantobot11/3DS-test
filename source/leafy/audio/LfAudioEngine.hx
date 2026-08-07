@@ -16,6 +16,8 @@ import leafy.backend.internal.LfAudioManagerInternal;
  */
 class LfAudioEngine {
 
+    public function new() {}
+
     /**
      * Is the audio currently playing
      */

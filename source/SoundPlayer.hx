@@ -1,5 +1,5 @@
 package;
-
+#if (!wiiu || !cafe)
 import cpp.RawPointer;
 import CWAV;
 
@@ -25,3 +25,4 @@ class SoundPlayer
         CWAVHelper.play(cwavPtr, 0, -1);
     }
 }
+#end

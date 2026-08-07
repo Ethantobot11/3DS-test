@@ -1,10 +1,12 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroSprite;
 import citro.backend.CitroColor;
 import citro.CitroG;
 
-class DarkTransitionLine extends CitroSprite
+class DSDarkTransitionLine extends CitroSprite
 {
     var moveSpeed:Float;
 
@@ -37,3 +39,5 @@ class DarkTransitionLine extends CitroSprite
         return super.update();
     }
 }
+
+#end

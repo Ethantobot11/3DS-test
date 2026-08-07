@@ -1,12 +1,13 @@
-package objects;
+package;
 
 import leafy.objects.LfSprite;
 import leafy.objects.LfText;
 import leafy.gamepad.LfGamepad;
 import leafy.backend.LeafyDebug;
 import leafy.filesystem.LfSystemPaths;
+import leafy.audio.LfAudioEngine;
 
-class DialogueBox extends LfSprite
+class WiiUDialogueBox extends LfSprite
 {
     var boxBg:LfSprite;
     var boxBorder:LfSprite;
@@ -95,7 +96,7 @@ class DialogueBox extends LfSprite
 
         if (faceAtlas != null && expressionFrame != null)
         {
-            portrait.loadGraphicFromXml('assets/images/${faceAtlas}.png', 'assets/images/${faceAtlas}.xml');
+            portrait.loadGraphicFromXml("assets/images/" + faceAtlas + ".png", "assets/images/" + faceAtlas + ".xml");
             portrait.addAnimationByPrefix("expression", expressionFrame, 0, false);
             portrait.playAnimation("expression");
             portrait.isVisible = true;
@@ -132,8 +133,8 @@ class DialogueBox extends LfSprite
 
                     if (char != " " && char != "\n")
                     {
-                        var audioEngine = new leafy.audio.LfAudioEngine();
-                        audioEngine.play('assets/sounds/${soundAsset}', false);
+                        var soundPlayer:LfAudioEngine = new LfAudioEngine();
+                        soundPlayer.play("assets/sounds/snd_txtnoe.wav", false);
                     }
                     charIndex++;
                 }
@@ -196,6 +197,10 @@ class DialogueBox extends LfSprite
         soulCursor.y = Std.int(y + (selectedIndex == 0 ? 20 : 38));
         soulCursor.sdlRect.x = soulCursor.x;
         soulCursor.sdlRect.y = soulCursor.y;
+    }
+
+    public function enabled():Void {
+    this.isVisible = true;
     }
 
     override public function destroy():Void

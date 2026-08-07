@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroSprite;
 import citro.object.CitroText;
 import citro.backend.CitroColor;
@@ -277,3 +279,5 @@ class BattleState extends CitroState
         super.destroy();
     }
 }
+
+#end

@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroAnimate;
 
 class DSRudinn extends CitroAnimate
@@ -63,3 +65,5 @@ class DSRudinn extends CitroAnimate
         }
     }
 }
+
+#end

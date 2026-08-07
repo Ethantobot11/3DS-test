@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.CitroG;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
@@ -118,3 +120,5 @@ class OptionsState extends CitroState {
         super.destroy();
     }
 }
+
+#end

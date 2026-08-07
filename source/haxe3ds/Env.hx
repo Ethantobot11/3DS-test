@@ -1,5 +1,7 @@
 package haxe3ds;
 
+#if (!wiiu || !cafe)
+
 /**
  * The concurrent Homebrew Environment Configuration.
  * 
@@ -31,3 +33,5 @@ class Env {
 		return isLuma;
 	}
 }
+
+#end

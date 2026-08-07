@@ -1,5 +1,7 @@
 package;
 
+#if (!wiiu || !cafe)
+
 import citro.object.CitroAnimate;
 import citro.object.CitroSprite;
 import citro.object.CitroCamera;
@@ -231,3 +233,5 @@ class DSDarkWorldTransition extends CitroAnimate
         return super.update();
     }
 }
+
+#end

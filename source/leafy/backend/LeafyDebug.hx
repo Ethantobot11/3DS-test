@@ -384,7 +384,7 @@ class LeafyDebug {
 				case CFunction:
 					callStackText += "Non-Haxe (C++) Function";
 				case Module(c):
-					callStackText += 'Module ${c}';
+					callStackText += 'Module' + c;
 				default:
 					callStackText += "Unknown stack item: " + Std.string(stackItem) + "\n";
 			}

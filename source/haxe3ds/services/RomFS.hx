@@ -1,5 +1,7 @@
 package haxe3ds.services;
 
+#if (!wiiu || !cafe)
+
 import haxe3ds.types.Result;
 
 /**
@@ -23,3 +25,5 @@ class RomFS {
 		return untyped __cpp__('romfsExit()');
 	}
 }
+
+#end

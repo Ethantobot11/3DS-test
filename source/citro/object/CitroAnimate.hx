@@ -1,5 +1,7 @@
 package citro.object;
 
+#if (!wiiu || !cafe)
+
 import sys.io.File;
 import citro.object.CitroSprite;
 
@@ -168,3 +170,5 @@ class CitroAnimate extends CitroObject {
         super.destroy();
     }
 }
+
+#end

@@ -1,5 +1,7 @@
 package citro;
 
+#if (!wiiu || !cafe)
+
 import haxe.Json;
 import haxe3ds.Env;
 import haxe3ds.services.FS;
@@ -127,3 +129,5 @@ class CitroSave {
 		}
 	}
 }
+
+#end

@@ -1,4 +1,5 @@
 package;
+#if (!wiiu || !cafe)
 
 import citro.object.CitroSprite;
 import citro.object.CitroText;
@@ -249,3 +250,5 @@ class DSDialogueBox extends citro.object.CitroObject
         super.destroy();
     }
 }
+
+#end
