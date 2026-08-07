@@ -189,10 +189,6 @@ jobs:
           haxe build.hxml
           cp export/haxeCompileU ../haxeCompileU
           cd ..
-          haxelib dev reflaxe .haxelib/reflaxe/git
-          haxelib dev reflaxe.cpp .haxelib/reflaxe,cpp/git/Std
-          haxelib dev reflaxe.cpp .haxelib/reflaxe,cpp/git/src
-          haxelib dev reflaxe.cpp .haxelib/reflaxe,cpp/git
           ./haxeCompileU --prepare
           ./haxeCompileU --compile
 
