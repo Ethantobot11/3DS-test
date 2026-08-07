@@ -35,18 +35,18 @@ AccessControlInfo:
   # FS:USER Archive Access Permissions
   # Uncomment as required
   FileSystemAccess:
-   - CategorySystemApplication
+   #- CategorySystemApplication
    #- CategoryHardwareCheck
-   #- CategoryFileSystemTool
-   - Debug
+   - CategoryFileSystemTool
+   #- Debug
    #- TwlCardBackup
    #- TwlNandData
-   "- Boss
+   #- Boss
    - DirectSdmc
    #- Core
-   - CtrNandRo
-   - CtrNandRw
-   - CtrNandRoWrite
+   #- CtrNandRo
+   #- CtrNandRw
+   #- CtrNandRoWrite
    #- CategorySystemSettings
    #- CardBoard
    #- ExportImportIvs
@@ -54,8 +54,8 @@ AccessControlInfo:
    #- SwitchCleanup
    #- SaveDataMove
    #- Shop
-   "- Shell
-   "- CategoryHomeMenu
+   #- Shell
+   #- CategoryHomeMenu
 
   # Process Settings
   MemoryType                    : Application # Application/System/Base
