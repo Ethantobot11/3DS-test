@@ -89,8 +89,8 @@ jobs:
             chmod +x /opt/devkitpro/tools/bin/makerom
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools
-            mkdir -p .haxelib
-            haxelib setup .haxelib
+            mkdir -p ~/haxelib
+            haxelib setup ~/haxelib
             haxelib git hxu_wut https://github.com/Haxe-WiiU/HxU_WUT --quiet
             haxelib git hxu_libnotifications https://github.com/Haxe-WiiU/HxU_LibNotifications --quiet
             haxelib git hxu_libmappedmemory https://github.com/Haxe-WiiU/HxU_LibMappedMemory --quiet
