@@ -75,10 +75,10 @@ jobs:
         uses: actions/download-artifact@main
         with:
            name: WiiUBuild
-           path: output/
+           path: output/wiiuFiles/
 
       - name: Move WiiUBuild CIA
-        run: mv output/*.wuhb output/${{ env.PROJECT_NAME }}.wuhb
+        run: mv output/wiiuFiles/*.wuhb output/wiiuFiles/${{ env.PROJECT_NAME }}.wuhb
 
       - name: Publish The Release
         uses: softprops/action-gh-release@v2
@@ -89,4 +89,4 @@ jobs:
           #prerelease: false
           files: |
             buildFiles/*cia
-            output/*wuhb
+            output/wiiuFiles/*wuhb
