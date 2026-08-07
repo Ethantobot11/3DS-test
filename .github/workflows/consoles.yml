@@ -175,7 +175,6 @@ jobs:
           haxe build.hxml
           cp export/haxeCompileU ../haxeCompileU
           cd ..
-          ./haxeCompileU --prepare
           ./haxeCompileU --compile
 
       - name: Upload Artifact
