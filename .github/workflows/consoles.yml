@@ -101,8 +101,6 @@ jobs:
             haxelib git hxu_vorbis https://github.com/Haxe-WiiU/HxU_Vorbis --quiet
             haxelib git reflaxe https://github.com/SomeRanDev/reflaxe --quiet
             haxelib git reflaxe.cpp https://github.com/Ethantobot11/reflaxe.CPP --quiet
-            haxelib dev reflaxe .haxelib/reflaxe/git
-            haxelib dev reflaxe.cpp .haxelib/reflaxe,cpp/git
           fi
       - name: Build HXCPP Runner and Tools
         if: inputs.name == 'Nintendo 3DS'
@@ -191,6 +189,8 @@ jobs:
           haxe build.hxml
           cp export/haxeCompileU ../haxeCompileU
           cd ..
+          haxelib dev reflaxe .haxelib/reflaxe/git
+          haxelib dev reflaxe.cpp .haxelib/reflaxe,cpp/git
           ./haxeCompileU --prepare
           ./haxeCompileU --compile
 
