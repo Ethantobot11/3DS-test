@@ -31,6 +31,10 @@ package haxe;
 @:headerInclude("memory", true)
 @:headerInclude("haxe_NativeStackTrace.h", true)
 @:headerCode("
+#include <iostream>
+#include <algorithm>
+#include <deque>
+#include <memory>
 namespace haxe {
 	class StackItem;
 }
