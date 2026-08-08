@@ -21,6 +21,12 @@ import leafy.backend.sdl.LfWindow;
 import leafy.utils.LfUtils.LfVector2D;
 import leafy.utils.LfUtils;
 
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+import cxx.Char;
+
 /**
  * Type of the object
  */
