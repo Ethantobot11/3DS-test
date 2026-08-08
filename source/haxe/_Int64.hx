@@ -3,8 +3,12 @@ package haxe;
 
 @:native("int64_t")
 @:include("cstdint", true)
-extern class NativeInt64 {
-    public var high(get, never):Int32;
-    public var low(get, never):Int32;
-    public function new(high:Int32, low:Int32);
+class NativeInt64 {
+    public var high:Int32;
+    public var low:Int32;
+
+    public inline function new(high:Int32, low:Int32) {
+        this.high = high;
+        this.low = low;
+    }
 }
