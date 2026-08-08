@@ -48,7 +48,7 @@ jobs:
             os: ubuntu-latest
             buildArgs: "wiiu -D final -D cafe"
             artifactName: WiiUBuild
-            artifactPath: "output/*.wuhb"
+            artifactPath: "output/wiiuFiles/*.wuhb"
     uses: ./.github/workflows/consoles.yml
     with:
       name: ${{ matrix.name }}
