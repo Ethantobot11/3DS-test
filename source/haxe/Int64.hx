@@ -35,6 +35,16 @@ import haxe.Int32;
 @:notNull
 #end
 @:transitive
+@:headerCode("
+#include <iostream>
+#include <algorithm>
+#include <deque>
+#include <memory>
+
+namespace haxe {
+    class NativeInt64Struct;
+}
+")
 abstract Int64(NativeInt64Struct) from NativeInt64Struct to NativeInt64Struct {
     private inline function new(x:NativeInt64Struct)
         this = x;
@@ -356,6 +366,16 @@ abstract Int64(NativeInt64Struct) from NativeInt64Struct to NativeInt64Struct {
     private inline function set_low(x) return this.low = x;
 }
 
+@:headerCode("
+#include <iostream>
+#include <algorithm>
+#include <deque>
+#include <memory>
+
+namespace haxe {
+    class NativeInt64Struct;
+}
+")
 class NativeInt64Struct {
     public var high:Int32;
     public var low:Int32;
