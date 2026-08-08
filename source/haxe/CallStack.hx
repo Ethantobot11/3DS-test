@@ -56,6 +56,7 @@ enum StackItem {
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
 @:headerInclude("haxe_NativeStackTrace.h", true)
+@:headerInclude("_TypeUtils.h", true)
 @:headerCode("
 #ifndef HCXX_STACK_METHOD
 #define HCXX_STACK_METHOD(...)
