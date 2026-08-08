@@ -15,6 +15,11 @@ import vorbis.Codec.Vorbis_info;
 
 import leafy.filesystem.LfSystemPaths;
 
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+
 /**
  * The LfAudio class, used to play OGG files
  * 
