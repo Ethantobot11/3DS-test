@@ -9,6 +9,12 @@ package leafy.audio;
 
 import leafy.backend.internal.LfAudioManagerInternal;
 
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+
+
 /**
  * Audio engine, handles audio playback
  * 
