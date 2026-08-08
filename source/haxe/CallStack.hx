@@ -26,11 +26,6 @@ package haxe;
 	Elements return by `CallStack` methods.
 **/
 #if (!haxe3ds || !nx)
-@:headerCode("
-namespace haxe {
-    class StackItem;
-}
-")
 @:headerInclude("iostream", true)
 @:headerInclude("algorithm", true)
 @:headerInclude("deque", true)
