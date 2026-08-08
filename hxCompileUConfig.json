@@ -1,12 +1,12 @@
 {
 	"extraLibs": [
-        "hxu_vorbis",
-        "hxu_jansson",
-        "hxu_sdl_fontcache",
-        "hxu_sdl2",
-        "slushiutilsU",
-        "hxu_libmappedmemory",
-        "hxu_libnotifications"
+	    "hxu_vorbis",
+	    "hxu_jansson",
+	    "hxu_sdl_fontcache",
+	    "hxu_sdl2",
+	    "slushiutilsU",
+	    "hxu_libmappedmemory",
+	    "hxu_libnotifications"
 	],
 	"programVersion": ">=1.5.3",
 	"projectDefines": [],
