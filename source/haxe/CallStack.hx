@@ -25,20 +25,17 @@ package haxe;
 /**
 	Elements return by `CallStack` methods.
 **/
+#if (!haxe3ds || !nx)
 @:headerInclude("iostream", true)
 @:headerInclude("algorithm", true)
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
-@:headerInclude("haxe_NativeStackTrace.h", true)
 @:headerCode("
 #include <iostream>
 #include <algorithm>
 #include <deque>
-#include <memory>
-namespace haxe {
-	class StackItem;
-}
-")
+#include <memory>")
+#end
 enum StackItem {
 	CFunction;
 	Module(m:String);
