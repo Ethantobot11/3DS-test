@@ -6,8 +6,6 @@
 package leafy.states;
 
 #if (!haxe3ds || !nx)
-
-import haxe.Unserializer.TypeResolver;
 import Std;
 
 import leafy.objects.LfObject;
