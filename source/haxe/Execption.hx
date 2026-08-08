@@ -41,6 +41,7 @@ package haxe;
 	}
 	```
 **/
+#if (!haxe3ds || !nx)
 @:headerInclude("iostream", true)
 @:headerInclude("algorithm", true)
 @:headerInclude("deque", true)
@@ -50,6 +51,7 @@ package haxe;
 #include <algorithm>
 #include <deque>
 #include <memory>")
+#end
 extern class Exception {
 	/**
 		Exception message.
