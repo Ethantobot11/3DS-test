@@ -21,6 +21,9 @@ import vorbis.VorbisFile;
 import vorbis.VorbisFile.OggVorbis_File;
 import vorbis.Codec.Vorbis_info;
 
+import cxx.Ptr;
+import cxx.VoidPtr;
+
 import leafy.audio.LfAudio;
 
 /**
