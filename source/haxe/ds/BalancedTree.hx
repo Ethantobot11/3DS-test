@@ -127,7 +127,7 @@ class BalancedTree<K, V> implements haxe.Constraints.IMap<K, V> {
 		See `Map.keyValueIterator`
 	**/
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
-		return new haxe.iterators.MapKeyValueIterator(cast this);
+		return new haxe.iterators.MapKeyValueIterator(untyped __cpp__("std::shared_ptr<BalancedTree<K, V>>(this, [](void*){})"));
 	}
 
 	/**
