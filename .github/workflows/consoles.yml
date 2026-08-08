@@ -85,7 +85,7 @@ jobs:
             haxelib git hxu_jansson https://github.com/Ethantobot11/HxU_Jansson --quiet
             haxelib git hxu_vorbis https://github.com/Ethantobot11/HxU_Vorbis --quiet
             haxelib git reflaxe https://github.com/SomeRanDev/reflaxe.git --quiet
-            haxelib git reflaxe.cpp https://github.com/SomeRanDev/reflaxe.CPP nightly --quiet
+            haxelib git reflaxe.cpp https://github.com/Ethantobot11/reflaxe.CPP nightly --quiet
             haxelib list
           fi
       - name: Build HXCPP Runner and Tools
