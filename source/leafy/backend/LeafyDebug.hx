@@ -24,6 +24,12 @@ import leafy.filesystem.LfSystemPaths;
 import leafy.utils.LfStringUtils;
 import leafy.system.console.SDCard;
 
+
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+
 /**
  * The log level
  */
