@@ -1,4 +1,3 @@
-#if (wiiu || cafe)
 /*
  * Copyright (C)2005-2019 Haxe Foundation
  *
@@ -127,9 +126,15 @@ class BalancedTree<K, V> implements haxe.Constraints.IMap<K, V> {
 	/**
 		See `Map.keyValueIterator`
 	**/
+	#if (wiiu || cafe)
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
 		return new haxe.iterators.MapKeyValueIterator(untyped __cpp__("std::shared_ptr<BalancedTree<K, V>>(this, [](void*){})"));
 	}
+	#elseif (haxe3ds || nx)
+	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
+		return new haxe.iterators.MapKeyValueIterator(this);
+	}
+	#end
 
 	/**
 		Iterates over the keys of `this` BalancedTree.
@@ -268,4 +273,3 @@ class TreeNode<K, V> {
 		return (left == null ? "" : left.toString() + ", ") + '$key => $value' + (right == null ? "" : ", " + right.toString());
 	}
 }
-#end
