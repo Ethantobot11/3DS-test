@@ -128,7 +128,7 @@ class BalancedTree<K, V> implements haxe.Constraints.IMap<K, V> {
 	**/
 	#if (wiiu || cafe)
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
-		return new haxe.iterators.MapKeyValueIterator(cast (this, haxe.ds.BalancedTree<K, V>));
+		return new haxe.iterators.MapKeyValueIterator(cast (this, Dynamic));
 	}
 	#elseif (haxe3ds || nx)
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
