@@ -128,7 +128,18 @@ class BalancedTree<K, V> implements haxe.Constraints.IMap<K, V> {
 	**/
 	#if (wiiu || cafe)
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
-		return untyped __cpp__("std::make_shared<haxe::iterators::MapKeyValueIterator<K, V>>(std::enable_shared_from_this<BalancedTree<K, V>>::shared_from_this())");
+		var keysArray = [];
+		keysLoop(root, keysArray);
+		var valuesArray = [];
+		iteratorLoop(root, valuesArray);
+		var index = 0;
+		return {
+			hasNext: function() return index < keysArray.length,
+			next: function() {
+				var i = index++;
+				return { key: keysArray[i], value: valuesArray[i] };
+			}
+		};
 	}
 	#elseif (haxe3ds || nx)
 	@:runtime public inline function keyValueIterator():KeyValueIterator<K, V> {
