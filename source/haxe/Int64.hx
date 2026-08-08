@@ -23,8 +23,6 @@ package haxe;
  * DEALINGS IN THE SOFTWARE.
  */
 
-package haxe;
-
 using haxe.Int64;
 
 /**
