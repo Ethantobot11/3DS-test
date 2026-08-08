@@ -1,3 +1,4 @@
+#if (wiiu || cafe)
 /*
  * Copyright (C)2005-2019 Haxe Foundation
  *
@@ -267,3 +268,4 @@ class TreeNode<K, V> {
 		return (left == null ? "" : left.toString() + ", ") + '$key => $value' + (right == null ? "" : ", " + right.toString());
 	}
 }
+#end
