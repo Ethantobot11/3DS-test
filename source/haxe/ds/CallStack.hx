@@ -30,13 +30,6 @@ package haxe;
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
 @:headerInclude("haxe_NativeStackTrace.h", true)
-@:headerCode("
-#ifndef HCXX_STACK_METHOD
-#define HCXX_STACK_METHOD(...)
-#endif
-#ifndef HCXX_LINE
-#define HCXX_LINE(...)
-#endif")
 enum StackItem {
 	CFunction;
 	Module(m:String);
