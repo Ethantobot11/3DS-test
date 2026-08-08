@@ -182,6 +182,15 @@ jobs:
           cd ..
           ./haxeCompileU --compile
 
+      - name: Archive and Upload Workspace for Inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-debug-zip
+          path: |
+            output/
+          if-no-files-found: ignore
+
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
