@@ -137,7 +137,7 @@ class StringTools {
 		s = lua.NativeStringTools.gsub(s, "\r\n", "\n");
 		return s;
 		#else
-		return null;
+		return "";
 		#end
 	}
 
