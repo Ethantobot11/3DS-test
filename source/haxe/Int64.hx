@@ -44,8 +44,6 @@ abstract Int64(haxe._Int64.NativeInt64) from haxe._Int64.NativeInt64 to haxe._In
  * DEALINGS IN THE SOFTWARE.
  */
 
-package haxe;
-
 using haxe.Int64;
 
 /**
