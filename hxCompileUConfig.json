@@ -9,13 +9,7 @@
 	    "hxu_libnotifications"
 	],
 	"programVersion": ">=1.5.3",
-	"projectDefines": [
-		"wiiu",
-		"cafe",
-		"cxx-no-null-warnings",
-		"HCXX_LINE",
-		"HCXX_STACK_METHOD"
-	],
+	"projectDefines": [],
 	"haxeConfig": {
 		"errorReportingStyle": "pretty",
 		"othersOptions": [],
