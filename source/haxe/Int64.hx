@@ -35,15 +35,15 @@ import haxe.Int32;
 @:notNull
 #end
 @:transitive
-abstract Int64(__Int64) from __Int64 to __Int64 {
-    private inline function new(x:__Int64)
+abstract Int64(NativeInt64Struct) from NativeInt64Struct to NativeInt64Struct {
+    private inline function new(x:NativeInt64Struct)
         this = x;
 
     public inline function copy():Int64
         return make(high, low);
 
     public static inline function make(high:Int32, low:Int32):Int64
-        return new Int64(new __Int64(high, low));
+        return new Int64(new NativeInt64Struct(high, low));
 
     @:from public static inline function ofInt(x:Int):Int64
         #if lua return make((x : Int32) >> 31, (x : Int32)); #else return make(x >> 31, x); #end
@@ -60,7 +60,7 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
     }
 
     inline public static function isInt64(val:Dynamic):Bool
-        return Std.isOfType(val, __Int64);
+        return Std.isOfType(val, NativeInt64Struct);
 
     public static inline function getHigh(x:Int64):Int32
         return x.high;
@@ -356,9 +356,7 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
     private inline function set_low(x) return this.low = x;
 }
 
-private typedef __Int64 = ___Int64;
-
-private class ___Int64 {
+class NativeInt64Struct {
     public var high:Int32;
     public var low:Int32;
 
