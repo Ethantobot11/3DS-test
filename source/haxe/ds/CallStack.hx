@@ -29,6 +29,7 @@ package haxe;
 @:headerInclude("algorithm", true)
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
+#include "haxe_NativeStackTrace.h"
 enum StackItem {
 	CFunction;
 	Module(m:String);
@@ -46,6 +47,7 @@ enum StackItem {
 @:headerInclude("algorithm", true)
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
+#include "haxe_NativeStackTrace.h"
 abstract CallStack(Array<StackItem>) from Array<StackItem> {
 	/**
 		The length of this stack.
