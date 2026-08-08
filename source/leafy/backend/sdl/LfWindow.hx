@@ -16,6 +16,12 @@ import sdl2.SDL_Video;
 import sdl2.SDL_Video.SDL_WindowFlags;
 import sdl2.SDL_Render;
 
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+import cxx.Char;
+
 /**
  * Enum that defines the window types
  */
