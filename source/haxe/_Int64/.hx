@@ -1,5 +1,5 @@
 
-package haxe._Int64;
+package haxe;
 
 @:native("int64_t")
 @:include("cstdint", true)
