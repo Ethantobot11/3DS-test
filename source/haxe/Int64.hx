@@ -15,11 +15,13 @@ abstract Int64(haxe._Int64.NativeInt64) from haxe._Int64.NativeInt64 to haxe._In
         return new Int64(x >> 31, x);
     }
 
-    public var high(get, never):Int32;
+    public var high(get, set):Int32;
     private inline function get_high():Int32 return this.high;
+    private inline function set_high(v:Int32):Int32 return this.high = v;
 
-    public var low(get, never):Int32;
+    public var low(get, set):Int32;
     private inline function get_low():Int32 return this.low;
+    private inline function set_low(v:Int32):Int32 return this.low = v;
 }
 #else
 /*
