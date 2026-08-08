@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package haxe.ds;
+package std.haxe.ds;
 
 /**
 	BalancedTree allows key-value mapping with arbitrary keys, as long as they
