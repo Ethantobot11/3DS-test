@@ -12,9 +12,7 @@
 	"projectDefines": [
 		"-D wiiu",
 		"-D cafe",
-		"-D cxx-no-null-warnings",
-		"-D HCXX_LINE",
-		"-D HCXX_STACK_METHOD"
+		"-D cxx-no-null-warnings"
 	],
 	"haxeConfig": {
 		"errorReportingStyle": "pretty",
