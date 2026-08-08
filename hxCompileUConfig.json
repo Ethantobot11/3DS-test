@@ -19,7 +19,7 @@
 		"sourceDir": "source"
 	},
 	"wiiuConfig": {
-		"convertToWUHB": false,
+		"convertToWUHB": true,
 		"wuhbConfig": {
 			"shortName": "DELTARUNE",
 			"name": "Deltarune",
