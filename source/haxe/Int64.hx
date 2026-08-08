@@ -2,9 +2,9 @@ package haxe;
 
 #if (wiiu || cafe)
 @:transitive
-abstract Int64(haxe._Int64.NativeInt64) from haxe._Int64.NativeInt64 to haxe._Int64.NativeInt64 {
+abstract Int64(NativeInt64) from NativeInt64 to NativeInt64 {
     public inline function new(high:Int32, low:Int32) {
-        this = new haxe._Int64.NativeInt64(high, low);
+        this = new NativeInt64(high, low);
     }
 
     public static inline function make(high:Int32, low:Int32):Int64 {
@@ -17,11 +17,17 @@ abstract Int64(haxe._Int64.NativeInt64) from haxe._Int64.NativeInt64 to haxe._In
 
     public var high(get, set):Int32;
     private inline function get_high():Int32 return this.high;
-    private inline function set_high(v:Int32):Int32 return this.high = v;
+    private inline function set_high(v:Int32):Int32 {
+        this.high = v;
+        return v;
+    }
 
     public var low(get, set):Int32;
     private inline function get_low():Int32 return this.low;
-    private inline function set_low(v:Int32):Int32 return this.low = v;
+    private inline function set_low(v:Int32):Int32 {
+        this.low = v;
+        return v;
+    }
 }
 #else
 /*
