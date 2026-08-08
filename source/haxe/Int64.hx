@@ -25,6 +25,8 @@ package haxe;
 
 using haxe.Int64;
 
+import haxe.Int32;
+
 /**
 	A cross-platform signed 64-bit integer.
 	Int64 instances can be created from two 32-bit words using `Int64.make()`.
