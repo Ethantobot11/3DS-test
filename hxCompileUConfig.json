@@ -13,8 +13,8 @@
 		"-D wiiu",
 		"-D cafe",
 		"-D cxx-no-null-warnings",
-		"HCXX_LINE",
-		"HCXX_STACK_METHOD"
+		"-D HCXX_LINE",
+		"-D HCXX_STACK_METHOD"
 	],
 	"haxeConfig": {
 		"errorReportingStyle": "pretty",
