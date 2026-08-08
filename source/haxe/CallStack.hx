@@ -36,6 +36,7 @@ namespace haxe {
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
 @:headerInclude("haxe_NativeStackTrace.h", true)
+@:headerInclude("_TypeUtils.h", true)
 #end
 enum StackItem {
 	CFunction;
