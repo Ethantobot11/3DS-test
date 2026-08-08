@@ -47,6 +47,9 @@ package haxe;
 @:headerInclude("deque", true)
 @:headerInclude("memory", true)
 @:headerCode("
+namespace haxe {
+    struct StackItem;
+}
 #include <iostream>
 #include <algorithm>
 #include <deque>
