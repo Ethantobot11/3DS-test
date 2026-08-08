@@ -12,6 +12,12 @@ import jansson.Jansson;
 import leafy.filesystem.LfSystemPaths;
 import leafy.utils.LfStringUtils;
 
+
+import cxx.ConstCharPtr;
+import cxx.num.*;
+import cxx.Ptr;
+import cxx.VoidPtr;
+
 /**
  * JSON parser, loader, and utility functions
  * 
