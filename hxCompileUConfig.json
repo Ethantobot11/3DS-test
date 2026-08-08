@@ -10,9 +10,11 @@
 	],
 	"programVersion": ">=1.5.3",
 	"projectDefines": [
-		"-D wiiu",
-		"-D cafe",
-		"-D cxx-no-null-warnings"
+		"wiiu",
+		"cafe",
+		"cxx-no-null-warnings",
+		"HCXX_LINE",
+		"HCXX_STACK_METHOD"
 	],
 	"haxeConfig": {
 		"errorReportingStyle": "pretty",
