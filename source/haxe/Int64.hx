@@ -29,9 +29,7 @@ import haxe.Int32;
 
 @:headerCode("
 namespace haxe {
-	namespace _Int64 {
-		class ___Int64;
-	}
+	class ___Int64;
 }
 ")
 #if flash
@@ -63,7 +61,7 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 
 	/**
 		Returns an Int with the value of the Int64 `x`.
-		Throws an exception  if `x` cannot be represented in 32 bits.
+		Throws an exception if `x` cannot be represented in 32 bits.
 	**/
 	public static inline function toInt(x:Int64):Int {
 		if (x.high != x.low >> 31)
@@ -144,7 +142,6 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 		var neg = false;
 		if (i.isNeg()) {
 			neg = true;
-			// i = -i; cannot negate here as --9223372036854775808 = -9223372036854775808
 		}
 		var ten:Int64 = 10;
 		while (i != 0) {
@@ -469,6 +466,7 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 
 private typedef __Int64 = ___Int64;
 
+@:native("___Int64")
 class ___Int64 {
 	public var high:Int32;
 	public var low:Int32;
