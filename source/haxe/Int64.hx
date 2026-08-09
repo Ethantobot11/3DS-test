@@ -34,9 +34,9 @@ import haxe.Int32;
 abstract Int64 from Int64 to Int64 {
 	@:native("_HaxeInt64Make")
 	public static inline function make(high:Int32, low:Int32):Int64 {
-		return (cast high:Int64) << 32 | (cast low:Int64 & 4294967295);
+		return ((cast high:Int64) << 32) | ((cast low:Int64) & ~(cast 0:Int64));
 	}
-
+	
 	@:from public static inline function ofInt(x:Int):Int64 {
 		return cast x;
 	}
