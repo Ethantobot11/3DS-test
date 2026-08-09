@@ -356,16 +356,6 @@ abstract Int64(NativeInt64Struct) from NativeInt64Struct to NativeInt64Struct {
     private inline function set_low(x) return this.low = x;
 }
 
-@:headerCode("
-#include <iostream>
-#include <algorithm>
-#include <deque>
-#include <memory>
-
-namespace haxe {
-    class NativeInt64Struct;
-}
-")
 class NativeInt64Struct {
     public var high:Int32;
     public var low:Int32;
