@@ -27,10 +27,13 @@ using haxe.Int64;
 
 import haxe.Int32;
 
-/**
-	A cross-platform signed 64-bit integer.
-	Int64 instances can be created from two 32-bit words using `Int64.make()`.
-**/
+@:headerCode("
+namespace haxe {
+	namespace _Int64 {
+		class ___Int64;
+	}
+}
+")
 #if flash
 @:notNull
 #end
@@ -404,18 +407,21 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 	/**
 		Returns the bitwise AND of `a` and `b`.
 	**/
+	@:native("and")
 	@:op(A & B) public static inline function and(a:Int64, b:Int64):Int64
 		return make(a.high & b.high, a.low & b.low);
 
 	/**
 		Returns the bitwise OR of `a` and `b`.
 	**/
+	@:native("or")
 	@:op(A | B) public static inline function or(a:Int64, b:Int64):Int64
 		return make(a.high | b.high, a.low | b.low);
 
 	/**
 		Returns the bitwise XOR of `a` and `b`.
 	**/
+	@:native("xor")
 	@:op(A ^ B) public static inline function xor(a:Int64, b:Int64):Int64
 		return make(a.high ^ b.high, a.low ^ b.low);
 
@@ -462,11 +468,6 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 		return this.low = x;
 }
 
-/**
-	This typedef will fool `@:coreApi` into thinking that we are using
-	the same underlying type, even though it might be different on
-	specific platforms.
-**/
 private typedef __Int64 = ___Int64;
 
 class ___Int64 {
@@ -478,11 +479,6 @@ class ___Int64 {
 		this.low = low;
 	}
 
-	/**
-		We also define toString here to ensure we always get a pretty string
-		when tracing or calling `Std.string`. This tends not to happen when
-		`toString` is only in the abstract.
-	**/
 	public function toString():String
 		return Int64.toStr(cast this);
 }
