@@ -29,7 +29,13 @@ import haxe.Int32;
 
 @:headerCode("
 namespace haxe {
-	class ___Int64;
+	class ___Int64 {
+	public:
+		int32_t high;
+		int32_t low;
+		___Int64(int32_t h, int32_t l) : high(h), low(l) {}
+		std::string toString();
+	};
 }
 ")
 #if flash
