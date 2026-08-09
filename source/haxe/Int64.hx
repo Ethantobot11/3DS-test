@@ -34,6 +34,11 @@ import haxe.Int32;
 #if flash
 @:notNull
 #end
+@:headerCode("
+namespace haxe {
+    class NativeInt64Struct;
+}
+")
 @:transitive
 abstract Int64(NativeInt64Struct) from NativeInt64Struct to NativeInt64Struct {
     private inline function new(x:NativeInt64Struct)
