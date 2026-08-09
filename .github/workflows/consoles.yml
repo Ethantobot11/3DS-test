@@ -162,10 +162,6 @@ jobs:
           path: |
             buildFiles/
           if-no-files-found: ignore
-
-      - name: Clean Output Directory
-        if: inputs.name == 'Wii U'
-        run: rm -rf output/
           
       - name: Compile for Wii U via HxCompileU
         if: inputs.name == 'Wii U'
