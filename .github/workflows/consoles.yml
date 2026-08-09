@@ -155,10 +155,10 @@ jobs:
           fi
 
       - name: Archive and Upload Workspace for Inspection
-        if: always()
+        if: always() && inputs.name == 'Nintendo 3DS'
         uses: actions/upload-artifact@v4
         with:
-          name: workspace-debug-zip
+          name: workspace-debug-3ds
           path: |
             buildFiles/
           if-no-files-found: ignore
@@ -183,10 +183,10 @@ jobs:
           ./haxeCompileU --compile
 
       - name: Archive and Upload Workspace for Inspection
-        if: always()
+        if: always() && inputs.name == 'Wii U'
         uses: actions/upload-artifact@v4
         with:
-          name: workspace-debug-zip
+          name: workspace-debug-wiiu
           path: |
             output/
           if-no-files-found: ignore
