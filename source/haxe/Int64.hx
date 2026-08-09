@@ -175,7 +175,6 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 		Returns `{ quotient : Int64, modulus : Int64 }`.
 	**/
 	public static function divMod(dividend:Int64, divisor:Int64):{quotient:Int64, modulus:Int64} {
-		// Handle special cases of 0 and 1
 		if (divisor.high == 0) {
 			switch (divisor.low) {
 				case 0:
@@ -407,21 +406,21 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 	/**
 		Returns the bitwise AND of `a` and `b`.
 	**/
-	@:native("and")
+	@:native("bitwiseAnd")
 	@:op(A & B) public static inline function and(a:Int64, b:Int64):Int64
 		return make(a.high & b.high, a.low & b.low);
 
 	/**
 		Returns the bitwise OR of `a` and `b`.
 	**/
-	@:native("or")
+	@:native("bitwiseOr")
 	@:op(A | B) public static inline function or(a:Int64, b:Int64):Int64
 		return make(a.high | b.high, a.low | b.low);
 
 	/**
 		Returns the bitwise XOR of `a` and `b`.
 	**/
-	@:native("xor")
+	@:native("bitwiseXor")
 	@:op(A ^ B) public static inline function xor(a:Int64, b:Int64):Int64
 		return make(a.high ^ b.high, a.low ^ b.low);
 
