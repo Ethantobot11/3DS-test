@@ -469,7 +469,7 @@ abstract Int64(__Int64) from __Int64 to __Int64 {
 **/
 private typedef __Int64 = ___Int64;
 
-private class ___Int64 {
+class ___Int64 {
 	public var high:Int32;
 	public var low:Int32;
 
