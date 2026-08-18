@@ -79,9 +79,9 @@ class CitroGame {
 			var dt = CitroG.deltaTime;
 
 			untyped __cpp__('
+				C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 				C2D_TargetClear(topScreen, 0xFF000000);
 				C2D_TargetClear(bottomScreen, 0xFF000000);
-				C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 			');
 
 			CitroTween.update();
@@ -96,6 +96,7 @@ class CitroGame {
 			}
 
 			untyped __cpp__('C3D_FrameEnd(0)');
+            
 			CitroG.deltaTime = {
 				dt = OS.time.toInt() - old.toInt();
 				if (dt < 1) dt = 1;
