@@ -56,6 +56,7 @@ class ThreeDSMainMenuState extends CitroState {
 
         updateVisualSelection();
         trace("MainMenuState loaded.");
+      }
     }
 
     override public function update(delta:Int) {
