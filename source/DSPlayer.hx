@@ -156,6 +156,7 @@ class DSPlayer extends CitroAnimate
             if (curAnim != currentStanding) {
                 play(currentStanding);
             }
+            frame = 0;
         }
     }
 }
