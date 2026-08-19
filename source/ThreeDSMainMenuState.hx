@@ -144,7 +144,7 @@ class ThreeDSMainMenuState extends CitroState {
         trace('Erased Slot ${slotIndex + 1}');
     }
 
-    override public function destroy() {
+    public function destroy() {
         super.destroy();
     }
 }
