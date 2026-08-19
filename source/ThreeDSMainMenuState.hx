@@ -48,7 +48,6 @@ class ThreeDSMainMenuState extends CitroState {
             
            slots[i].name;
            slots[i].playTime;
-        }
         
         var optionsBox = new CitroSprite(40, 40 + (3 * 50));
         optionsBox.makeGraphic(240, 40, 0xFF222244);
@@ -144,7 +143,7 @@ class ThreeDSMainMenuState extends CitroState {
         trace('Erased Slot ${slotIndex + 1}');
     }
 
-    public function destroy() {
+    override public function destroy() {
         super.destroy();
     }
 }
