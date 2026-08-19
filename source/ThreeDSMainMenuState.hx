@@ -3,26 +3,20 @@ package;
 #if (!wiiu || !cafe)
 import citro.CitroG;
 import citro.object.CitroObject;
-import citro.object.CitroSprite;
+import citro.object.CitroSprite
+import citro.object.CitroText; 
 import citro.state.CitroState;
 import haxe3ds.services.HID;
 
 class ThreeDSMainMenuState extends CitroState {
     
-    /**
-     * Currently selected index (0 to 2 for save slots, 3 for Options menu).
-     */
     private var selectedIndex:Int = 0;
-
-    /**
-     * Total items selectable in the main menu (3 Save Slots + 1 Options Button).
-     */
     private final TOTAL_MENU_ITEMS:Int = 4;
 
-    /**
-     * Visual UI elements for background.
-     */
     private var menuBackground:CitroSprite;
+
+    private var slotUIElements:Array<CitroSprite> = [];
+    private var slotTexts:Array<CitroText> = [];
 
     public function new() {
         super();
@@ -39,27 +33,52 @@ class ThreeDSMainMenuState extends CitroState {
             ];
             CitroG.save.flush();
         }
-
+        
         menuBackground = new CitroSprite(0, 0);
         menuBackground.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF0A0A1E); 
         add(menuBackground);
+        
+        var slots:Array<Dynamic> = CitroG.save.data.slots;
+        for (i in 0...3) {
+            var slotBox = new CitroSprite(40, 40 + (i * 50));
+            slotBox.makeGraphic(240, 40, 0xFF222244);
+            add(slotBox);
+            slotUIElements.push(slotBox);
 
-        trace("MainMenuState loaded. Use UP/DOWN to navigate, A to select, X to erase slots.");
+            
+           slots[i].name;
+           slots[i].playTime;
+        }
+        
+        var optionsBox = new CitroSprite(40, 40 + (3 * 50));
+        optionsBox.makeGraphic(240, 40, 0xFF222244);
+        add(optionsBox);
+        slotUIElements.push(optionsBox);
+
+        updateVisualSelection();
+        trace("MainMenuState loaded.");
     }
 
     override public function update(delta:Int) {
         super.update(delta);
 
+        var changed = false;
+
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             selectedIndex--;
             if (selectedIndex < 0) selectedIndex = TOTAL_MENU_ITEMS - 1;
-            updateSelectionLog();
+            changed = true;
         }
         
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             selectedIndex++;
             if (selectedIndex >= TOTAL_MENU_ITEMS) selectedIndex = 0;
+            changed = true;
+        }
+
+        if (changed) {
             updateSelectionLog();
+            updateVisualSelection();
         }
 
         if (HID.keyPressed(HIDKey.A)) {
@@ -72,11 +91,21 @@ class ThreeDSMainMenuState extends CitroState {
         }
 
         if (HID.keyPressed(HIDKey.X) && selectedIndex < 3) {
-            eraseSlot(selectedIndex);
+            eraseSlot(selectedIndex)
         }
 
         if (HID.keyPressed(HIDKey.Y)) {
             CitroG.switchState(new OptionsState());
+        }
+    }
+
+    private function updateVisualSelection() 
+        for (i in 0...slotUIElements.length) {
+            if (i == selectedIndex) {
+                slotUIElements[i].makeGraphic(240, 40, 0xFF444488); // Brighter highlight color
+            } else {
+                slotUIElements[i].makeGraphic(240, 40, 0xFF222244); // Normal color
+            }
         }
     }
 
@@ -88,9 +117,6 @@ class ThreeDSMainMenuState extends CitroState {
         }
     }
 
-    /**
-     * Handles loading or creating a save file for the chosen slot.
-     */
     private function selectSlot(slotIndex:Int) {
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         var currentSlotData = slots[slotIndex];
@@ -107,13 +133,9 @@ class ThreeDSMainMenuState extends CitroState {
         }
 
         CitroG.save.flush();
-
         CitroG.switchState(new PlayState());
     }
 
-    /**
-     * Wipes data clean for a specific slot.
-     */
     private function eraseSlot(slotIndex:Int) {
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         slots[slotIndex] = { created: false, name: "EMPTY", playTime: 0, room: "R_START" };
@@ -126,5 +148,4 @@ class ThreeDSMainMenuState extends CitroState {
         super.destroy();
     }
 }
-
 #end
