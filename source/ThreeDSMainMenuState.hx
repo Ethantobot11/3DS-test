@@ -91,7 +91,7 @@ class ThreeDSMainMenuState extends CitroState {
         }
 
         if (HID.keyPressed(HIDKey.X) && selectedIndex < 3) {
-            eraseSlot(selectedIndex)
+            eraseSlot(selectedIndex);
         }
 
         if (HID.keyPressed(HIDKey.Y)) {
