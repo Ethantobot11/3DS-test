@@ -3,7 +3,7 @@ package;
 #if (!wiiu || !cafe)
 import citro.CitroG;
 import citro.object.CitroObject;
-import citro.object.CitroSprite
+import citro.object.CitroSprite;
 import citro.object.CitroText; 
 import citro.state.CitroState;
 import haxe3ds.services.HID;
@@ -32,7 +32,7 @@ class ThreeDSMainMenuState extends CitroState {
                 { created: false, name: "EMPTY", playTime: 0, room: "R_START" }
             ];
             CitroG.save.flush();
-        }
+        } je
         
         menuBackground = new CitroSprite(0, 0);
         menuBackground.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF0A0A1E); 
