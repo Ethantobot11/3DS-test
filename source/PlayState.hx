@@ -78,7 +78,7 @@ class PlayState extends CitroState
         if (HID.keyPressed(HIDKey.A)) {
            CitroG.substate = new SaveMenuSubState();
            CitroG.substate.create();
-           inputLockout = 0.6:
+           inputLockout = 0.6;
         }
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
@@ -91,7 +91,7 @@ class PlayState extends CitroState
             };
             add(transition);
             camera.add(transition);
-            inputLockout = 0.6:
+            inputLockout = 0.6;
             return;
         }
 
