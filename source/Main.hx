@@ -11,7 +11,7 @@ import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
 #end
 
-class Main
+class Main extends CitroState
 {  
     public static var fpsText:CitroText;
     
