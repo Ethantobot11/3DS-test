@@ -17,7 +17,13 @@ class FPS extends CitroState
 
     public function new()
     {
-       trace("Starting FPS Counter for 3DS Application...");
+       this = this
+    }
+
+    override public function create()
+    {
+        super.create();
+        trace("Starting FPS Counter for 3DS Application...");
 
         fpsText = new CitroText(2, 2, "FPS: 60");
         fpsText.color = 0xFFFFFF00;
@@ -29,12 +35,14 @@ class FPS extends CitroState
         }, -1);
     }
 
-    public function update(delta:Int)
+    override public function update(delta:Int)
     {
+        super.update(delta);
         currentDelta = delta;
     }
 
-    public function destroy() {
+    override public function destroy() {
         CitroTimer.reset();
+        super.destroy();
     }
 }
