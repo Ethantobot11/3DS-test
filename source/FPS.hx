@@ -13,6 +13,8 @@ class FPS extends CitroState
 {
     public var fpsText:CitroText;
 
+    private var currentDelta:Int = 16;
+
     public function new()
     {
        trace("Starting FPS Counter for 3DS Application...");
