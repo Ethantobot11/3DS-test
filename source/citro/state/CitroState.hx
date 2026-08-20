@@ -1,11 +1,15 @@
 package citro.state;
 
 import citro.object.CitroObject;
+import citro.object.CitroText;
 
 /**
  * State for Handling What this state should do, Like for Adding Sprites, Checking Members, and More.
  */
 class CitroState {
+
+	public static var fpsText:CitroText;
+	
 	/**
 	 * Lists of members currently added in this state.
 	 */
