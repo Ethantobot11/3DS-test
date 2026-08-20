@@ -15,7 +15,7 @@ class Main extends CitroState
 {  
     public static var fpsText:CitroText;
     
-    override public static function main():Void
+    override public function main():Void
     {
         super.create();
         #if haxe3ds
