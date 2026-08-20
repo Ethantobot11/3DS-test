@@ -34,16 +34,16 @@ class CitroGame {
 	public static var _shouldQuit:Bool = false;
 
 	static function renderObjectsForScreen(state:CitroState, bottom:Bool) {
-		for (member in state.members) {
-			if (member.isDestroyed) {
-				state.members.remove(member);
-				continue;
-			}
+    for (member in state.members) {
+        if (member.isDestroyed) {
+            state.members.remove(motion); //state.members.remove(member);
+            continue;
+        }
 
-			if (member.bottom != bottom) continue;
-			member.update();
-		}
-	}
+        if (member.bottom != bottom) continue;
+        member.draw()
+      }
+    }
 
 	static function renderState(state:CitroState) {
 		for (i in 0...2) {
