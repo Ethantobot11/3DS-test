@@ -10,7 +10,11 @@ def main():
         print("No 'assets' directory found. Skipping conversion.")
         return
 
-    excluded_file = os.path.normpath("assets/resources/audio.wav")
+    excluded_files = {
+        os.path.normpath("assets/resources/audio.wav"),
+        os.path.normpath("resources/audio.wav"),
+        os.path.normpath("audio.wav")
+    }
 
     for root, dirs, files in os.walk("assets"):
         for file in files:
@@ -19,6 +23,11 @@ def main():
             ext = ext.lower()
 
             if ext == ".mp3":
+                if os.path.normpath(file_path) in excluded_files:
+                    print(f"Skipping CWAV conversion for excluded file: {file_path}")
+                    continue
+
+                
                 out_path = os.path.join(root, name + ".ogg")
                 print(f"Converting {file_path} to OGG...")
                 try:
@@ -31,7 +40,7 @@ def main():
                     print(f"Unexpected error during MP3 conversion for {file_path}: {e}")
 
             elif ext == ".ogg":
-                if os.path.normpath(file_path) == excluded_file:
+                if os.path.normpath(file_path) in excluded_files:
                     print(f"Skipping CWAV conversion for excluded file: {file_path}")
                     continue
 
