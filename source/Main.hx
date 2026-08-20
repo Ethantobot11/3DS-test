@@ -20,6 +20,8 @@ class Main
         trace("Starting Citro 3DS Application...");
 
         CitroGame.start(new ThreeDSMainMenuState());
+
+        fpsText = new FPS();
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
