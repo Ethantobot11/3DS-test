@@ -41,7 +41,6 @@ class DSDialogueBox extends citro.object.CitroObject
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
 
-        // Portrait is now an animated sprite inheriting/using CitroAnimate capabilities via portrait object or frame-switching
         portrait = new CitroSprite(8, 6);
         portrait.visible = false;
 
@@ -69,6 +68,17 @@ class DSDialogueBox extends citro.object.CitroObject
         optionNoText.visible = false;
 
         visible = false;
+
+        var currentState = CitroG.substate != null ? CitroG.substate : CitroG.state;
+        if (currentState != null) {
+            currentState.add(boxBorder);
+            currentState.add(boxBg);
+            currentState.add(portrait);
+            currentState.add(textDisplay);
+            currentState.add(soulCursor);
+            currentState.add(optionYesText);
+            currentState.add(optionNoText);
+        }
     }
 
     public function startDialogue(text:String, faceAtlas:String = null, expressionFrame:String = null, style:String = "light", withChoices:Bool = false, snd:String = "snd_txtnoe.cwav")
@@ -94,7 +104,7 @@ class DSDialogueBox extends citro.object.CitroObject
             if (sys.FileSystem.exists(ceaPath))
             {
                 var file:String = sys.io.File.getContent(ceaPath);
-                var dir:String = "romfs:/assets/images/chars";
+                var dir:String = "romfs:/assets/images";
                 
                 for (line in file.split("\n"))
                 {
@@ -195,44 +205,46 @@ class DSDialogueBox extends citro.object.CitroObject
 
     override public function update():Bool
     {
-        if (!visible) return false;
+        boxBorder.visible = visible;
+        boxBg.visible = visible;
+        
+        if (!visible) 
+        {
+            if (portrait.visible) portrait.visible = false;
+            textDisplay.visible = false;
+            optionYesText.visible = false;
+            optionNoText.visible = false;
+            soulCursor.visible = false;
+            return false;
+        }
+
+        textDisplay.visible = true;
 
         boxBorder.x = x;
         boxBorder.y = y;
-        boxBorder.update();
 
         boxBg.x = x + 3;
         boxBg.y = y + 3;
-        boxBg.update();
 
         if (portrait.visible)
         {
             portrait.x = x + 8;
             portrait.y = y + 6;
-            portrait.update();
         }
 
         textDisplay.x = portrait.visible ? (x + 68) : (x + 15);
         textDisplay.y = y + 10;
-        textDisplay.update();
 
         if (optionYesText.visible)
         {
             optionYesText.x = x + 210;
             optionYesText.y = y + 18;
-            optionYesText.update();
         }
 
         if (optionNoText.visible)
         {
             optionNoText.x = x + 210;
             optionNoText.y = y + 36;
-            optionNoText.update();
-        }
-
-        if (soulCursor.visible)
-        {
-            soulCursor.update();
         }
 
         return true;
@@ -240,6 +252,17 @@ class DSDialogueBox extends citro.object.CitroObject
 
     override public function destroy()
     {
+        var currentState = CitroG.substate != null ? CitroG.substate : CitroG.state;
+        if (currentState != null) {
+            if (boxBg != null) currentState.remove(boxBg);
+            if (boxBorder != null) currentState.remove(boxBorder);
+            if (portrait != null) currentState.remove(portrait);
+            if (textDisplay != null) currentState.remove(textDisplay);
+            if (soulCursor != null) currentState.remove(soulCursor);
+            if (optionYesText != null) currentState.remove(optionYesText);
+            if (optionNoText != null) currentState.remove(optionNoText);
+        }
+
         if (boxBg != null) boxBg.destroy();
         if (boxBorder != null) boxBorder.destroy();
         if (portrait != null) portrait.destroy();
