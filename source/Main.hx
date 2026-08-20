@@ -11,16 +11,7 @@ import leafy.backend.sdl.LfWindowRender;
 #end
 
 class Main
-{
-    public var fpsText:CitroText;
-
-    public function showfpsbro():Void
-    {
-        fpsText = new CitroText(2, 2, "FPS: 60");
-        fpsText.color = 0xFFFFFF00;
-        add(fpsText);
-    }
-        
+{    
     public static function main():Void
     {
         #if haxe3ds
@@ -29,8 +20,6 @@ class Main
         trace("Starting Citro 3DS Application...");
 
         CitroGame.start(new ThreeDSMainMenuState());
-
-        showfpsbro();
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
