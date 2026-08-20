@@ -30,4 +30,9 @@ class FPS
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
         #end
     }
+
+    public function update(delta:Int):Void
+    {
+        currentDelta = delta;
+    }
 }
