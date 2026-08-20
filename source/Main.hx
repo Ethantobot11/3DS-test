@@ -12,7 +12,14 @@ import leafy.backend.sdl.LfWindowRender;
 
 class Main
 {
-    private var fpsText:CitroText;
+    public var fpsText:CitroText;
+
+    public function showfpsbro():Void
+    {
+        fpsText = new CitroText(2, 2, "FPS: 60");
+        fpsText.color = 0xFFFFFF00;
+        add(fpsText);
+    }
         
     public static function main():Void
     {
@@ -23,9 +30,7 @@ class Main
 
         CitroGame.start(new ThreeDSMainMenuState());
 
-        fpsText = new CitroText(2, 2, "FPS: 60");
-        fpsText.color = 0xFFFFFF00;
-        add(fpsText);
+        showfpsbro();
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
