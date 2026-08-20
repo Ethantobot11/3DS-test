@@ -15,17 +15,18 @@ class Main extends CitroState
 {  
     public static var fpsText:CitroText;
     
-    public static function main():Void
+    override public static function main():Void
     {
+        super.create()
         #if haxe3ds
         CrashHandler.init();
+
+        fpsText = new FPS();
+        add(fpsText);
         
         trace("Starting Citro 3DS Application...");
 
         CitroGame.start(new ThreeDSMainMenuState());
-
-        fpsText = new FPS();
-        add(fpsText);
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
