@@ -14,7 +14,7 @@ class ThreeDSMainMenuState extends CitroState {
     private final TOTAL_MENU_ITEMS:Int = 4;
 
     private var menuBackground:CitroSprite;
-
+    
     private var slotUIElements:Array<CitroSprite> = [];
     private var slotTexts:Array<CitroText> = [];
 
@@ -33,22 +33,22 @@ class ThreeDSMainMenuState extends CitroState {
             ];
             CitroG.save.flush();
         }
-        
+
         menuBackground = new CitroSprite(0, 0);
         menuBackground.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF0A0A1E); 
         add(menuBackground);
-        
+
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         for (i in 0...3) {
             var slotBox = new CitroSprite(40, 40 + (i * 50));
             slotBox.makeGraphic(240, 40, 0xFF222244);
             add(slotBox);
             slotUIElements.push(slotBox);
+            slots[i].name;
+            slots[i].playTime;
+            slots[i].room;
+        }
 
-            
-           slots[i].name;
-           slots[i].playTime;
-        
         var optionsBox = new CitroSprite(40, 40 + (3 * 50));
         optionsBox.makeGraphic(240, 40, 0xFF222244);
         add(optionsBox);
@@ -56,7 +56,6 @@ class ThreeDSMainMenuState extends CitroState {
 
         updateVisualSelection();
         trace("MainMenuState loaded.");
-      }
     }
 
     override public function update(delta:Int) {
@@ -99,12 +98,12 @@ class ThreeDSMainMenuState extends CitroState {
         }
     }
 
-    private function updateVisualSelection() 
+    private function updateVisualSelection() {
         for (i in 0...slotUIElements.length) {
             if (i == selectedIndex) {
-                slotUIElements[i].makeGraphic(240, 40, 0xFF444488); // Brighter highlight color
+                slotUIElements[i].makeGraphic(240, 40, 0xFF444488);
             } else {
-                slotUIElements[i].makeGraphic(240, 40, 0xFF222244); // Normal color
+                slotUIElements[i].makeGraphic(240, 40, 0xFF222244);
             }
         }
     }
