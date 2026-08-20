@@ -35,7 +35,7 @@ class PlayState extends CitroState
         background.makeGraphic(1280, 720, 0xff1d1d24);
         camera.add(background);
 
-        kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
+        kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2);
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
@@ -69,8 +69,8 @@ class PlayState extends CitroState
                             HID.keyPressed(HIDKey.R);
 
         if (HID.keyPressed(HIDKey.A)) {
-        CitroG.substate = new SaveMenuSubState();
-        CitroG.substate.create();
+           CitroG.substate = new SaveMenuSubState();
+           CitroG.substate.create();
         }
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
