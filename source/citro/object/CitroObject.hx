@@ -177,11 +177,6 @@ class CitroObject {
 	};
 
 	/**
-	 * Draws the object to the screen. Override this in subclasses.
-	 */
-	public function draw() {}
-
-	/**
 	 * Screen centers the current object.
 	 * @param pos Current axes to use as, can be X, Y or XY.
 	 */
