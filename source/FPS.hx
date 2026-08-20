@@ -17,7 +17,7 @@ class FPS extends CitroState
 
     public function new()
     {
-       this = this
+       this = this;
     }
 
     override public function create()
