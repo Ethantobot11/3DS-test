@@ -3,12 +3,13 @@ package;
 #if haxe3ds
 import citro.object.CitroText;
 import citro.backend.CitroTimer;
+import citro.state.CitroState;
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
 #end
 
-class FPS
+class FPS extends CitroState
 {
     public var fpsText:CitroText;
 
