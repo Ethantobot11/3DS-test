@@ -4,6 +4,7 @@ package;
 import haxe3ds.services.RomFS;
 import haxe3ds.services.GFX;
 import citro.CitroGame;
+import citro.object.CitroObject;
 import citro.object.CitroText;
 import citro.state.CitroState;
 #else
@@ -15,7 +16,7 @@ class Main extends CitroState
 {  
     public static var fpsText:CitroText;
     
-    override public function main():Void
+    public static function main():Void
     {
         super.create();
         #if haxe3ds
@@ -32,4 +33,17 @@ class Main extends CitroState
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
         #end
     }
+
+    public function add(member:CitroObject) {
+		if (check(member))
+			return;
+
+		final index:Int = members.indexOf(null);
+		if (index != -1) {
+			members[index] = member;
+			return;
+		}
+
+		members.push(member);
+	}
 }
