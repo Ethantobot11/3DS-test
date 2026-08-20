@@ -5,28 +5,24 @@ package;
 import citro.CitroG;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
+import citro.object.CitroText;
+import citro.backend.CitroTimer;
 import haxe3ds.services.HID;
 import citro.state.CitroState;
 
 class OptionsState extends CitroState {
 
-    /**
-     * Current selected option index in the menu.
-     */
     private var selectedIndex:Int = 0;
-
-    /**
-     * Total number of options available.
-     */
     private final MAX_OPTIONS:Int = 3;
 
-    /**
-     * FPS Counter display properties.
-     */
     private static var showFps:Bool = true;
-    private var fpsSprite:CitroSprite;
-    
     private var controlScheme:String = "Default (A: Confirm, B: Cancel)";
+
+    private var optionBoxes:Array<CitroSprite> = [];
+    private var optionTexts:Array<CitroText> = [];
+    private var fpsText:CitroText;
+
+    private var currentDelta:Int = 16;
 
     public function new() {
         super();
@@ -49,74 +45,111 @@ class OptionsState extends CitroState {
         bg.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF141428);
         add(bg);
 
-        trace("OptionsState loaded. Use UP/DOWN to navigate, A to toggle/change, B to exit.");
+        for (i in 0...MAX_OPTIONS) {
+            var box = new CitroSprite(40, 50 + (i * 50));
+            box.makeGraphic(240, 40, 0xFF222244);
+            add(box);
+            optionBoxes.push(box);
+
+            var label = getOptionText(i);
+            var textObj = new CitroText(50, 58 + (i * 50), label);
+            textObj.color = 0xFFFFFFFF;
+            add(textObj);
+            optionTexts.push(textObj);
+        }
+
+        fpsText = new CitroText(4, 4, "FPS: 60");
+        fpsText.color = 0xFFFFFF00;
+        add(fpsText);
+
+        CitroTimer.start(0.25, function() {
+            var fps:Int = currentDelta > 0 ? Std.int(1000 / currentDelta) : 60;
+            fpsText.text = 'FPS: $fps';
+        }, -1);
+
+        updateVisualSelection();
+        trace("OptionsState loaded.");
     }
 
     override public function update(delta:Int) {
         super.update(delta);
 
+        currentDelta = delta;
+
+        var changed = false;
+
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             selectedIndex--;
             if (selectedIndex < 0) selectedIndex = MAX_OPTIONS - 1;
-            trace('Selected Option Index: $selectedIndex');
+            changed = true;
         }
-
+        
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             selectedIndex++;
             if (selectedIndex >= MAX_OPTIONS) selectedIndex = 0;
-            trace('Selected Option Index: $selectedIndex');
+            changed = true;
+        }
+
+        if (changed) {
+            updateVisualSelection();
         }
 
         if (HID.keyPressed(HIDKey.A)) {
             executeOptionAction(selectedIndex);
+            refreshOptionTexts();
         }
 
         if (HID.keyPressed(HIDKey.B)) {
-            executeOptionAction(selectedIndex);
             trace("Exiting Options Menu...");
+            CitroG.switchState(new ThreeDSMainMenuState());
         }
 
-        if (showFps) {
-            renderFpsCounter(delta);
+        fpsText.visible = showFps;
+    }
+
+    private function getOptionText(index:Int):String {
+        switch (index) {
+            case 0: return 'FPS Counter: ${showFps ? "ON" : "OFF"}';
+            case 1: return 'Controls: ${CitroG.save.data.options.controlType == 0 ? "Default" : "Alt"}';
+            case 2: return "Back to Main Menu";
+            default: return "";
         }
     }
 
-    /**
-     * Executes the action for the currently highlighted option.
-     */
+    private function refreshOptionTexts() {
+        for (i in 0...optionTexts.length) {
+            optionTexts[i].text = getOptionText(i);
+        }
+    }
+
+    private function updateVisualSelection() {
+        for (i in 0...optionBoxes.length) {
+            if (i == selectedIndex) {
+                optionBoxes[i].makeGraphic(240, 40, 0xFF444488);
+            } else {
+                optionBoxes[i].makeGraphic(240, 40, 0xFF222244);
+            }
+        }
+    }
+
     private function executeOptionAction(index:Int) {
         switch (index) {
             case 0:
                 showFps = !showFps;
                 CitroG.save.data.options.fpsEnabled = showFps;
                 CitroG.save.flush();
-                trace('FPS Counter toggled: ${showFps ? "ON" : "OFF"}');
-
             case 1:
                 var currentType:Int = CitroG.save.data.options.controlType;
                 currentType = (currentType == 0) ? 1 : 0;
                 CitroG.save.data.options.controlType = currentType;
-                
-                controlScheme = (currentType == 0) ? "Default (A: Confirm, B: Cancel)" : "Alternative (A: Action, X: Menu)";
                 CitroG.save.flush();
-                trace('Control Scheme changed to: $controlScheme');
-
             case 2:
-                trace("Returning to Main Menu...");
                 CitroG.switchState(new ThreeDSMainMenuState());
         }
     }
 
-    /**
-     * Simple utility to calculate and draw a basic text/frame update indicator on the top left.
-     */
-    private function renderFpsCounter(delta:Int) {
-        var currentFps:Int = delta > 0 ? Std.int(1000 / delta) : 60;
-        
-        //citro.object.CitroText.text('FPS: $currentFps', 4, 4, 0xFFFFFFFF);
-    }
-
     override public function destroy() {
+        CitroTimer.reset();
         super.destroy();
     }
 }
