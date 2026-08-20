@@ -12,7 +12,7 @@ import leafy.backend.sdl.LfWindowRender;
 
 class Main
 {
-    var fpsText:CitroText;
+    public var fpsText:CitroText;
         
     public static function main():Void
     {
