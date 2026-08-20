@@ -35,4 +35,8 @@ class FPS
     {
         currentDelta = delta;
     }
+
+    override public function destroy() {
+        CitroTimer.reset();
+    }
 }
