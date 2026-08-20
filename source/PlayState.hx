@@ -25,31 +25,32 @@ class PlayState extends CitroState
     var camera:CitroCamera;
 
     override public function create()
-{
-    super.create();
+    {
+        super.create();
 
-    camera = new CitroCamera(false);
-    add(camera);
+        camera = new CitroCamera(false);
+        add(camera);
 
-    var background = new CitroSprite(0, 0);
-    background.makeGraphic(1280, 720, 0xff1d1d24);
-    camera.add(background);
+        var background = new CitroSprite(0, 0);
+        background.makeGraphic(1280, 720, 0xff1d1d24);
+        camera.add(background);
 
-    kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
-    camera.add(kris);
+        kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
+        camera.add(kris);
 
-    noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
-    noelle.target = kris;
-    camera.add(noelle);
+        noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
+        noelle.target = kris;
+        camera.add(noelle);
 
-    camera.follow(kris, true);
+        camera.follow(kris, true);
+        camera.target = kris;
 
-    dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
-    camera.add(dialogueBox);
+        dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
+        camera.add(dialogueBox);
 
-    closetDoor = new DSDarkDoor(300, 100);
-    camera.add(closetDoor);
-}
+        closetDoor = new DSDarkDoor(300, 100);
+        camera.add(closetDoor);
+    }
 
     override public function update(delta:Int):Void
     {
