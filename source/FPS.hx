@@ -15,9 +15,13 @@ class FPS extends CitroState
 
     private var currentDelta:Int = 16;
 
+    public var instance:FPS;
+
     public function new()
     {
-       this = this;
+       super();
+        
+       instance = this;
     }
 
     override public function create()
