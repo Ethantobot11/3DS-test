@@ -3,50 +3,33 @@ package;
 #if haxe3ds
 import citro.object.CitroText;
 import citro.backend.CitroTimer;
-import citro.state.CitroState;
-#else
-import leafy.LfEngine;
-import leafy.backend.sdl.LfWindowRender;
-#end
 
-class FPS extends CitroState
+class FPS extends CitroText
 {
-    public var fpsText:CitroText;
-
     private var currentDelta:Int = 16;
+    public static var instance:FPS;
 
-    public var instance:FPS;
-
-    public function new()
+    public function new(x:Float = 2, y:Float = 2)
     {
-       super();
+        super(x, y, "FPS: 60");
+        color = 0xFFFFFF00;
+        instance = this;
         
-       instance = this;
-    }
-
-    override public function create()
-    {
-        super.create();
         trace("Starting FPS Counter for 3DS Application...");
-
-        fpsText = new CitroText(2, 2, "FPS: 60");
-        fpsText.color = 0xFFFFFF00;
-        add(fpsText);
 
         CitroTimer.start(0.25, function() {
             var fps:Int = currentDelta > 0 ? Std.int(1000 / currentDelta) : 60;
-            fpsText.text = 'FPS: $fps';
+            text = 'FPS: $fps';
         }, -1);
     }
 
-    override public function update(delta:Int)
+    public function update(delta:Int)
     {
-        super.update(delta);
         currentDelta = delta;
     }
 
-    override public function destroy() {
+    public function destroy() {
         CitroTimer.reset();
-        super.destroy();
     }
+    #end
 }
