@@ -53,12 +53,12 @@ class SaveMenuSubState extends CitroSubState
     {
         super.update(dt);
 
-        if (HID.keyPressed(HIDKey.UP || HIDKey.DPAD_UP)) {
+        if (HID.keyPressed(HIDKey.UP)) {
             selectedSlot--;
             if (selectedSlot < 0) selectedSlot = 2;
             updateSlotColors();
         }
-        else if (HID.keyPressed(HIDKey.DOWN || HIDKey.DPAD_DOWN)) {
+        else if (HID.keyPressed(HIDKey.DOWN)) {
             selectedSlot++;
             if (selectedSlot > 2) selectedSlot = 0;
             updateSlotColors();
