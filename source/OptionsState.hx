@@ -20,7 +20,6 @@ class OptionsState extends CitroState {
 
     private var optionBoxes:Array<CitroSprite> = [];
     private var optionTexts:Array<CitroText> = [];
-    private var fpsText:CitroText;
 
     private var currentDelta:Int = 16;
 
