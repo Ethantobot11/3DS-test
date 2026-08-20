@@ -25,6 +25,11 @@ class FPS
         trace("Starting FPS Counter for 3DS Application...");
 
         showfpsbro();
+
+        CitroTimer.start(0.25, function() {
+            var fps:Int = currentDelta > 0 ? Std.int(1000 / currentDelta) : 60;
+            fpsText.text = 'FPS: $fps';
+        }, -1);
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
