@@ -35,16 +35,16 @@ class CitroGame {
 
 	static function renderObjectsForScreen(state:CitroState, bottom:Bool) {
     for (member in state.members) {
+        if (member == null) continue;
+        
         if (member.isDestroyed) {
-            state.members.remove(motion); //state.members.remove(member);
+            state.members.remove(member);
             continue;
         }
 
         if (member.bottom != bottom) continue;
-        member.draw();
-      }
+     }
     }
-
 	static function renderState(state:CitroState) {
 		for (i in 0...2) {
 			untyped __cpp__("C2D_SceneBegin({0} == 0 ? topScreen : bottomScreen)", i);
