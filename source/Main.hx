@@ -6,24 +6,19 @@ import haxe3ds.services.GFX;
 import citro.CitroGame;
 import citro.object.CitroObject;
 import citro.object.CitroText;
-import citro.state.CitroState;
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
 #end
 
-class Main extends CitroState
+class Main
 {  
     public static var fpsText:CitroText;
     
     public static function main():Void
     {
-        super.create();
         #if haxe3ds
         CrashHandler.init();
-
-        fpsText = new FPS();
-        add(fpsText);
         
         trace("Starting Citro 3DS Application...");
 
@@ -33,17 +28,4 @@ class Main extends CitroState
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
         #end
     }
-
-    public function add(member:CitroObject) {
-		if (check(member))
-			return;
-
-		final index:Int = members.indexOf(null);
-		if (index != -1) {
-			members[index] = member;
-			return;
-		}
-
-		members.push(member);
-	}
 }
