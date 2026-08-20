@@ -44,15 +44,25 @@ class ThreeDSMainMenuState extends CitroState {
             slotBox.makeGraphic(240, 40, 0xFF222244);
             add(slotBox);
             slotUIElements.push(slotBox);
-            slots[i].name;
-            slots[i].playTime;
-            slots[i].room;
+
+            var slotData = slots[i];
+            var displayText = slotData.created ? 'Slot ${i + 1}: ${slotData.name}' : 'Slot ${i + 1}: EMPTY';
+            
+            var textObj = new CitroText(50, 48 + (i * 50), displayText);
+            textObj.color = 0xFFFFFFFF;
+            add(textObj);
+            slotTexts.push(textObj);
         }
 
         var optionsBox = new CitroSprite(40, 40 + (3 * 50));
         optionsBox.makeGraphic(240, 40, 0xFF222244);
         add(optionsBox);
         slotUIElements.push(optionsBox);
+
+        var optionsText = new CitroText(50, 48 + (3 * 50), "Options");
+        optionsText.color = 0xFFFFFFFF;
+        add(optionsText);
+        slotTexts.push(optionsText);
 
         updateVisualSelection();
         trace("MainMenuState loaded.");
