@@ -85,14 +85,6 @@ class CitroSprite extends CitroObject {
 	 * Updates sprite physics/acceleration
 	 */
 	override function update():Bool {
-		super.update();
-		return isDestroyed;
-	}
-
-	/**
-	 * Draws the sprite
-	 */
-	override function draw() {
 		untyped __cpp__('
 			Float sw = scale->x, sh = scale->y;
 
@@ -126,6 +118,7 @@ class CitroSprite extends CitroObject {
 
 			C2D_ViewRestore(&matrix)
 		');
+		 return true;
 	}
 
 	override function destroy() {
