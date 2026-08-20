@@ -17,7 +17,7 @@ class Main extends CitroState
     
     override public static function main():Void
     {
-        super.create()
+        super.create();
         #if haxe3ds
         CrashHandler.init();
 
