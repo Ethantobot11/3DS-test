@@ -25,7 +25,7 @@ class ThreeDSMainMenuState extends CitroState {
     override public function create() {
         super.create();
 
-        SoundPlayer.playSound('romfs:/assets/sounds/AUDIO_INTRONOISE.cwav')
+        SoundPlayer.playSound('romfs:/assets/romfs/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav')
 
         if (CitroG.save.data.slots == null) {
             CitroG.save.data.slots = [
