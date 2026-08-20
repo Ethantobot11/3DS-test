@@ -11,14 +11,14 @@ class FPS
 {
     public var fpsText:CitroText;
 
-    public function showfpsbro():Void
+    public function showfpsbro()
     {
         fpsText = new CitroText(2, 2, "FPS: 60");
         fpsText.color = 0xFFFFFF00;
         add(fpsText);
     }
         
-    public function main():Void
+    public function create()
     {
         #if haxe3ds
         
@@ -31,7 +31,7 @@ class FPS
         #end
     }
 
-    public function update(delta:Int):Void
+    public function update(delta:Int)
     {
         currentDelta = delta;
     }
