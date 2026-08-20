@@ -43,7 +43,7 @@ class CitroGame {
         }
 
         if (member.bottom != bottom) continue;
-		member.update()
+		member.update();
      }
     }
 	static function renderState(state:CitroState) {
