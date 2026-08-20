@@ -23,6 +23,8 @@ class OptionsState extends CitroState {
 
     private var currentDelta:Int = 16;
 
+    public var fpsText:CitroText; 
+
     public function new() {
         super();
     }
