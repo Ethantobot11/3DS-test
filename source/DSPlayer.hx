@@ -98,10 +98,6 @@ class DSPlayer extends CitroAnimate
         {
             handleMovement();
         }
-        else
-        {
-            frame = 0;
-        }
 
         var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
         pathHistory.unshift({x: x, y: y, anim: curAnimName});
@@ -111,7 +107,20 @@ class DSPlayer extends CitroAnimate
             pathHistory.pop();
         }
 
-        return super.update();
+        var result = super.update();
+
+        var up:Bool = HID.keyHeld(HIDKey.UP);
+        var down:Bool = HID.keyHeld(HIDKey.DOWN);
+        var left:Bool = HID.keyHeld(HIDKey.LEFT);
+        var right:Bool = HID.keyHeld(HIDKey.RIGHT);
+
+        if (!isBusy && !up && !down && !left && !right)
+        {
+            frame = 0;
+            // paused = true; 
+        }
+
+        return result;
     }
 
     private function handleMovement()
@@ -156,7 +165,6 @@ class DSPlayer extends CitroAnimate
             if (curAnim != currentStanding) {
                 play(currentStanding);
             }
-            frame = 0;
         }
     }
 }
