@@ -50,6 +50,11 @@ class PlayState extends CitroState
 
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
+
+        var greenBlock:CitroSprite;
+        greenBlock = new CitroSprite(50, 50);
+        greenBlock.makeGraphic(40, 40, CitroColor.GREEN; // or hex code 0xFF00FF00
+        add(greenBlock);
     }
 
     override public function update(delta:Int):Void
@@ -62,6 +67,11 @@ class PlayState extends CitroState
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                             HID.keyPressed(HIDKey.START) || 
                             HID.keyPressed(HIDKey.R);
+
+        if (HID.keyPressed(HIDKey.A)) {
+        CitroG.substate = new SaveMenuSubState();
+        CitroG.substate.create();
+        }
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
