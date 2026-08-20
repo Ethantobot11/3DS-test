@@ -24,6 +24,8 @@ class PlayState extends CitroState
     var dialogueStage:Int = 0;
     var camera:CitroCamera;
 
+    var inputLockout:Float = 0;
+
     override public function create()
     {
         super.create();
@@ -61,6 +63,11 @@ class PlayState extends CitroState
     {
         super.update(delta);
 
+        if (inputLockout > 0) {
+            inputLockout -= delta / 1000.0;
+            return;
+        }
+
         separate(kris, noelle, !noelle.isFollowing);
         separate(noelle, closetDoor, true);
 
@@ -71,6 +78,7 @@ class PlayState extends CitroState
         if (HID.keyPressed(HIDKey.A)) {
            CitroG.substate = new SaveMenuSubState();
            CitroG.substate.create();
+           inputLockout = 0.6:
         }
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
@@ -83,6 +91,7 @@ class PlayState extends CitroState
             };
             add(transition);
             camera.add(transition);
+            inputLockout = 0.6:
             return;
         }
 
