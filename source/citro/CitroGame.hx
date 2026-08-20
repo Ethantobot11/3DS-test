@@ -41,7 +41,7 @@ class CitroGame {
         }
 
         if (member.bottom != bottom) continue;
-        member.draw()
+        member.draw();
       }
     }
 
