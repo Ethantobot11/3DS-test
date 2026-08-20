@@ -58,10 +58,6 @@ class OptionsState extends CitroState {
             optionTexts.push(textObj);
         }
 
-        fpsText = new CitroText(4, 4, "FPS: 60");
-        fpsText.color = 0xFFFFFF00;
-        add(fpsText);
-
         CitroTimer.start(0.25, function() {
             var fps:Int = currentDelta > 0 ? Std.int(1000 / currentDelta) : 60;
             fpsText.text = 'FPS: $fps';
