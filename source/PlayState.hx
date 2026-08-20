@@ -25,37 +25,31 @@ class PlayState extends CitroState
     var camera:CitroCamera;
 
     override public function create()
-    {
-        super.create();
+{
+    super.create();
 
-        camera = new CitroCamera(false);
-        add(camera);
+    camera = new CitroCamera(false);
+    add(camera);
 
-        var background = new CitroSprite(0, 0);
-        background.makeGraphic(1280, 720, 0xff1d1d24);
-        add(background);
-        camera.add(background);
+    var background = new CitroSprite(0, 0);
+    background.makeGraphic(1280, 720, 0xff1d1d24);
+    camera.add(background);
 
-        kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
-        add(kris);
-        camera.add(kris);
+    kris = new DSPlayer(CitroG.WIDTH / 2, CitroG.HEIGHT / 2);
+    camera.add(kris);
 
-        noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
-        noelle.target = kris;
-        add(noelle);
-        camera.add(noelle);
+    noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
+    noelle.target = kris;
+    camera.add(noelle);
 
-        camera.follow(kris, true);
-        camera.target = kris;
+    camera.follow(kris, true);
 
-        dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
-        add(dialogueBox);
-        camera.add(dialogueBox);
+    dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
+    camera.add(dialogueBox);
 
-        closetDoor = new DSDarkDoor(300, 100);
-        add(closetDoor);
-        camera.add(closetDoor);
-    }
+    closetDoor = new DSDarkDoor(300, 100);
+    camera.add(closetDoor);
+}
 
     override public function update(delta:Int):Void
     {
