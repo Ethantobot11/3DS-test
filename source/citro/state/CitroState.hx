@@ -36,7 +36,10 @@ class CitroState {
 	 * 
 	 * @param delta Delta Time in MS.
 	 */
-	public function update(delta:Int) {}
+	public function update(delta:Int) {
+		CrashHandler.protect(function() {
+        }, new ThreeDSMainMenuState());
+	}
 
 	/**
 	 * Constructor called when state has been switched.
