@@ -1,6 +1,6 @@
 package citro.state;
 
-import CrashHanlder;
+import CrashHandler;
 import citro.backend.CitroColor;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
@@ -55,8 +55,6 @@ class CitroSubState extends CitroState {
 	}
 
 	override function update(delta:Int) {
-		CrashHandler.protect(function() {
             super.update(delta);
-        }, new ThreeDSMainMenuState());
 	}
 }
