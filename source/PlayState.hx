@@ -70,7 +70,7 @@ class PlayState extends CitroState
         }
 
         separate(kris, noelle, !noelle.isFollowing);
-        separate(noelle, closetDoor, greenBlock, true);
+        separate(noelle, closetDoor, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                             HID.keyPressed(HIDKey.START) || 
