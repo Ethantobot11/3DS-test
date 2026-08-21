@@ -72,7 +72,7 @@ class CitroSave {
 		#else
 		if (FS.mountSaveData("sdmc", files, dirs).isFail()) {
 			status = FS_ERROR;
-			trace('save.json is corrupt and will be deleted, reason: ${error.message}');
+			trace('ran out of ideas');
 			return;
 		}
 
