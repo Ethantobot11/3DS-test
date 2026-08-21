@@ -27,7 +27,6 @@ class ThreeDSMainMenuState extends CitroState {
     }
 
     override public function create() {
-        super.create();
 
         trace("Entering MainMenuState.create()...");
 
@@ -75,6 +74,8 @@ class ThreeDSMainMenuState extends CitroState {
         soulCursor = new CitroSprite(40, 56);
         soulCursor.makeGraphic(8, 8, 0xFFFF0000);
         add(soulCursor);
+
+        super.create();
 
         updateVisualSelection();
         trace("MainMenuState loaded.");
