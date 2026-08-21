@@ -7,6 +7,7 @@ import citro.object.CitroSprite;
 import citro.object.CitroText; 
 import citro.state.CitroState;
 import citro.backend.CitroTween;
+import citro.backend.CitroTimer;
 import haxe3ds.services.HID;
 
 class ThreeDSMainMenuState extends CitroState {
