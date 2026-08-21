@@ -32,6 +32,8 @@ class OptionsState extends CitroState {
     override public function create() {
         super.create();
 
+        CrashHandler.init();
+
         if (CitroG.save.data.options == null) {
             CitroG.save.data.options = {
                 fpsEnabled: true,
