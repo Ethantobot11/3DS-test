@@ -32,7 +32,7 @@ class OptionsState extends CitroState {
     override public function create() {
         super.create();
 
-        CrashHandler.init();
+        trace("Entering OptionsState.create()...");
 
         if (CitroG.save.data.options == null) {
             CitroG.save.data.options = {
