@@ -19,8 +19,8 @@ class Main
     {
         #if haxe3ds
         RomFS.init();
-        
         CrashHandler.init();
+        SoundPlayer.init();
         
         trace("Starting Citro 3DS Application...");
 
