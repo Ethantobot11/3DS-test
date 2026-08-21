@@ -16,6 +16,8 @@ class SoundPlayer
     {
         if (initialized) return;
 
+        CrashHandler.init();
+
         untyped __cpp__("ndspInit()");
 
         CWAVHelper.useEnvironment(0); 
