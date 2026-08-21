@@ -54,7 +54,7 @@ class SaveMenuSubState extends CitroSubState
         soulCursor.makeGraphic(8, 8, 0xFFFF0000); 
         add(soulCursor);
         
-        updateSlotColors();
+        updateSlotSelection();
     }
 
     override public function update(dt:Int)
