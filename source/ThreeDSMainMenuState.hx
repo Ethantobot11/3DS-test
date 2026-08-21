@@ -6,6 +6,7 @@ import citro.object.CitroObject;
 import citro.object.CitroSprite;
 import citro.object.CitroText; 
 import citro.state.CitroState;
+import citro.backend.CitroTween;
 import haxe3ds.services.HID;
 
 class ThreeDSMainMenuState extends CitroState {
@@ -17,6 +18,8 @@ class ThreeDSMainMenuState extends CitroState {
     
     private var slotUIElements:Array<CitroSprite> = [];
     private var slotTexts:Array<CitroText> = [];
+
+    private var soulCursor:CitroSprite;
 
     public function new() {
         super();
@@ -42,7 +45,7 @@ class ThreeDSMainMenuState extends CitroState {
 
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         for (i in 0...3) {
-            var slotBox = new CitroSprite(40, 40 + (i * 50));
+            var slotBox = new CitroSprite(60, 40 + (i * 50));
             slotBox.makeGraphic(240, 40, 0xFF222244);
             add(slotBox);
             slotUIElements.push(slotBox);
@@ -50,21 +53,25 @@ class ThreeDSMainMenuState extends CitroState {
             var slotData = slots[i];
             var displayText = slotData.created ? 'Slot ${i + 1}: ${slotData.name}' : 'Slot ${i + 1}: EMPTY';
             
-            var textObj = new CitroText(50, 48 + (i * 50), displayText);
+            var textObj = new CitroText(80, 48 + (i * 50), displayText);
             textObj.color = 0xFFFFFFFF;
             add(textObj);
             slotTexts.push(textObj);
         }
 
-        var optionsBox = new CitroSprite(40, 40 + (3 * 50));
+        var optionsBox = new CitroSprite(60, 40 + (3 * 50));
         optionsBox.makeGraphic(240, 40, 0xFF222244);
         add(optionsBox);
         slotUIElements.push(optionsBox);
 
-        var optionsText = new CitroText(50, 48 + (3 * 50), "Options");
+        var optionsText = new CitroText(80, 48 + (3 * 50), "Options");
         optionsText.color = 0xFFFFFFFF;
         add(optionsText);
         slotTexts.push(optionsText);
+
+        soulCursor = new CitroSprite(40, 56);
+        soulCursor.makeGraphic(8, 8, 0xFFFF0000);
+        add(soulCursor);
 
         updateVisualSelection();
         trace("MainMenuState loaded.");
@@ -118,9 +125,14 @@ class ThreeDSMainMenuState extends CitroState {
                 slotUIElements[i].makeGraphic(240, 40, 0xFF222244);
             }
         }
+
+        var targetY = 56 + (selectedIndex * 50);
+        CitroTween.cancelTweensFrom(soulCursor);
+        CitroTween.tweenObject(soulCursor, ["y" => targetY], 0.1, { ease: QUAD_OUT });
     }
 
     private function updateSelectionLog() {
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
         if (selectedIndex < 3) {
             trace('Selected: Save Slot ${selectedIndex + 1}');
         } else {
@@ -133,6 +145,8 @@ class ThreeDSMainMenuState extends CitroState {
         var currentSlotData = slots[slotIndex];
 
         CitroG.save.data.currentSlot = slotIndex;
+
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
 
         if (!currentSlotData.created) {
             currentSlotData.created = true;
@@ -152,6 +166,16 @@ class ThreeDSMainMenuState extends CitroState {
         slots[slotIndex] = { created: false, name: "EMPTY", playTime: 0, room: "R_START" };
         
         CitroG.save.flush();
+
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_break1.cwav');
+
+        CitroTimer.start(0.3, function() {
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_break2.cwav');
+        }, -1);
+        
+        var slotData = slots[slotIndex];
+        slotTexts[slotIndex].text = 'Slot ${slotIndex + 1}: EMPTY';
+        
         trace('Erased Slot ${slotIndex + 1}');
     }
 
