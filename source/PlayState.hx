@@ -39,6 +39,7 @@ class PlayState extends CitroState
         camera.add(background);
 
         kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2);
+        add(kris);
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
@@ -84,6 +85,7 @@ class PlayState extends CitroState
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
             dialogueBox.visible = false;
             
             kris.isBusy = true;
@@ -156,6 +158,7 @@ class PlayState extends CitroState
 
     function startBattle(targetEnemy:DSRudinn):Void
     {
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
         trace('[startBattle()] Entering startBattle function...');
         kris.isBusy = true;
         
