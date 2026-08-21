@@ -23,15 +23,11 @@ class OptionsState extends CitroState {
 
     private var currentDelta:Int = 16;
 
-    public var fpsText:CitroText; 
-
     public function new() {
         super();
     }
 
     override public function create() {
-        super.create();
-
         trace("Entering OptionsState.create()...");
 
         if (CitroG.save.data.options == null) {
@@ -60,6 +56,8 @@ class OptionsState extends CitroState {
             add(textObj);
             optionTexts.push(textObj);
         }
+
+        super.create();
 
         updateVisualSelection();
         trace("OptionsState loaded.");
@@ -96,7 +94,9 @@ class OptionsState extends CitroState {
             CitroG.switchState(new ThreeDSMainMenuState());
         }
 
-        fpsText.visible = showFps;
+        if (CitroState.fpsText != null) {
+            CitroState.fpsText.visible = showFps;
+        }
     }
 
     private function getOptionText(index:Int):String {
