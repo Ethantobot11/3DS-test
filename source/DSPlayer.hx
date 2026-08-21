@@ -96,7 +96,9 @@ class DSPlayer extends CitroAnimate
     {
         if (!isBusy)
         {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_step1.cwav');
             handleMovement();
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_step2.cwav');
         }
         else
         {
