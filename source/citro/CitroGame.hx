@@ -27,25 +27,22 @@ C3D_RenderTarget* topScreen = nullptr;
 C3D_RenderTarget* bottomScreen = nullptr;
 ')
 class CitroGame {
-	/**
-	 * A way to say if you want the game to quit, should not be set and instead should call `CitroG.exitGame()`
-	 */
 	@:noCompletion
 	public static var _shouldQuit:Bool = false;
 
 	static function renderObjectsForScreen(state:CitroState, bottom:Bool) {
-    for (member in state.members) {
-        if (member == null) continue;
-        
-        if (member.isDestroyed) {
-            state.members.remove(member);
-            continue;
-        }
+		for (member in state.members) {
+			if (member == null) continue;
+			
+			if (member.isDestroyed) {
+				state.members.remove(member);
+				continue;
+			}
 
-        if (member.bottom != bottom) continue;
-        member.update();
-      }
-    }
+			if (member.bottom != bottom) continue;
+		}
+	}
+
 	static function renderState(state:CitroState) {
 		for (i in 0...2) {
 			untyped __cpp__("C2D_SceneBegin({0} == 0 ? topScreen : bottomScreen)", i);
@@ -53,10 +50,6 @@ class CitroGame {
 		}
 	}
 
-	/**
-	 * Sets up everything to get Citro Engine Running, and Make your 3DS Game come back to life!
-	 * @param state State to use, do NOT use `null`, if so then it quits immediately.
-	 */
 	public static function start(state:CitroState) {
 		if (state == null) {
 			return;
@@ -88,16 +81,19 @@ class CitroGame {
 			CitroTween.update();
 			CitroTimer.update();
 			CitroG.state.update(dt);
-			renderState(CitroG.state);
 
 			final sub = CitroG.substate;
 			if (sub != null) {
 				sub.update(dt);
+			}
+
+			renderState(CitroG.state);
+			if (sub != null) {
 				renderState(sub);
 			}
 
 			untyped __cpp__('C3D_FrameEnd(0)');
-            
+			
 			CitroG.deltaTime = {
 				dt = OS.time.toInt() - old.toInt();
 				if (dt < 1) dt = 1;
