@@ -29,9 +29,8 @@ class PlayState extends CitroState
 
     override public function create()
     {
-        super.create();
 
-        camera = new CitroCamera(false);
+        camera = new CitroCamera(true);
         add(camera);
 
         var background = new CitroSprite(0, 0);
@@ -59,6 +58,8 @@ class PlayState extends CitroState
         greenBlock = new CitroSprite(50, 50);
         greenBlock.makeGraphic(40, 40, CitroColor.GREEN); // or hex code 0xFF00FF00
         add(greenBlock);
+
+        super.create();
     }
 
     override public function update(delta:Int):Void
