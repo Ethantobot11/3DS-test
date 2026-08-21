@@ -84,12 +84,14 @@ class ThreeDSMainMenuState extends CitroState {
         var changed = false;
 
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedIndex--;
             if (selectedIndex < 0) selectedIndex = TOTAL_MENU_ITEMS - 1;
             changed = true;
         }
         
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedIndex++;
             if (selectedIndex >= TOTAL_MENU_ITEMS) selectedIndex = 0;
             changed = true;
@@ -107,6 +109,11 @@ class ThreeDSMainMenuState extends CitroState {
                 trace("Opening Options Menu...");
                 CitroG.switchState(new OptionsState());
             }
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
+        }
+
+        if (HID.keyPressed(HIDKey.B)) {
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
         }
 
         if (HID.keyPressed(HIDKey.X) && selectedIndex < 3) {
@@ -133,7 +140,6 @@ class ThreeDSMainMenuState extends CitroState {
     }
 
     private function updateSelectionLog() {
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
         if (selectedIndex < 3) {
             trace('Selected: Save Slot ${selectedIndex + 1}');
         } else {
@@ -146,8 +152,6 @@ class ThreeDSMainMenuState extends CitroState {
         var currentSlotData = slots[slotIndex];
 
         CitroG.save.data.currentSlot = slotIndex;
-
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
 
         if (!currentSlotData.created) {
             currentSlotData.created = true;
