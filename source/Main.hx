@@ -18,7 +18,7 @@ class Main
     public static function main():Void
     {
         #if haxe3ds
-        romfsInit();
+        RomFS.init();
         
         CrashHandler.init();
         
