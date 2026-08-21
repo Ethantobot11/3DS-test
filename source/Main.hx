@@ -18,6 +18,8 @@ class Main
     public static function main():Void
     {
         #if haxe3ds
+        romfsInit();
+        
         CrashHandler.init();
         
         trace("Starting Citro 3DS Application...");
