@@ -67,10 +67,12 @@ class CitroSave {
 	 */
 	public function new(files:Int = 16, dirs:Int = 1) {
 		#if IS_3DSX
+		trace('how does saves work on 3dsx?');
 		status = USES_3DSX;
 		#else
 		if (FS.mountSaveData("sdmc", files, dirs).isFail()) {
 			status = FS_ERROR;
+			trace('save.json is corrupt and will be deleted, reason: ${error.message}');
 			return;
 		}
 
@@ -78,7 +80,7 @@ class CitroSave {
 			try {
 				data = Json.parse(File.getContent('sdmc:/Deltarune/save.json'));
 			} catch(error) {
-				trace('save.json is corrupt and will be deleted, reason: ${error.message}');
+				trace('FS Failed to mount try again ig?');
 				FileSystem.deleteFile('sdmc:/Deltarune/save.json');
 			}
 		}
@@ -98,6 +100,7 @@ class CitroSave {
 
 		try {
 			#if IS_CIA
+			trace('FS Is avaible on cias...but on 3dsx idk bro???');
 			File.saveContent("sdmc:/Deltarune/save.json", Json.stringify(data));
 			FS.flushAndCommit();
 			#end
@@ -123,6 +126,7 @@ class CitroSave {
 
 		try {
 			FileSystem.deleteFile("sdmc:/Deltarune/save.json");
+			trace('noooo goodbye!!!!');
 			return true;
 		} catch(_) {
 			return false;
