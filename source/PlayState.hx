@@ -69,13 +69,13 @@ class PlayState extends CitroState
         }
 
         separate(kris, noelle, !noelle.isFollowing);
-        separate(noelle, closetDoor, true);
+        separate(noelle, closetDoor, greenBlock, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                             HID.keyPressed(HIDKey.START) || 
                             HID.keyPressed(HIDKey.R);
 
-        if (HID.keyPressed(HIDKey.A)) {
+        if (CitroG.overlaps(kris, greenBlock) && HID.keyPressed(HIDKey.A)) {
            CitroG.substate = new SaveMenuSubState();
            CitroG.substate.create();
            inputLockout = 0.6;
