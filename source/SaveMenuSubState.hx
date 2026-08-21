@@ -64,11 +64,13 @@ class SaveMenuSubState extends CitroSubState
         var previousSlot = selectedSlot;
 
         if (HID.keyPressed(HIDKey.UP)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedSlot--;
             if (selectedSlot < 0) selectedSlot = 2;
             updateSlotSelection(previousSlot);
         }
         else if (HID.keyPressed(HIDKey.DOWN)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedSlot++;
             if (selectedSlot > 2) selectedSlot = 0;
             updateSlotSelection(previousSlot);
@@ -94,7 +96,6 @@ class SaveMenuSubState extends CitroSubState
 
     private function updateSlotSelection(previousSlot:Int)
     {
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
         for (i in 0...slotTexts.length) {
             slotTexts[i].color = (i == selectedSlot) ? CitroColor.GREEN : CitroColor.WHITE;
         }
