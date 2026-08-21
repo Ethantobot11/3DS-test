@@ -69,17 +69,17 @@ class CitroSave {
 		#if IS_3DSX
 		status = USES_3DSX;
 		#else
-		if (FS.mountSaveData("ext", files, dirs).isFail()) {
+		if (FS.mountSaveData("sdmc", files, dirs).isFail()) {
 			status = FS_ERROR;
 			return;
 		}
 
-		if (FileSystem.exists('ext:/save.json')) {
+		if (FileSystem.exists('sdmc:/Deltarune/save.json')) {
 			try {
-				data = Json.parse(File.getContent('ext:/save.json'));
+				data = Json.parse(File.getContent('sdmc:/Deltarune/save.json'));
 			} catch(error) {
 				trace('save.json is corrupt and will be deleted, reason: ${error.message}');
-				FileSystem.deleteFile('ext:/save.json');
+				FileSystem.deleteFile('sdmc:/Deltarune/save.json');
 			}
 		}
 
@@ -98,7 +98,7 @@ class CitroSave {
 
 		try {
 			#if IS_CIA
-			File.saveContent("ext:/save.json", Json.stringify(data));
+			File.saveContent("sdmc:/Deltarune/save.json", Json.stringify(data));
 			FS.flushAndCommit();
 			#end
 			return true;
@@ -122,7 +122,7 @@ class CitroSave {
 		}
 
 		try {
-			FileSystem.deleteFile("ext:/save.json");
+			FileSystem.deleteFile("sdmc:/Deltarune/save.json");
 			return true;
 		} catch(_) {
 			return false;
