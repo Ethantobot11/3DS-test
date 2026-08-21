@@ -18,7 +18,10 @@ class CitroState {
 	/**
 	 * Constructor for creating this state.
 	 */
-	public function new() {};
+	public function new() {
+		fpsText = new FPS();
+        add(fpsText);
+	};
 
 	/**
 	 * Constructor called when state is ready to be created.
