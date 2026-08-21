@@ -23,6 +23,8 @@ class SaveMenuSubState extends CitroSubState
     {
         super.create();
 
+        CrashHandler.init();
+
         background = new CitroSprite(40, 30);
         background.makeGraphic(320, 180, 0xDD000000);
         add(background);
