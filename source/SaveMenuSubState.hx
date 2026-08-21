@@ -75,6 +75,7 @@ class SaveMenuSubState extends CitroSubState
         }
 
         if (HID.keyPressed(HIDKey.A)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_save.cwav');
             CitroG.save.data.slots[selectedSlot] = {
                 created: true,
                 name: "KRIS",
@@ -93,6 +94,7 @@ class SaveMenuSubState extends CitroSubState
 
     private function updateSlotSelection(previousSlot:Int)
     {
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
         for (i in 0...slotTexts.length) {
             slotTexts[i].color = (i == selectedSlot) ? CitroColor.GREEN : CitroColor.WHITE;
         }
