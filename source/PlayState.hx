@@ -19,6 +19,7 @@ class PlayState extends CitroState
     public var kris:DSPlayer;
     public var noelle:DSNoelle;
     public var dialogueBox:DSDialogueBox;
+    public var greenBlock:CitroSprite;
     var closetDoor:DSDarkDoor;
 
     var dialogueStage:Int = 0;
@@ -54,7 +55,6 @@ class PlayState extends CitroState
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
 
-        var greenBlock:CitroSprite;
         greenBlock = new CitroSprite(50, 50);
         greenBlock.makeGraphic(40, 40, CitroColor.GREEN); // or hex code 0xFF00FF00
         add(greenBlock);
