@@ -6,6 +6,7 @@ import haxe3ds.services.GFX;
 import citro.CitroGame;
 import citro.object.CitroObject;
 import citro.object.CitroText;
+import citro.backend.CitroTimer;
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
