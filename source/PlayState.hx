@@ -48,6 +48,7 @@ class PlayState extends CitroState
         camera.target = kris;
 
         dialogueBox = new DSDialogueBox(20, CitroG.HEIGHT - 70);
+        dialogueBox.visible = false;
         camera.add(dialogueBox);
 
         closetDoor = new DSDarkDoor(300, 100);
@@ -83,6 +84,8 @@ class PlayState extends CitroState
 
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
+            dialogueBox.visible = false;
+            
             kris.isBusy = true;
             
             var transition = new DSDarkWorldTransition(kris, closetDoor, camera);
