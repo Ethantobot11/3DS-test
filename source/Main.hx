@@ -25,7 +25,9 @@ class Main
 
         CitroGame.start(new ThreeDSMainMenuState());
 
+        CitroTimer.start(1, function() {
         SoundPlayer.init();
+        }
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
