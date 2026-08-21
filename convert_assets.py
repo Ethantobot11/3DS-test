@@ -12,6 +12,7 @@ def main():
 
     excluded_files = {
         os.path.normpath("assets/resources/audio.wav"),
+        os.path.normpath("assets/romfs/resources/audio.wav"),
         os.path.normpath("resources/audio.wav"),
         os.path.normpath("audio.wav")
     }
