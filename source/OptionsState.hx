@@ -59,19 +59,12 @@ class OptionsState extends CitroState {
             optionTexts.push(textObj);
         }
 
-        CitroTimer.start(0.25, function() {
-            var fps:Int = currentDelta > 0 ? Std.int(1000 / currentDelta) : 60;
-            fpsText.text = 'FPS: $fps';
-        }, -1);
-
         updateVisualSelection();
         trace("OptionsState loaded.");
     }
 
     override public function update(delta:Int) {
         super.update(delta);
-
-        currentDelta = delta;
 
         var changed = false;
 
