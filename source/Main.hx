@@ -20,11 +20,12 @@ class Main
         #if haxe3ds
         RomFS.init();
         CrashHandler.init();
-        SoundPlayer.init();
         
         trace("Starting Citro 3DS Application...");
 
         CitroGame.start(new ThreeDSMainMenuState());
+
+        SoundPlayer.init();
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
