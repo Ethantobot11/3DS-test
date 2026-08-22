@@ -28,6 +28,7 @@ class CitroState {
 	public function create() {
 		fpsText = new FPS();
         add(fpsText);
+		super.create();
 	};
 
 	/**
@@ -37,12 +38,13 @@ class CitroState {
 	 */
 	public function update(delta:Int) {
 		CrashHandler.protect(function() {
-			for (member in members) {
-				if (member != null && !member.isDestroyed) {
+		}, new ThreeDSMainMenuState());
+
+		for (member in members) {
+				{
 					member.update();
 				}
-			}
-		}, new ThreeDSMainMenuState());
+		}
 	}
 
 	/**
