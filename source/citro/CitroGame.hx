@@ -80,7 +80,7 @@ class CitroGame {
 
 			CitroTween.update();
 			CitroTimer.update();
-			CitroG.state.update(CitroG.deltaTime);
+			//CitroG.state.update(CitroG.deltaTime);
 
 			final sub = CitroG.substate;
 			if (sub != null) {
