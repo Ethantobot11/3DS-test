@@ -38,7 +38,7 @@ class SoundPlayer
 			var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
 			
 			if (status == 1) {
-				CitroG.caches.set(path, cwavPtr);
+				CitroG.caches.set(path, new citro.VoidPtr(cwavPtr));
 				trace('Successfully cached and loaded sound: $path');
 			} else {
 				trace('ERROR: Failed to load CWAV file "$path". Status code: $status');
