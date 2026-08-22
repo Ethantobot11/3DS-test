@@ -116,8 +116,8 @@ class BattleState extends CitroState
                 }
         }
 
-        CitroObjectDraw.drawRect(arenaX, arenaY, arenaW, arenaH, [CitroColor.WHITE], false);
-        CitroObjectDraw.drawRect(arenaX + 3, arenaY + 3, arenaW - 6, arenaH - 6, [CitroColor.BLACK], false);
+        CitroObjectDraw.drawRect(arenaX, arenaY, arenaW, arenaH, [CitroColor.WHITE]);
+        CitroObjectDraw.drawRect(arenaX + 3, arenaY + 3, arenaW - 6, arenaH - 6, [CitroColor.BLACK]);
 
         infoText.update();
         for (opt in menuTextGroup) {
