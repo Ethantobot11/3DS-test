@@ -30,7 +30,7 @@ class PlayState extends CitroState
     override public function create()
     {
 
-        camera = new CitroCamera(true);
+        camera = new CitroCamera(false);
         add(camera);
 
         var background = new CitroSprite(0, 0);
