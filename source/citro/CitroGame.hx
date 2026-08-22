@@ -70,8 +70,7 @@ class CitroGame {
 
 		(CitroG.state = state).create();
 		while (APT.mainLoop() && !_shouldQuit) {
-			final old = OS.time;
-			var dt = CitroG.deltaTime;
+			final startTime = OS.time.toInt();
 
 			untyped __cpp__('
 				C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -81,11 +80,11 @@ class CitroGame {
 
 			CitroTween.update();
 			CitroTimer.update();
-			CitroG.state.update(dt);
+			CitroG.state.update(CitroG.deltaTime);
 
 			final sub = CitroG.substate;
 			if (sub != null) {
-				sub.update(dt);
+				sub.update(CitroG.deltaTime);
 			}
 
 			renderState(CitroG.state);
@@ -95,11 +94,9 @@ class CitroGame {
 
 			untyped __cpp__('C3D_FrameEnd(0)');
 			
-			CitroG.deltaTime = {
-				dt = OS.time.toInt() - old.toInt();
-				if (dt < 1) dt = 1;
-				dt;
-			};
+			var elapsed = OS.time.toInt() - startTime;
+			if (elapsed < 1) elapsed = 1;
+			CitroG.deltaTime = elapsed;
 		}
 
 		untyped __cpp__('
