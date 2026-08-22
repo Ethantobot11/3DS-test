@@ -28,7 +28,6 @@ class CitroState {
 	public function create() {
 		fpsText = new FPS();
         add(fpsText);
-		super.create();
 	};
 
 	/**
