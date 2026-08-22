@@ -49,11 +49,15 @@ class CitroCache {
 		untyped __cpp__('if (!{0}) return', ptr);
 
 		var extension = key.split(".");
-		switch (extension[extension.length - 1]) {
+		var ext = extension[extension.length - 1].toLowerCase();
+		
+		switch (ext) {
 			case "t3x":
 				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet)ptr);');
 			case "bcfnt":
-				untyped __cpp__('C2D_FontFree((C2D_Font)ptr)');
+				untyped __cpp__('C2D_FontFree((C2D_Font)ptr);');
+			case "cwav":
+				untyped __cpp__('cwavFileFree((CWAV*){0}); free({0});', ptr);
 			default:
 				untyped __cpp__('SUPER_FREE((void**)&ptr)');
 		}
