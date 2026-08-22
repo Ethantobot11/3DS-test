@@ -93,9 +93,12 @@ class CitroGame {
 			}
 
 			untyped __cpp__('C3D_FrameEnd(0)');
-			
+
 			var elapsed = OS.time.toInt() - startTime;
+
 			if (elapsed < 1) elapsed = 1;
+			if (elapsed > 33) elapsed = 33; 
+			
 			CitroG.deltaTime = elapsed;
 		}
 
