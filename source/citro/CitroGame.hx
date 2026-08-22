@@ -40,6 +40,7 @@ class CitroGame {
 			}
 
 			if (member.bottom != bottom) continue;
+			member.update();
 		}
 	}
 
