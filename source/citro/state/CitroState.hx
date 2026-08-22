@@ -38,12 +38,6 @@ class CitroState {
 	public function update(delta:Int) {
 		CrashHandler.protect(function() {
 		}, new ThreeDSMainMenuState());
-
-		for (member in members) {
-				{
-					member.update();
-				}
-		}
 	}
 
 	/**
