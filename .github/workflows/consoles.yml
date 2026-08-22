@@ -138,6 +138,7 @@ jobs:
           export AR=arm-none-eabi-ar
           export RANLIB=arm-none-eabi-ranlib
 
+          haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
 
