@@ -29,6 +29,7 @@ class PlayState extends CitroState
 
     override public function create()
     {
+        inputLockout = 0.6;
 
         camera = new CitroCamera(false);
         add(camera);
