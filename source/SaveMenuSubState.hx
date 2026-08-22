@@ -21,10 +21,6 @@ class SaveMenuSubState extends CitroSubState
 
     override public function create()
     {
-        super.create();
-
-        CrashHandler.init();
-
         background = new CitroSprite(40, 30);
         background.makeGraphic(320, 180, 0xDD000000);
         add(background);
@@ -55,6 +51,8 @@ class SaveMenuSubState extends CitroSubState
         soulCursor = new CitroSprite(60, 98);
         soulCursor.makeGraphic(8, 8, 0xFFFF0000); 
         add(soulCursor);
+
+        super.create();
         
         //updateSlotSelection();
     }
