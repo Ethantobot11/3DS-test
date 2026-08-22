@@ -3,6 +3,7 @@ package citro.backend;
 import citro.CitroG.VoidPtr;
 
 @:cppFileCode('
+#include <cwav.h>
 #include <citro2d.h>
 void SUPER_FREE(void **ptr2ptr) {
 	if (ptr2ptr && *ptr2ptr) {
@@ -10,6 +11,10 @@ void SUPER_FREE(void **ptr2ptr) {
 		*ptr2ptr = NULL;
 	}
 }')
+
+@:cppFileCode('
+#include <cwav.h>
+')
 class CitroCache {
 	public var cache:Map<String, VoidPtr> = [];
 
