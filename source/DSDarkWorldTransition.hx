@@ -43,7 +43,7 @@ class DSDarkWorldTransition extends CitroAnimate
         player.isBusy = true;
 
         if (this.camera != null) {
-            this.camera.follow(this);
+            this.camera.follow(this, true);
         }
 
         startTransition();
@@ -108,8 +108,18 @@ class DSDarkWorldTransition extends CitroAnimate
 
         switch (statePhase)
         {
+            case 0:
+                y += 30 * elapsed;
+                if (timer >= 0.25)
+                {
+                    statePhase = 1;
+                    timer = 0;
+                    play("spr_krisu_run");
+                    acceleration.y = -200;
+                }
+
             case 1:
-                if (timer >= 0.4)
+                if (timer >= 0.35)
                 {
                     if (door != null) {
                         door.setDoorState(DSDarkDoor.STATE_OPEN_FRAME);
@@ -122,7 +132,7 @@ class DSDarkWorldTransition extends CitroAnimate
                 }
 
             case 2:
-                if (timer >= 0.6)
+                if (timer >= 0.5)
                 {
                     if (door != null) {
                         door.setDoorState(DSDarkDoor.STATE_DARK_VOID);
@@ -130,6 +140,10 @@ class DSDarkWorldTransition extends CitroAnimate
 
                     bgOverlay = new CitroSprite(0, 0);
                     bgOverlay.makeGraphic(CitroG.WIDTH * 4, CitroG.HEIGHT * 16, 0xFF000000);
+                    
+                    if (camera != null) {
+                        camera.add(bgOverlay, true);
+                    }
                     
                     framerate = 10;
                     play("spr_kris_fall_turnaround");
@@ -139,23 +153,23 @@ class DSDarkWorldTransition extends CitroAnimate
                 }
 
             case 3:
-                if (timer >= 0.5)
+                if (timer >= 0.4)
                 {
                     framerate = 6;
                     looped = true;
                     play("spr_kris_fall_d_lw");
                 }
 
-                if (timer >= 2.0)
+                if (timer >= 1.8)
                 {
                     statePhase = 4;
                     timer = 0;
-                    framerate = 6;
+                    framerate = 15;
                     play("spr_kris_fall_d_white");
                 }
 
             case 4:
-                if (timer >= 1.2)
+                if (timer >= 0.12)
                 {
                     statePhase = 5;
                     timer = 0;
@@ -185,6 +199,12 @@ class DSDarkWorldTransition extends CitroAnimate
 
             case 7:
                 y += 600 * elapsed;
+                
+                if (bgOverlay != null) {
+                    bgOverlay.x = x - CitroG.WIDTH * 2;
+                    bgOverlay.y = y - CitroG.HEIGHT * 8;
+                }
+
                 if (y >= targetLandingY) 
                 {
                     y = targetLandingY;
@@ -207,7 +227,7 @@ class DSDarkWorldTransition extends CitroAnimate
                     player.isBusy = false;
 
                     if (camera != null) {
-                        camera.follow(player);
+                        camera.follow(player, true);
                     }
 
                     if (bgOverlay != null)
@@ -227,6 +247,9 @@ class DSDarkWorldTransition extends CitroAnimate
             {
                 lineSpawnTimer = 0;
                 var line = new DSDarkTransitionLine(x, y + 200);
+                if (camera != null) {
+                    camera.add(line, true);
+                }
             }
         }
 
