@@ -94,8 +94,8 @@ class CitroCamera extends CitroObject {
 
 		spr.scale.x *= zoom;
 		spr.scale.y *= zoom;
-		spr.x = (oldX + curX - scX) * zoom + scX;
-		spr.y = (oldY + curY - 120) * zoom + 120;
+		spr.x = (oldX - curX - scX) * zoom + scX;
+		spr.y = (oldY - curY - 120) * zoom + 120;
 		spr.alpha *= alpha;
 
 		final out:Bool = spr.update();
