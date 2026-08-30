@@ -28,7 +28,7 @@ using haxe.Int64;
 	A cross-platform signed 64-bit integer.
 	Int64 instances can be created from two 32-bit words using `Int64.make()`.
 **/
-#if (!haxe3ds || nx)
+#if (!haxe3ds || !nx)
 @:headerCode("
 namespace haxe {
     namespace _Int64 {
