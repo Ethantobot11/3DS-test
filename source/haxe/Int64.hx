@@ -23,8 +23,6 @@ package haxe;
  * DEALINGS IN THE SOFTWARE.
  */
 
-using haxe.Int64;
-using haxe.Int32;
 import haxe.Int32;
 
 @:coreType
@@ -34,108 +32,108 @@ import haxe.Int32;
 abstract Int64 {
 	@:native("_HaxeInt64Make")
 	public static inline function make(high:Int32, low:Int32):Int64 {
-		return ((cast high:Int64) << 32) | ((cast low:Int64) & ~(cast 0:Int64));
+		return untyped __cpp__("_HaxeInt64Make({0}, {1})", high, low);
 	}
 	
 	@:from public static inline function ofInt(x:Int):Int64 {
-		return cast x;
+		return untyped __cpp__("(int64_t)({0})", x);
 	}
 
 	@:to public static inline function toInt(x:Int64):Int {
-		return cast x;
+		return untyped __cpp__("(int)({0})", x);
 	}
 
 	public static inline function toStr(x:Int64):String {
-		return Std.string(cast x);
+		return Std.string(toInt(x));
 	}
 
 	@:op(-A) public static inline function neg(x:Int64):Int64 {
-		return -x;
+		return untyped __cpp__("-({0})", x);
 	}
 
 	@:op(A + B) public static inline function add(a:Int64, b:Int64):Int64 {
-		return a + b;
+		return untyped __cpp__("({0}) + ({1})", a, b);
 	}
 
 	@:op(A - B) public static inline function sub(a:Int64, b:Int64):Int64 {
-		return a - b;
+		return untyped __cpp__("({0}) - ({1})", a, b);
 	}
 
 	@:op(A * B) public static inline function mul(a:Int64, b:Int64):Int64 {
-		return a * b;
+		return untyped __cpp__("({0}) * ({1})", a, b);
 	}
 
 	@:op(A / B) public static inline function div(a:Int64, b:Int64):Int64 {
-		return a / b;
+		return untyped __cpp__("({0}) / ({1})", a, b);
 	}
 
 	@:op(A % B) public static inline function mod(a:Int64, b:Int64):Int64 {
-		return a % b;
+		return untyped __cpp__("({0}) % ({1})", a, b);
 	}
 
 	@:op(A == B) public static inline function eq(a:Int64, b:Int64):Bool {
-		return a == b;
+		return untyped __cpp__("({0}) == ({1})", a, b);
 	}
 
 	@:op(A != B) public static inline function neq(a:Int64, b:Int64):Bool {
-		return a != b;
+		return untyped __cpp__("({0}) != ({1})", a, b);
 	}
 
 	@:op(A < B) public static inline function lt(a:Int64, b:Int64):Bool {
-		return a < b;
+		return untyped __cpp__("({0}) < ({1})", a, b);
 	}
 
 	@:op(A <= B) public static inline function lte(a:Int64, b:Int64):Bool {
-		return a <= b;
+		return untyped __cpp__("({0}) <= ({1})", a, b);
 	}
 
 	@:op(A > B) public static inline function gt(a:Int64, b:Int64):Bool {
-		return a > b;
+		return untyped __cpp__("({0}) > ({1})", a, b);
 	}
 
 	@:op(A >= B) public static inline function gte(a:Int64, b:Int64):Bool {
-		return a >= b;
+		return untyped __cpp__("({0}) >= ({1})", a, b);
 	}
 
 	@:op(A & B) public static inline function and(a:Int64, b:Int64):Int64 {
-		return a & b;
+		return untyped __cpp__("({0}) & ({1})", a, b);
 	}
 
 	@:op(A | B) public static inline function or(a:Int64, b:Int64):Int64 {
-		return a | b;
+		return untyped __cpp__("({0}) | ({1})", a, b);
 	}
 
 	@:op(A ^ B) public static inline function xor(a:Int64, b:Int64):Int64 {
-		return a ^ b;
+		return untyped __cpp__("({0}) ^ ({1})", a, b);
 	}
 
 	@:op(A << B) public static inline function shl(a:Int64, b:Int):Int64 {
-		return a << b;
+		return untyped __cpp__("((int64_t)({0})) << ({1})", a, b);
 	}
 
 	@:op(A >> B) public static inline function shr(a:Int64, b:Int):Int64 {
-		return a >> b;
+		return untyped __cpp__("((int64_t)({0})) >> ({1})", a, b);
 	}
 
 	@:op(A >>> B) public static inline function ushr(a:Int64, b:Int):Int64 {
-		return cast((cast a : Int64) >> b);
+		return untyped __cpp__("((uint64_t)({0})) >> ({1})", a, b);
 	}
 
 	public var high(get, set):Int32;
 	private inline function get_high():Int32 
-		return cast(this >> 32);
+		return untyped __cpp__("(int32_t)(({0}) >> 32)", this);
 	
 	private inline function set_high(x:Int32):Int32 {
-		this = (this & ~((cast -1:Int64) << 32)) | ((cast x:Int64) << 32);
+		this = untyped __cpp__("((({0}) & ~(((int64_t)-1) << 32)) | (((int64_t)({1})) << 32))", this, x);
 		return x;
 	}
 
 	public var low(get, set):Int32;
 	private inline function get_low():Int32 
-		return cast(this & ~(-1 << 32));
+		return untyped __cpp__("(int32_t)(({0}) & 0xFFFFFFFFLL)", this);
 	
 	private inline function set_low(x:Int32):Int32 {
-		this = (this & ~((cast -1:Int64) & ~(-1 << 32))) | ((cast x:Int64) & ~(-1 << 32));
+		this = untyped __cpp__("((({0}) & ~(((int64_t)-1) & 0xFFFFFFFFLL)) | (((int64_t)({1})) & 0xFFFFFFFFLL))", this, x);
 		return x;
 	}
 
@@ -144,11 +142,11 @@ abstract Int64 {
 	}
 
 	public static inline function parseString(s:String):Int64 {
-		return Std.parseInt(s);
+		return ofInt(Std.parseInt(s));
 	}
 
 	public static inline function fromFloat(f:Float):Int64 {
-		return Std.int(f);
+		return ofInt(Std.int(f));
 	}
 
 	public static inline function divMod(dividend:Int64, divisor:Int64):{quotient:Int64, modulus:Int64} {
