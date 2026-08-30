@@ -23,6 +23,14 @@ class Main
         #if haxe3ds
         RomFS.init();
         CrashHandler.init();
+
+        SoundPlayer.preload('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_select.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_shineselect.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_error.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_break1.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_break2.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/snd_save.cwav');
         
         trace("Starting Citro 3DS Application...");
 
