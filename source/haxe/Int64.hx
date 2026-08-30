@@ -121,7 +121,7 @@ abstract Int64(__Int64Native) {
 	}
 
 	@:op(A >>> B) public static inline function ushr(a:Int64, b:Int):Int64 {
-		return cast((cast a : haxe.UInt64) >> b);
+		return cast((cast a : Int64) >> b);
 	}
 
 	public var high(get, set):Int32;
