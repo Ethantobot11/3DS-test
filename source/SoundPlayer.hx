@@ -24,6 +24,26 @@ class SoundPlayer
 		trace("SoundPlayer initialized with NDSP.");
 	}
 
+	public static function preload(path:String):Void
+	{
+	    init();
+	
+	    var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
+	    if (cwavPtr == null) {
+	        cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
+	        CWAVHelper.fileLoad(cwavPtr, path, 4);
+	
+	        var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
+	        if (status == 1) {
+	            CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
+	            trace('Preloaded sound: $path');
+	        } else {
+	            trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
+	            untyped __cpp__("free({0})", cwavPtr);
+	        }
+	    }
+	}
+
 	public static function playSound(path:String):Void
 	{
 		init();
