@@ -32,6 +32,7 @@ class WiiUDialogueBox extends LfSprite
 
     private var gamepad:LfGamepad;
     private var defaultFontPath:String = "assets/fonts/determination.ttf"; // Change to your project's font path
+    private var textSoundEngine:LfAudioEngine = new LfAudioEngine();
 
     public function new(x:Float, y:Float)
     {
@@ -133,8 +134,7 @@ class WiiUDialogueBox extends LfSprite
 
                     if (char != " " && char != "\n")
                     {
-                        var soundPlayer:LfAudioEngine = new LfAudioEngine();
-                        soundPlayer.play("assets/sounds/snd_txtnoe.wav", false);
+                        textSoundEngine.play("assets/sounds/" + soundAsset, false);
                     }
                     charIndex++;
                 }

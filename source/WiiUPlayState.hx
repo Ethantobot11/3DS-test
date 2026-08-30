@@ -153,6 +153,16 @@ class WiiUPlayState extends LfState
 
     private function isKrisFacingNoelle():Bool
     {
+        var xDist = Math.abs(kris.x - noelle.x);
+        var yDist = Math.abs(kris.y - noelle.y);
+        
+        if (xDist < 40 && yDist < 40)
+        {
+            if (kris.facingDir == "left" && kris.x > noelle.x) return true;
+            if (kris.facingDir == "right" && kris.x < noelle.x) return true;
+            if (kris.facingDir == "up" && kris.y > noelle.y) return true;
+            if (kris.facingDir == "down" && kris.y < noelle.y) return true;
+        }
         return false;
     }
 

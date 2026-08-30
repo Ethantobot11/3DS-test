@@ -26,8 +26,11 @@ class CitroState {
 	 * Constructor called when state is ready to be created.
 	 */
 	public function create() {
+	if (fpsText != null)
+	{
 		fpsText = new FPS();
-        add(fpsText);
+		add(fpsText);
+	}
 	};
 
 	/**

@@ -9,7 +9,7 @@ import leafy.gamepad.LfGamepad.LfGamepadButton;
 typedef SaveSlot = {
     var created:Bool;
     var name:String;
-    var playTime:Int;
+    var playTime:cxx.num.Int64; 
     var room:String;
 }
 
@@ -84,7 +84,6 @@ class WiiUMainMenuState extends LfState {
 
     private function updateSelectionLog():Void {
         if (selectedIndex < 3) {
-            // Replaced string interpolation with explicit concatenation
             trace("Selected: Save Slot " + (selectedIndex + 1));
         } else {
             trace("Selected: Options Menu");
@@ -92,10 +91,8 @@ class WiiUMainMenuState extends LfState {
     }
 
     private function selectSlot(slotIndex:Int):Void {
-        // Cast the save slots array explicitly to your SaveSlot typedef type
         var slots:Array<SaveSlot> = cast Leafy.save.data.slots;
         
-        // Explicitly type currentSlotData as SaveSlot so C++ knows its layout
         var currentSlotData:SaveSlot = slots[slotIndex];
 
         Leafy.save.data.currentSlot = slotIndex;

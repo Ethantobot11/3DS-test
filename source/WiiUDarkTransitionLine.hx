@@ -8,11 +8,13 @@ import leafy.Leafy;
 class WiiUDarkTransitionLine extends LfSprite
 {
     var moveSpeed:Float;
+    var floatY:Float;
 
     public function new(centerX:Float, spawnY:Float)
     {
         var spawnX:Float = centerX + (Math.random() * 320 - 160);
-        super(Std.int(spawnX), Std.int(spawnY));
+        floatY = spawnY;
+        super(Std.int(spawnX), Std.int(floatY));
 
         var lineThickness:Int = 2;
         var lineLength:Int = Std.int(Math.random() * 40 + 40);
@@ -25,10 +27,11 @@ class WiiUDarkTransitionLine extends LfSprite
 
     override public function update(elapsed:Float):Void
     {
-        y -= moveSpeed * elapsed;
-        sdlRect.y = Std.int(y);
+        floatY -= moveSpeed * elapsed;
+        y = floatY;
+        sdlRect.y = Std.int(floatY);
 
-        if (y < -100 || y > 720 + 100)
+        if (floatY < -100 || floatY > 720 + 100)
         {
             destroy();
         }

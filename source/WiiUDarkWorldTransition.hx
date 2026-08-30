@@ -18,12 +18,14 @@ class WiiUDarkWorldTransition extends LfSprite
     var lineSpawnTimer:Float = 0;
     
     var targetLandingY:Float;
+    var floatY:Float;
 
     public var onComplete:Void->Void;
 
     public function new(player:WiiUPlayer, door:WiiUDarkDoor = null)
     {
-        super(Std.int(player.x), Std.int(player.y));
+        floatY = player.y;
+        super(Std.int(player.x), Std.int(floatY));
         this.player = player;
         this.door = door;
 
@@ -66,6 +68,9 @@ class WiiUDarkWorldTransition extends LfSprite
     {
         super.update(elapsed);
         timer += elapsed;
+        
+        floatY += velocity.y * elapsed;
+        y = floatY;
 
         if (statePhase >= 3 && statePhase <= 7)
         {
@@ -73,7 +78,7 @@ class WiiUDarkWorldTransition extends LfSprite
             if (lineSpawnTimer >= 0.035) 
             {
                 lineSpawnTimer = 0;
-                var line = new WiiUDarkTransitionLine(Std.int(x), Std.int(y + 200));
+                var line = new WiiUDarkTransitionLine(Std.int(x), Std.int(floatY + 200));
             }
         }
 
@@ -149,9 +154,10 @@ class WiiUDarkWorldTransition extends LfSprite
                 }
 
             case 7:
-                if (y >= targetLandingY) 
+                if (floatY >= targetLandingY) 
                 {
-                    y = targetLandingY;
+                    floatY = targetLandingY;
+                    y = floatY;
                     velocity = {x: 0, y: 0};
                     playAnimation("landed");
                     
@@ -163,7 +169,7 @@ class WiiUDarkWorldTransition extends LfSprite
                 if (currentAnimation != null && currentAnimation.name == "landed" && finished)
                 {
                     player.x = x;
-                    player.y = y;
+                    player.y = floatY;
                     
                     player.loadDarkWorld();
                     player.isVisible = true;
