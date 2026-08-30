@@ -22,7 +22,7 @@ package haxe;
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
+	
 import haxe.Int32;
 
 @:coreType
@@ -39,12 +39,12 @@ abstract Int64 {
 		return untyped __cpp__("(int64_t)({0})", x);
 	}
 
-	@:to public static inline function toInt(x:Int64):Int {
-		return untyped __cpp__("(int)({0})", x);
+	@:to public inline function toInt():Int {
+		return untyped __cpp__("(int)({0})", this);
 	}
 
 	public static inline function toStr(x:Int64):String {
-		return Std.string(toInt(x));
+		return Std.string(x.toInt());
 	}
 
 	@:op(-A) public static inline function neg(x:Int64):Int64 {
