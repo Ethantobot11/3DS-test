@@ -1,5 +1,7 @@
 package haxe3ds.services;
 
+#if (!wiiu || !cafe)
+
 import cpp.UInt8;
 import cpp.UInt64;
 import cpp.UInt32;
@@ -210,4 +212,6 @@ class News {
 	static function get_totalNotifications():UInt32 {
 		return untyped __cpp__('API_GETTER(u32, NEWS_GetTotalNotifications, 0)');
 	}
+
+	#end
 }

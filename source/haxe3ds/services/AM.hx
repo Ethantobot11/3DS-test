@@ -1,5 +1,7 @@
 package haxe3ds.services;
 
+#if (!wiiu || !cafe)
+
 import cpp.UInt16;
 import haxe3ds.services.FS.FSSMDH;
 import haxe3ds.services.FS.FSMediaType;
@@ -220,4 +222,5 @@ class AM {
 	public static inline function toBlocks(size:Int):Int {
 		return Std.int(size / 131072);
 	}
+	#end
 }

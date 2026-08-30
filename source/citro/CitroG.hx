@@ -1,5 +1,7 @@
 package citro;
 
+#if (!wiiu || !cafe)
+
 import citro.backend.CitroCache;
 import citro.backend.CitroTimer;
 import citro.backend.CitroTween;
@@ -215,4 +217,5 @@ class CitroG {
 
 		caches.clear();
 	}
+	#end
 }

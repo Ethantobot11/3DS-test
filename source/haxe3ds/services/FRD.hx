@@ -1,5 +1,7 @@
 package haxe3ds.services;
 
+#if (!wiiu || !cafe)
+
 import sys.thread.Thread;
 import haxe3ds.types.Event;
 import haxe3ds.types.NanoTime;
@@ -433,4 +435,5 @@ class FRD {
 			frdExit()
 		');
 	}
+	#end
 }

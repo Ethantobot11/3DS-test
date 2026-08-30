@@ -1,5 +1,7 @@
 package haxe3ds.services;
 
+#if (!wiiu || !cafe)
+
 import haxe3ds.types.Event;
 import haxe3ds.types.Result;
 
@@ -319,4 +321,5 @@ class APT {
 		', lowTID);
 		return ret;
 	}
+	#end
 }

@@ -1,5 +1,7 @@
 package citro;
 
+#if (!wiiu || !cafe)
+
 import citro.backend.CitroTimer;
 import citro.backend.CitroTween;
 import citro.state.CitroState;
@@ -110,4 +112,5 @@ class CitroGame {
 		RomFS.exit();
 		GFX.exit();
 	}
+	#end
 }
