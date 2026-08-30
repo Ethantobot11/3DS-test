@@ -13,8 +13,10 @@ import leafy.backend.sdl.LfWindowRender;
 #end
 
 class Main
-{  
+{
+    #if haxe3ds
     public static var fpsText:CitroText;
+    #end
     
     public static function main():Void
     {
