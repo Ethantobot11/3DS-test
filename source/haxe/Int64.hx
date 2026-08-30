@@ -27,10 +27,14 @@ using haxe.Int64;
 using haxe.Int32;
 import haxe.Int32;
 
+private class __Int64Native {
+	public inline function new() {}
+}
+
 @:native("int64_t")
 @:include("cstdint", true)
 @:valueType
-abstract Int64(Float) {
+abstract Int64(__Int64Native) {
 	@:native("_HaxeInt64Make")
 	public static inline function make(high:Int32, low:Int32):Int64 {
 		return ((cast high:Int64) << 32) | ((cast low:Int64) & ~(cast 0:Int64));
@@ -49,71 +53,71 @@ abstract Int64(Float) {
 	}
 
 	@:op(-A) public static inline function neg(x:Int64):Int64 {
-		return -x;
+		return cast -(cast x:__Int64Native);
 	}
 
 	@:op(A + B) public static inline function add(a:Int64, b:Int64):Int64 {
-		return a + b;
+		return cast ((cast a:__Int64Native) + (cast b:__Int64Native));
 	}
 
 	@:op(A - B) public static inline function sub(a:Int64, b:Int64):Int64 {
-		return a - b;
+		return cast ((cast a:__Int64Native) - (cast b:__Int64Native));
 	}
 
 	@:op(A * B) public static inline function mul(a:Int64, b:Int64):Int64 {
-		return a * b;
+		return cast ((cast a:__Int64Native) * (cast b:__Int64Native));
 	}
 
 	@:op(A / B) public static inline function div(a:Int64, b:Int64):Int64 {
-		return a / b;
+		return cast ((cast a:__Int64Native) / (cast b:__Int64Native));
 	}
 
 	@:op(A % B) public static inline function mod(a:Int64, b:Int64):Int64 {
-		return a % b;
+		return cast ((cast a:__Int64Native) % (cast b:__Int64Native));
 	}
 
 	@:op(A == B) public static inline function eq(a:Int64, b:Int64):Bool {
-		return a == b;
+		return (cast a:__Int64Native) == (cast b:__Int64Native);
 	}
 
 	@:op(A != B) public static inline function neq(a:Int64, b:Int64):Bool {
-		return a != b;
+		return (cast a:__Int64Native) != (cast b:__Int64Native);
 	}
 
 	@:op(A < B) public static inline function lt(a:Int64, b:Int64):Bool {
-		return a < b;
+		return (cast a:__Int64Native) < (cast b:__Int64Native);
 	}
 
 	@:op(A <= B) public static inline function lte(a:Int64, b:Int64):Bool {
-		return a <= b;
+		return (cast a:__Int64Native) <= (cast b:__Int64Native);
 	}
 
 	@:op(A > B) public static inline function gt(a:Int64, b:Int64):Bool {
-		return a > b;
+		return (cast a:__Int64Native) > (cast b:__Int64Native);
 	}
 
 	@:op(A >= B) public static inline function gte(a:Int64, b:Int64):Bool {
-		return a >= b;
+		return (cast a:__Int64Native) >= (cast b:__Int64Native);
 	}
 
 	@:op(A & B) public static inline function and(a:Int64, b:Int64):Int64 {
-		return a & b;
+		return cast ((cast a:__Int64Native) & (cast b:__Int64Native));
 	}
 
 	@:op(A | B) public static inline function or(a:Int64, b:Int64):Int64 {
-		return a | b;
+		return cast ((cast a:__Int64Native) | (cast b:__Int64Native));
 	}
 
 	@:op(A ^ B) public static inline function xor(a:Int64, b:Int64):Int64 {
-		return a ^ b;
+		return cast ((cast a:__Int64Native) ^ (cast b:__Int64Native));
 	}
 
 	@:op(A << B) public static inline function shl(a:Int64, b:Int):Int64 {
-		return a << b;
+		return cast ((cast a:__Int64Native) << b);
 	}
 
 	@:op(A >> B) public static inline function shr(a:Int64, b:Int):Int64 {
-		return a >> b;
+		return cast ((cast a:__Int64Native) >> b);
 	}
 
 	@:op(A >>> B) public static inline function ushr(a:Int64, b:Int):Int64 {
@@ -122,10 +126,10 @@ abstract Int64(Float) {
 
 	public var high(get, set):Int32;
 	private inline function get_high():Int32 
-	    return cast(this >> 32);
+		return cast(this >> 32);
 	
 	private inline function set_high(x:Int32):Int32 {
-		this = (this & ~((cast -1:Int64) << 32)) | ((cast x:Int64) << 32);
+		this = cast ((cast this:__Int64Native) & ~((cast -1:Int64) << 32) | ((cast x:Int64) << 32));
 		return x;
 	}
 
@@ -134,7 +138,7 @@ abstract Int64(Float) {
 		return cast(this & ~(-1 << 32));
 	
 	private inline function set_low(x:Int32):Int32 {
-		this = (this & ~((cast -1:Int64) & ~(-1 << 32))) | ((cast x:Int64) & ~(-1 << 32));
+		this = cast ((cast this:__Int64Native) & ~((cast -1:Int64) & ~(-1 << 32)) | ((cast x:Int64) & ~(-1 << 32)));
 		return x;
 	}
 
