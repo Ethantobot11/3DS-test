@@ -121,16 +121,20 @@ abstract Int64(Float) {
 	}
 
 	public var high(get, set):Int32;
-	private inline function get_high():Int32 return cast(this >> 32);
+	private inline function get_high():Int32 
+	    return cast(this >> 32);
+	
 	private inline function set_high(x:Int32):Int32 {
-	    this = (this & 0xFFFFFFFF) | ((cast x:Int64) << 32);
+	    this = (this & ~(cast -1:Int64 << 32)) | ((cast x:Int64) << 32);
 	    return x;
 	}
 
 	public var low(get, set):Int32;
-	private inline function get_low():Int32 return cast(this & 0xFFFFFFFF);
+	private inline function get_low():Int32 
+	    return cast(this & ~(-1 << 32));
+	
 	private inline function set_low(x:Int32):Int32 {
-	    this = (this & 0xFFFFFFFF00000000) | (cast x:Int64 & 0xFFFFFFFF);
+	    this = (this & ~(cast -1:Int64 & ~(-1 << 32))) | (cast x:Int64 & ~(-1 << 32));
 	    return x;
 	}
 
