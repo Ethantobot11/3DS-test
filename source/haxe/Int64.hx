@@ -125,17 +125,17 @@ abstract Int64(Float) {
 	    return cast(this >> 32);
 	
 	private inline function set_high(x:Int32):Int32 {
-	    this = (this & ~(cast -1:Int64 << 32)) | ((cast x:Int64) << 32);
-	    return x;
+		this = (this & ~((cast -1:Int64) << 32)) | ((cast x:Int64) << 32);
+		return x;
 	}
 
 	public var low(get, set):Int32;
 	private inline function get_low():Int32 
-	    return cast(this & ~(-1 << 32));
+		return cast(this & ~(-1 << 32));
 	
 	private inline function set_low(x:Int32):Int32 {
-	    this = (this & ~(cast -1:Int64 & ~(-1 << 32))) | (cast x:Int64 & ~(-1 << 32));
-	    return x;
+		this = (this & ~((cast -1:Int64) & ~(-1 << 32))) | ((cast x:Int64) & ~(-1 << 32));
+		return x;
 	}
 
 	public static inline function isInt64(val:Dynamic):Bool {
