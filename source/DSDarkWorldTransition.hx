@@ -142,7 +142,7 @@ class DSDarkWorldTransition extends CitroAnimate
                     bgOverlay.makeGraphic(CitroG.WIDTH * 4, CitroG.HEIGHT * 16, 0xFF000000);
                     
                     if (camera != null) {
-                        camera.add(bgOverlay, true);
+                        camera.add(bgOverlay);
                     }
                     
                     framerate = 10;
@@ -248,7 +248,7 @@ class DSDarkWorldTransition extends CitroAnimate
                 lineSpawnTimer = 0;
                 var line = new DSDarkTransitionLine(x, y + 200);
                 if (camera != null) {
-                    camera.add(line, true);
+                    camera.add(line);
                 }
             }
         }
