@@ -120,14 +120,18 @@ abstract Int64(Float) {
 		return cast((cast a : haxe.UInt64) >> b);
 	}
 
-	public var high(get, never):Int32;
-	private inline function get_high():Int32 {
-		return cast(this >> 32);
+	public var high(get, set):Int32;
+	private inline function get_high():Int32 return cast(this >> 32);
+	private inline function set_high(x:Int32):Int32 {
+	    this = (this & 0xFFFFFFFF) | ((cast x:Int64) << 32);
+	    return x;
 	}
 
-	public var low(get, never):Int32;
-	private inline function get_low():Int32 {
-		return cast(this & 0xFFFFFFFF);
+	public var low(get, set):Int32;
+	private inline function get_low():Int32 return cast(this & 0xFFFFFFFF);
+	private inline function set_low(x:Int32):Int32 {
+	    this = (this & 0xFFFFFFFF00000000) | (cast x:Int64 & 0xFFFFFFFF);
+	    return x;
 	}
 
 	public static inline function isInt64(val:Dynamic):Bool {
