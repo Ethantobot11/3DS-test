@@ -30,7 +30,7 @@ import haxe.Int32;
 @:native("int64_t")
 @:include("cstdint", true)
 @:valueType
-abstract Int64(Int64) {
+abstract Int64(Float) {
 	@:native("_HaxeInt64Make")
 	public static inline function make(high:Int32, low:Int32):Int64 {
 		return ((cast high:Int64) << 32) | ((cast low:Int64) & ~(cast 0:Int64));
