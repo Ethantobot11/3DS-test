@@ -63,7 +63,7 @@ jobs:
             git clone https://github.com/Steveice10/buildtools.git buildtools
             make
             mkdir -p /opt/devkitpro/tools/bin
-            cp cwavtool /opt/devkitpro/tools/bin/cwavtool
+            cp output/linux-x86_64/cwavtool /opt/devkitpro/tools/bin/cwavtool
             chmod +x /opt/devkitpro/tools/bin/cwavtool
             cd ..
             rm -rf cwavtool
