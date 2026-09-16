@@ -61,7 +61,7 @@ class SoundPlayer
 				CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 				trace('Successfully cached and loaded sound: $path');
 			} else {
-				trace('ERROR: Failed to load CWAV file "\(path". Status code:\)status');
+				trace('ERROR: Failed to load CWAV file');
 				untyped __cpp__("free({0})", cwavPtr);
 				return;
 			}
@@ -74,7 +74,6 @@ class SoundPlayer
 	{
 		var cwavPtr:RawPointer = cast CitroG.caches.get(path);
 		if (cwavPtr != null) {
-			// Setting both channels to -1 stops all channels associated with this CWAV
 			CWAVHelper.stop(cwavPtr, leftChannel, rightChannel);
 			trace('Stopped sound: $path');
 		}
