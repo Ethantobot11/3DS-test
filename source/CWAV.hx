@@ -18,22 +18,22 @@ class CWAVHelper
         untyped __cpp__("cwavUseEnvironment({0})", envMode);
     }
 
-    public static inline function fileLoad(out:RawPointer, filename:ConstCharStar, maxSPlays:Int):Void
+    public static inline function fileLoad(out:RawPointer<CWAVData>, filename:ConstCharStar, maxSPlays:Int):Void
     {
         untyped __cpp__("cwavFileLoad({0}, {1}, {2})", out, filename, maxSPlays);
     }
 
-    public static inline function play(cwav:RawPointer, leftChannel:Int, rightChannel:Int):Void
+    public static inline function play(cwav:RawPointer<CWAVData>, leftChannel:Int, rightChannel:Int):Void
     {
         untyped __cpp__("cwavPlay({0}, {1}, {2})", cwav, leftChannel, rightChannel);
     }
 
-    public static inline function stop(cwav:RawPointer, leftChannel:Int, rightChannel:Int):Void
+    public static inline function stop(cwav:RawPointer<CWAVData>, leftChannel:Int, rightChannel:Int):Void
     {
         untyped __cpp__("cwavStop({0}, {1}, {2})", cwav, leftChannel, rightChannel);
     }
 
-    public static inline function fileFree(cwav:RawPointer):Void
+    public static inline function fileFree(cwav:RawPointer<CWAVData>):Void
     {
         untyped __cpp__("cwavFileFree({0})", cwav);
     }
