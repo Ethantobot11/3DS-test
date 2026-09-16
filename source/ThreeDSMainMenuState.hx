@@ -178,8 +178,8 @@ class ThreeDSMainMenuState extends CitroState {
         SoundPlayer.playSound('romfs:/assets/sounds/snd_break1.cwav');
 
         CitroTimer.start(0.3, function() {
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_break2.cwav');
-        }, -1);
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_break2.cwav');
+        }, 1);
         
         var slotData = slots[slotIndex];
         slotTexts[slotIndex].text = 'Slot ${slotIndex + 1}: EMPTY';
