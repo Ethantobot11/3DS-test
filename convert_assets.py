@@ -17,6 +17,10 @@ def main():
         os.path.normpath("audio.wav")
     }
 
+    looped_files = {
+        os.path.normpath("assets/sounds/home.ogg"),
+    }
+
     for root, dirs, files in os.walk("assets"):
         for file in files:
             file_path = os.path.join(root, file)
@@ -39,7 +43,7 @@ def main():
                 except Exception as e:
                     print(f"Unexpected error during MP3 conversion for {file_path}: {e}")
 
-            elif ext == ".wav":
+            elif ext in [".wav", ".ogg"]:
                 if os.path.normpath(file_path) in excluded_files:
                     print(f"Skipping CWAV conversion for excluded file: {file_path}")
                     continue
@@ -47,23 +51,16 @@ def main():
                 out_path = os.path.join(root, name + ".cwav")
                 print(f"Converting {file_path} to CWAV...")
                 try:
-                    subprocess.run(["cwavtool", "-i", file_path, "-o", out_path], check=True)
-                    if os.path.exists(file_path):
+                    cmd = ["cwavtool", "-i", file_path, "-o", out_path]
+                    
+                    if os.path.normpath(file_path) in looped_files:
+                        cmd.extend(["-ls", "0", "-le", "end"])
+                        print(f"Applying loop points (0 to end) for {file_path}")
+
+                    subprocess.run(cmd, check=True)
+                    
+                    if ext == ".wav" and os.path.exists(file_path):
                         os.remove(file_path)
-                except subprocess.CalledProcessError as e:
-                    print(f"Error: cwavtool failed on {file_path} (Exit code {e.returncode}). Skipping...")
-                except Exception as e:
-                    print(f"Unexpected error during CWAV conversion for {file_path}: {e}")
-
-            elif ext == ".ogg":
-                if os.path.normpath(file_path) in excluded_files:
-                    print(f"Skipping CWAV conversion for excluded file: {file_path}")
-                    continue
-
-                out_path = os.path.join(root, name + ".cwav")
-                print(f"Converting {file_path} to CWAV...")
-                try:
-                    subprocess.run(["cwavtool", "-i", file_path, "-o", out_path], check=True)
                 except subprocess.CalledProcessError as e:
                     print(f"Error: cwavtool failed on {file_path} (Exit code {e.returncode}). Skipping...")
                 except Exception as e:
