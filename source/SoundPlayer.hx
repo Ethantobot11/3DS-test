@@ -28,7 +28,7 @@ class SoundPlayer
 	{
 	    init();
 	
-	    var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
+	    var cwavPtr:RawPointer = cast CitroG.caches.get(path);
 	    if (cwavPtr == null) {
 	        cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
 	        CWAVHelper.fileLoad(cwavPtr, path, 4);
@@ -38,7 +38,7 @@ class SoundPlayer
 	            CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 	            trace('Preloaded sound: $path');
 	        } else {
-	            trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
+	            trace('ERROR: Failed to preload CWAV file "\(path". Status code:\)status');
 	            untyped __cpp__("free({0})", cwavPtr);
 	        }
 	    }
@@ -48,7 +48,7 @@ class SoundPlayer
 	{
 		init();
 
-		var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
+		var cwavPtr:RawPointer = cast CitroG.caches.get(path);
 
 		if (cwavPtr == null) {
 			cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
@@ -61,13 +61,23 @@ class SoundPlayer
 				CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 				trace('Successfully cached and loaded sound: $path');
 			} else {
-				trace('ERROR: Failed to load CWAV file "$path". Status code: $status');
+				trace('ERROR: Failed to load CWAV file "\(path". Status code:\)status');
 				untyped __cpp__("free({0})", cwavPtr);
 				return;
 			}
 		}
 
 		CWAVHelper.play(cwavPtr, 0, -1);
+	}
+
+	public static function stopSound(path:String, leftChannel:Int = -1, rightChannel:Int = -1):Void
+	{
+		var cwavPtr:RawPointer = cast CitroG.caches.get(path);
+		if (cwavPtr != null) {
+			// Setting both channels to -1 stops all channels associated with this CWAV
+			CWAVHelper.stop(cwavPtr, leftChannel, rightChannel);
+			trace('Stopped sound: $path');
+		}
 	}
 }
 #end
