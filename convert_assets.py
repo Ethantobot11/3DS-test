@@ -25,10 +25,9 @@ def main():
 
             if ext == ".mp3":
                 if os.path.normpath(file_path) in excluded_files:
-                    print(f"Skipping CWAV conversion for excluded file: {file_path}")
+                    print(f"Skipping conversion for excluded file: {file_path}")
                     continue
 
-                
                 out_path = os.path.join(root, name + ".ogg")
                 print(f"Converting {file_path} to OGG...")
                 try:
@@ -39,6 +38,22 @@ def main():
                     print(f"Error: ffmpeg failed to convert {file_path} (Exit code {e.returncode}). Skipping...")
                 except Exception as e:
                     print(f"Unexpected error during MP3 conversion for {file_path}: {e}")
+
+            elif ext == ".wav":
+                if os.path.normpath(file_path) in excluded_files:
+                    print(f"Skipping CWAV conversion for excluded file: {file_path}")
+                    continue
+
+                out_path = os.path.join(root, name + ".cwav")
+                print(f"Converting {file_path} to CWAV...")
+                try:
+                    subprocess.run(["cwavtool", "-i", file_path, "-o", out_path], check=True)
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                except subprocess.CalledProcessError as e:
+                    print(f"Error: cwavtool failed on {file_path} (Exit code {e.returncode}). Skipping...")
+                except Exception as e:
+                    print(f"Unexpected error during CWAV conversion for {file_path}: {e}")
 
             elif ext == ".ogg":
                 if os.path.normpath(file_path) in excluded_files:
