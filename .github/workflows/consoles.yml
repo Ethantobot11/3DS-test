@@ -59,6 +59,12 @@ jobs:
             rm -rf libcwav
             git clone https://github.com/PabloMK7/cwavtool.git
             cd cwavtool
+            git submodule init
+            cd buildtools
+            git remote set-url origin https://github.com/Steveice10/buildtools.git
+            git fetch
+            git checkout master
+            cd ..
             make
             mkdir -p /opt/devkitpro/tools/bin
             cp cwavtool /opt/devkitpro/tools/bin/cwavtool
