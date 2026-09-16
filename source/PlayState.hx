@@ -78,7 +78,7 @@ class PlayState extends CitroState
                             HID.keyPressed(HIDKey.START) || 
                             HID.keyPressed(HIDKey.R);
 
-        if (HID.keyPressed(HIDKey.A)) {
+        if (HID.keyPressed(HIDKey.START) && !kris.isBusy && CitroG.substate == null) {
            CitroG.substate = new SaveMenuSubState();
            CitroG.substate.create();
            inputLockout = 0.6;
