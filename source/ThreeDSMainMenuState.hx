@@ -30,7 +30,7 @@ class ThreeDSMainMenuState extends CitroState {
 
         trace("Entering MainMenuState.create()...");
 
-        SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
+        SoundPlayer.playSound('assets/sounds/home.cwav');
 
         if (CitroG.save.data.slots == null) {
             CitroG.save.data.slots = [
@@ -188,6 +188,8 @@ class ThreeDSMainMenuState extends CitroState {
     }
 
     override public function destroy() {
+        SoundPlayer.stopSound('assets/sounds/home.cwav');
+        
         super.destroy();
     }
 }
