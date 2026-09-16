@@ -57,12 +57,14 @@ jobs:
             fi
             cd ..
             rm -rf libcwav
+            git clone https://github.com/PabloMK7/cwavtool.git
+            cd cwavtool
+            make
             mkdir -p /opt/devkitpro/tools/bin
-            wget -q https://github.com/PabloMK7/cwavtool/releases/download/1.0.0/cwavtool.zip -O cwavtool.zip
-            unzip -q cwavtool.zip -d cwavtool_extracted
-            find cwavtool_extracted -type f \( -name "cwavtool" -o -name "cwavtool_linux" \) -exec cp {} /opt/devkitpro/tools/bin/cwavtool \;
+            cp cwavtool /opt/devkitpro/tools/bin/cwavtool
             chmod +x /opt/devkitpro/tools/bin/cwavtool
-            rm -rf cwavtool.zip cwavtool_extracted
+            cd ..
+            rm -rf cwavtool
             wget -q https://github.com/diasurgical/bannertool/releases/download/1.2.0/bannertool.zip -O bannertool.zip
             unzip -q bannertool.zip -d bannertool_extracted
             find bannertool_extracted -type f -name "bannertool" -exec cp {} /opt/devkitpro/tools/bin/ \;
@@ -71,6 +73,7 @@ jobs:
             unzip -q makerom.zip -d makerom_extracted
             find makerom_extracted -type f -name "makerom" -exec cp {} /opt/devkitpro/tools/bin/ \;
             chmod +x /opt/devkitpro/tools/bin/makerom
+            rm -rf bannertool.zip bannertool_extracted makerom.zip makerom_extracted
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools wiiu-dev
             mkdir -p .haxelib
