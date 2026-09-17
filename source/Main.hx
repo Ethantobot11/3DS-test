@@ -32,7 +32,7 @@ class Main
         SoundPlayer.preload('romfs:/assets/sounds/snd_break2.cwav');
         SoundPlayer.preload('romfs:/assets/sounds/snd_save.cwav');
         
-        trace("Starting Citro 3DS Application...");
+        trace("Starting Deltarune 3DS Shitty Application...");
 
         CitroGame.start(new ThreeDSMainMenuState());
         
