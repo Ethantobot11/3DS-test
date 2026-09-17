@@ -26,29 +26,29 @@ class SoundPlayer
 
 	public static function preload(path:String):Void
 	{
-	    init();
+		init();
 	
-	    var cwavPtr:RawPointer = cast CitroG.caches.get(path);
-	    if (cwavPtr == null) {
-	        cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
-	        CWAVHelper.fileLoad(cwavPtr, path, 4);
+		var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
+		if (cwavPtr == null) {
+			cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
+			CWAVHelper.fileLoad(cwavPtr, path, 4);
 	
-	        var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
-	        if (status == 1) {
-	            CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
-	            trace('Preloaded sound: $path');
-	        } else {
-	            trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
-	            untyped __cpp__("free({0})", cwavPtr);
-	        }
-	    }
+			var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
+			if (status == 1) {
+				CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
+				trace('Preloaded sound: $path');
+			} else {
+				trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
+				untyped __cpp__("free({0})", cwavPtr);
+			}
+		}
 	}
 
 	public static function playSound(path:String):Void
 	{
 		init();
 
-		var cwavPtr:RawPointer = cast CitroG.caches.get(path);
+		var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
 
 		if (cwavPtr == null) {
 			cwavPtr = untyped __cpp__("calloc(1, sizeof(CWAV))");
@@ -61,7 +61,7 @@ class SoundPlayer
 				CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 				trace('Successfully cached and loaded sound: $path');
 			} else {
-				trace('ERROR: Failed to Load CWAV file "$path". Status code: $status');
+				trace('ERROR: Failed to load CWAV file "$path". Status code: $status');
 				untyped __cpp__("free({0})", cwavPtr);
 				return;
 			}
@@ -72,14 +72,12 @@ class SoundPlayer
 
 	public static function stopSound(path:String, leftChannel:Int = -1, rightChannel:Int = -1):Void
 	{
-		var cwavPtr:RawPointer = cast CitroG.caches.get(path);
+		var cwavPtr:RawPointer<CWAVData> = cast CitroG.caches.get(path);
 		if (cwavPtr != null) {
 			CWAVHelper.stop(cwavPtr, leftChannel, rightChannel);
 			trace('Stopped sound: $path');
-		}
-		else if (cwavPtr == null) {
-			trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
-			return;
+		} else {
+			trace('WARNING: Tried to stop sound that was not cached/loaded: "$path"');
 		}
 	}
 }
