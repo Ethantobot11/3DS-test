@@ -38,7 +38,7 @@ class SoundPlayer
 	            CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 	            trace('Preloaded sound: $path');
 	        } else {
-	            trace('ERROR: Failed to preload CWAV file "\(path". Status code:\)status');
+	            trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
 	            untyped __cpp__("free({0})", cwavPtr);
 	        }
 	    }
@@ -61,7 +61,7 @@ class SoundPlayer
 				CitroG.caches.set(path, (cast cwavPtr : citro.VoidPtr));
 				trace('Successfully cached and loaded sound: $path');
 			} else {
-				trace('ERROR: Failed to load CWAV file');
+				trace('ERROR: Failed to Load CWAV file "$path". Status code: $status');
 				untyped __cpp__("free({0})", cwavPtr);
 				return;
 			}
@@ -76,6 +76,10 @@ class SoundPlayer
 		if (cwavPtr != null) {
 			CWAVHelper.stop(cwavPtr, leftChannel, rightChannel);
 			trace('Stopped sound: $path');
+		}
+		else if (cwavPtr == null) {
+			trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
+			return;
 		}
 	}
 }
