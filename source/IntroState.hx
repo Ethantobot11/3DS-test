@@ -4,6 +4,9 @@ package;
 
 import citro.CitroG;
 import citro.state.CitroState;
+import citro.object.CitroSprite;
+import citro.state.CitroState;
+import citro.backend.CitroColor;
 
 class IntroState extends CitroState
 {
