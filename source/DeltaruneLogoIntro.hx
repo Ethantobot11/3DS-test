@@ -10,7 +10,6 @@ class DeltaruneLogoIntro extends CitroSprite
 {
     public var w:Float = 0;
     public var h:Float = 0;
-    public var noiseSound:Dynamic;
     
     public var siner:Float = 0;
     public var factor:Float = 1;
@@ -39,7 +38,7 @@ class DeltaruneLogoIntro extends CitroSprite
         w = width;
         h = height;
 
-        noiseSound = SoundPlayer.playSound('romfs:/assets/sounds/AUDIO_INTRONOISE.cwav');
+        SoundPlayer.playSound('romfs:/assets/sounds/AUDIO_INTRONOISE.cwav');
 
         siner = 0;
         factor = 1;
@@ -66,9 +65,9 @@ class DeltaruneLogoIntro extends CitroSprite
         draw_screen = true;
     }
 
-    override public function update(dt:Float):Void
+    override public function update(delta:Int):Void
     {
-        super.update(dt);
+        super.update();
 
         if (!draw_screen) return;
 
