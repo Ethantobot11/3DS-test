@@ -31,7 +31,7 @@ class ThreeDSMainMenuState extends CitroState {
     override public function create() {
         trace("Entering Deltarune-style MainMenuState.create()...");
 
-        SoundPlayer.playSound('assets/sounds/home.cwav');
+        SoundPlayer.playSound('romfs:/assets/sounds/home.cwav');
 
         if (CitroG.save.data.slots == null) {
             CitroG.save.data.slots = [
@@ -223,7 +223,7 @@ class ThreeDSMainMenuState extends CitroState {
     }
 
     override public function destroy() {
-        SoundPlayer.stopSound('assets/sounds/home.cwav');
+        SoundPlayer.stopSound('romfs:/assets/sounds/home.cwav');
         super.destroy();
     }
 }
