@@ -1,3 +1,6 @@
+import citro.CitroG;
+import citro.CitroSave;
+
 class AchievementManager {
     public static function unlock(achievementID:String) {
         if (CitroG.save.data.achievements == null) {
