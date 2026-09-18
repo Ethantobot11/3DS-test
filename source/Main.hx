@@ -24,7 +24,7 @@ class Main
         RomFS.init();
         CrashHandler.init();
 
-        SoundPlayer.preload('romfs:/assets/sounds/audiogroup_default/external/home.cwav');
+        SoundPlayer.preload('romfs:/assets/sounds/home.cwav');
         SoundPlayer.preload('romfs:/assets/sounds/snd_select.cwav');
         SoundPlayer.preload('romfs:/assets/sounds/snd_shineselect.cwav');
         SoundPlayer.preload('romfs:/assets/sounds/snd_error.cwav');
