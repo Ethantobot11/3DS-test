@@ -5,10 +5,7 @@ import haxe3ds.services.RomFS;
 import haxe3ds.services.GFX;
 import haxe3ds.services.misc.PLGLDR;
 import citro.CitroGame;
-import citro.object.CitroObject;
 import citro.object.CitroText;
-import citro.backend.CitroTimer;
-import sys.FileSystem;
 
 using StringTools;
 #else
@@ -35,25 +32,12 @@ class Main
         } else {
             trace("Luma3DS Plugin Loader not available (Result: " + plgResult + ")");
         }
-
-        var soundDir = "romfs:/assets/sounds";
-        if (FileSystem.isDirectory(soundDir)) {
-            for (file in FileSystem.readDirectory(soundDir)) {
-                if (file.endsWith(".cwav")) {
-                    var fullPath = '$soundDir/$file';
-                    SoundPlayer.preload(fullPath);
-                    trace('Auto-preloaded: $fullPath');
-                }
-            }
-        } else {
-            trace('WARNING: Sound directory not found: $soundDir');
-        }
         
-        trace("Starting Deltarune 3DS Shitty Application...");
+        trace("Starting Deltarune 3DS Application...");
 
         AchievementManager.unlock("play_DELTARUNE_3DS");
 
-        CitroGame.start(new ThreeDSMainMenuState());
+        CitroGame.start(new LoadingState());
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());
