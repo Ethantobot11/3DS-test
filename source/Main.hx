@@ -8,6 +8,7 @@ import citro.CitroGame;
 import citro.object.CitroObject;
 import citro.object.CitroText;
 import citro.backend.CitroTimer;
+import sys.FileSystem;
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
@@ -33,13 +34,18 @@ class Main
             trace("Luma3DS Plugin Loader not available (Result: " + plgResult + ")");
         }
 
-        SoundPlayer.preload('romfs:/assets/sounds/home.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_select.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_shineselect.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_error.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_break1.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_break2.cwav');
-        SoundPlayer.preload('romfs:/assets/sounds/snd_save.cwav');
+        var soundDir = "romfs:/assets/sounds";
+        if (FileSystem.isDirectory(soundDir)) {
+            for (file in FileSystem.readDirectory(soundDir)) {
+                if (file.endsWith(".cwav")) {
+                    var fullPath = '$soundDir/$file';
+                    SoundPlayer.preload(fullPath);
+                    trace('Auto-preloaded: $fullPath');
+                }
+            }
+        } else {
+            trace('WARNING: Sound directory not found: $soundDir');
+        }
         
         trace("Starting Deltarune 3DS Shitty Application...");
 
