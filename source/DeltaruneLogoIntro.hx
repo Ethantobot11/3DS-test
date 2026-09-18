@@ -66,7 +66,7 @@ class DeltaruneLogoIntro extends CitroSprite
         draw_screen = true;
     }
 
-    override public function update():Void
+    override public function update():Bool
     {
         super.update();
 
