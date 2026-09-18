@@ -21,11 +21,11 @@ class SaveMenuSubState extends CitroSubState
 
     override public function create()
     {
-        background = new CitroSprite(40, 30);
-        background.makeGraphic(320, 180, 0xDD000000);
+        background = new CitroSprite(40, 20);
+        background.makeGraphic(320, 200, 0xDD000000);
         add(background);
 
-        titleText = new CitroText(60, 40, "=== SAVE MENU ===");
+        titleText = new CitroText(60, 30, "=== SAVE MENU ===");
         titleText.color = CitroColor.YELLOW;
         add(titleText);
 
@@ -42,19 +42,22 @@ class SaveMenuSubState extends CitroSubState
             var slotData = CitroG.save.data.slots[i];
             var displayString = slotData.created ? 'Slot ${i + 1}: ${slotData.name}' : 'Slot ${i + 1}: EMPTY';
             
-            var t = new CitroText(80, 90 + (i * 35), displayString);
+            var t = new CitroText(80, 75 + (i * 35), displayString);
             t.color = CitroColor.WHITE;
             slotTexts.push(t);
             add(t);
         }
 
-        soulCursor = new CitroSprite(60, 98);
+        var menuText = new CitroText(80, 75 + (3 * 35), "Return to Main Menu");
+        menuText.color = CitroColor.WHITE;
+        slotTexts.push(menuText);
+        add(menuText);
+
+        soulCursor = new CitroSprite(60, 83);
         soulCursor.makeGraphic(8, 8, 0xFFFF0000); 
         add(soulCursor);
 
         super.create();
-        
-        //updateSlotSelection();
     }
 
     override public function update(dt:Int)
@@ -66,27 +69,34 @@ class SaveMenuSubState extends CitroSubState
         if (HID.keyPressed(HIDKey.UP)) {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedSlot--;
-            if (selectedSlot < 0) selectedSlot = 2;
+            if (selectedSlot < 0) selectedSlot = 3;
             updateSlotSelection(previousSlot);
         }
         else if (HID.keyPressed(HIDKey.DOWN)) {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             selectedSlot++;
-            if (selectedSlot > 2) selectedSlot = 0;
+            if (selectedSlot > 3) selectedSlot = 0; 
             updateSlotSelection(previousSlot);
         }
 
         if (HID.keyPressed(HIDKey.A)) {
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_save.cwav');
-            CitroG.save.data.slots[selectedSlot] = {
-                created: true,
-                name: "KRIS",
-                playTime: 100,
-                room: "room_save"
-            };
-            CitroG.save.flush();
-            
-            slotTexts[selectedSlot].text = 'Slot ${selectedSlot + 1}: KRIS';
+            if (selectedSlot < 3) {
+                // Save game logic for slots 0, 1, 2
+                SoundPlayer.playSound('romfs:/assets/sounds/snd_save.cwav');
+                CitroG.save.data.slots[selectedSlot] = {
+                    created: true,
+                    name: "KRIS",
+                    playTime: 100,
+                    room: "room_save"
+                };
+                CitroG.save.flush();
+                
+                slotTexts[selectedSlot].text = 'Slot ${selectedSlot + 1}: KRIS';
+            } else {
+                SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
+                close();
+                CitroG.switchState(new ThreeDSMainMenuState());
+            }
         }
 
         if (HID.keyPressed(HIDKey.B)) {
@@ -100,7 +110,7 @@ class SaveMenuSubState extends CitroSubState
             slotTexts[i].color = (i == selectedSlot) ? CitroColor.GREEN : CitroColor.WHITE;
         }
 
-        var targetY = 98 + (selectedSlot * 35);
+        var targetY = 83 + (selectedSlot * 35);
         CitroTween.cancelTweensFrom(soulCursor);
         CitroTween.tweenObject(soulCursor, ["y" => targetY], 0.1, { ease: QUAD_OUT });
     }
