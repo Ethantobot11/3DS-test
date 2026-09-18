@@ -70,7 +70,7 @@ class DeltaruneLogoIntro extends CitroSprite
     {
         super.update();
 
-        if (!draw_screen) return;
+        if (!draw_screen) return true;
 
         siner += 1;
 
