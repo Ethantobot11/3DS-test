@@ -29,6 +29,8 @@ class PlayState extends CitroState
 
     override public function create()
     {
+        AchievementManager.unlock("first_steps");
+        
         inputLockout = 0.6;
 
         camera = new CitroCamera(false);
