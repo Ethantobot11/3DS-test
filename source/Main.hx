@@ -51,6 +51,8 @@ class Main
         
         trace("Starting Deltarune 3DS Shitty Application...");
 
+        AchievementManager.unlock("play_DELTARUNE_3DS");
+
         CitroGame.start(new ThreeDSMainMenuState());
         
         #else
