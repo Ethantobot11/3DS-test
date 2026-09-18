@@ -5,6 +5,7 @@ package;
 import citro.CitroG;
 import citro.object.CitroSprite;
 import haxe3ds.services.HID;
+import citro.object.CitroSprite;
 
 class DeltaruneLogoIntro extends CitroSprite
 {
