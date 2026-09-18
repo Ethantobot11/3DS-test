@@ -55,9 +55,9 @@ class PlayState extends CitroState
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
 
-        greenBlock = new CitroSprite(50, 50);
-        greenBlock.makeGraphic(40, 40, CitroColor.GREEN); // or hex code 0xFF00FF00
-        add(greenBlock);
+        //greenBlock = new CitroSprite(50, 50);
+        //greenBlock.makeGraphic(40, 40, CitroColor.GREEN); // or hex code 0xFF00FF00
+        //add(greenBlock);
 
         super.create();
     }
