@@ -3,6 +3,7 @@ package;
 #if haxe3ds
 import haxe3ds.services.RomFS;
 import haxe3ds.services.GFX;
+import haxe3ds.services.misc.PLGLDR;
 import citro.CitroGame;
 import citro.object.CitroObject;
 import citro.object.CitroText;
@@ -23,6 +24,14 @@ class Main
         #if haxe3ds
         RomFS.init();
         CrashHandler.init();
+
+        var plgResult = PLGLDR.init();
+        if (plgResult == 0) {
+            trace("Luma3DS Plugin Loader initialized successfully.");
+            PLGLDR.displayMessage("Deltarune 3DS", "Luma3DS Plugin Loader active!");
+        } else {
+            trace("Luma3DS Plugin Loader not available (Result: " + plgResult + ")");
+        }
 
         SoundPlayer.preload('romfs:/assets/sounds/home.cwav');
         SoundPlayer.preload('romfs:/assets/sounds/snd_select.cwav');
