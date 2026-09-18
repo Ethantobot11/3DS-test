@@ -91,6 +91,7 @@ class DeltaruneLogoIntro extends CitroSprite
         {
             skipped = 1;
         }
+        return true;
     }
 }
 
