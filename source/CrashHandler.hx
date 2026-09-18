@@ -40,7 +40,7 @@ class CrashHandler {
             originalTrace(v, infos);
 
             var fileName = (infos != null && infos.fileName != null) ? infos.fileName : "Unknown";
-            var lineNumber = (infos != null && infos.lineNumber != null) ? infos.lineNumber : 0;
+            var lineNumber = (infos != null) ? infos.lineNumber : 0;
             var msg = '[$fileName:$lineNumber]: $v\n';
             
             appendGeneralLog(msg);
