@@ -84,6 +84,7 @@ class AchievementState extends CitroState {
     private function loadAchievements() {
         if (CitroG.save.data.achievements == null) {
             CitroG.save.data.achievements = {
+                play_DELTARUNE_3DS: false,
                 first_steps: false,
                 boss_defeated: false,
                 secret_hunter: false
