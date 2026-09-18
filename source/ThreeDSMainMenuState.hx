@@ -11,14 +11,16 @@ import citro.backend.CitroTimer;
 import haxe3ds.services.HID;
 
 class ThreeDSMainMenuState extends CitroState {
-    
-    private var selectedIndex:Int = 0;
-    private final TOTAL_MENU_ITEMS:Int = 5;
 
-    private var menuBackground:CitroSprite;
+    private var menuNo:Int = 0;
+    private var menuCoords:Array<Int> = [0, 0, 0, 0, 0, 0, 0, 0];
     
+    private var menuBackground:CitroSprite;
     private var slotUIElements:Array<CitroSprite> = [];
     private var slotTexts:Array<CitroText> = [];
+    private var actionTexts:Array<CitroText> = [];
+    private var headerText:CitroText;
+    private var footerText:CitroText;
 
     private var soulCursor:CitroSprite;
 
@@ -27,8 +29,7 @@ class ThreeDSMainMenuState extends CitroState {
     }
 
     override public function create() {
-
-        trace("Entering MainMenuState.create()...");
+        trace("Entering Deltarune-style MainMenuState.create()...");
 
         SoundPlayer.playSound('assets/sounds/home.cwav');
 
@@ -45,50 +46,45 @@ class ThreeDSMainMenuState extends CitroState {
         menuBackground.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF0A0A1E); 
         add(menuBackground);
 
+        headerText = new CitroText(8, 4, "CHAPTER 1");
+        headerText.color = 0xFFFFFFFF;
+        add(headerText);
+
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         for (i in 0...3) {
-            var slotBox = new CitroSprite(60, 40 + (i * 50));
-            slotBox.makeGraphic(240, 40, 0xFF222244);
+            var slotBox = new CitroSprite(55, 55 + (i * 45));
+            slotBox.makeGraphic(210, 40, 0xFF111122);
             add(slotBox);
             slotUIElements.push(slotBox);
 
             var slotData = slots[i];
-            var displayText = slotData.created ? 'Slot ${i + 1}: ${slotData.name}' : 'Slot ${i + 1}: EMPTY';
+            var displayText = slotData.created ? '${slotData.name}          ${slotData.playTime}' : '-------          --:--';
             
-            var textObj = new CitroText(80, 48 + (i * 50), displayText);
-            textObj.color = 0xFFFFFFFF;
+            var textObj = new CitroText(80, 63 + (i * 45), displayText);
+            textObj.color = 0xFF888888;
             add(textObj);
             slotTexts.push(textObj);
         }
 
-        var optionsBox = new CitroSprite(60, 40 + (3 * 50));
-        optionsBox.makeGraphic(240, 40, 0xFF222244);
-        add(optionsBox);
-        slotUIElements.push(optionsBox);
+        var actionLabels = ["Copy", "Erase", "CH SELECT", "日本語"];
+        var actionX = [54, 140, 204, 140];
+        var actionY = [190, 190, 190, 210];
 
-        var optionsText = new CitroText(80, 48 + (3 * 50), "Options");
-        optionsText.color = 0xFFFFFFFF;
-        add(optionsText);
-        slotTexts.push(optionsText);
+        for (i in 0...actionLabels.length) {
+            var actText = new CitroText(actionX[i], actionY[i], actionLabels[i]);
+            actText.color = 0xFF888888;
+            add(actText);
+            actionTexts.push(actText);
+        }
 
-        var achBox = new CitroSprite(60, 40 + (3 * 50));
-        achBox.makeGraphic(240, 40, 0xFF222244);
-        add(achBox);
-        slotUIElements.push(achBox);
-        
-        var achText = new CitroText(80, 48 + (3 * 50), "Achievements");
-        achText.color = 0xFFFFFFFF;
-        add(achText);
-        slotTexts.push(achText);
-
-        soulCursor = new CitroSprite(40, 56);
-        soulCursor.makeGraphic(8, 8, 0xFFFF0000);
+        soulCursor = new CitroSprite(65, 72);
+        soulCursor.loadGraphic("romfs:/assets/soul/soul.t3x");
+        //soulCursor.makeGraphic(8, 8, 0xFFFF0000);
         add(soulCursor);
 
         super.create();
-
         updateVisualSelection();
-        trace("MainMenuState loaded.");
+        trace("MainMenuState loaded successfully.");
     }
 
     override public function update(delta:Int) {
@@ -98,111 +94,136 @@ class ThreeDSMainMenuState extends CitroState {
 
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            selectedIndex--;
-            if (selectedIndex < 0) selectedIndex = TOTAL_MENU_ITEMS - 1;
+            navigateGrid(0, -1);
             changed = true;
         }
-        
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            selectedIndex++;
-            if (selectedIndex >= TOTAL_MENU_ITEMS) selectedIndex = 0;
+            navigateGrid(0, 1);
+            changed = true;
+        }
+        if (HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.CPAD_LEFT)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            navigateGrid(-1, 0);
+            changed = true;
+        }
+        if (HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.CPAD_RIGHT)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            navigateGrid(1, 0);
             changed = true;
         }
 
         if (changed) {
-            updateSelectionLog();
             updateVisualSelection();
         }
 
         if (HID.keyPressed(HIDKey.A)) {
-            if (selectedIndex < 3) {
-                selectSlot(selectedIndex);
-            } else if (selectedIndex == 3) {
-                trace("Opening Achievements State...");
-                CitroG.switchState(new AchievementState());
-            } else {
-                trace("Opening Options Menu...");
-                CitroG.switchState(new OptionsState());
-            }
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
+            executeAction();
         }
 
         if (HID.keyPressed(HIDKey.B)) {
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
+            if (menuNo > 0) {
+                menuNo = 0;
+                SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
+                updateVisualSelection();
+            }
         }
+    }
 
-        if (HID.keyPressed(HIDKey.X) && selectedIndex < 3) {
-            eraseSlot(selectedIndex);
-        }
+    private function navigateGrid(dx:Int, dy:Int) {
+        var currentSelection = menuCoords[menuNo];
 
-        if (HID.keyPressed(HIDKey.Y)) {
-            CitroG.switchState(new OptionsState());
+        if (menuNo == 0) {
+            if (dy < 0) {
+                if (currentSelection > 0 && currentSelection < 3) currentSelection--;
+                else if (currentSelection >= 3) currentSelection = 2;
+            } else if (dy > 0) {
+                if (currentSelection < 2) currentSelection++;
+                else if (currentSelection == 3 || currentSelection == 4) currentSelection = 6;
+                else if (currentSelection == 5) currentSelection = 7;
+            }
+            if (dx > 0) {
+                if (currentSelection >= 3 && currentSelection < 5) currentSelection++;
+                else if (currentSelection == 5) currentSelection = 3;
+            } else if (dx < 0) {
+                if (currentSelection > 3 && currentSelection <= 5) currentSelection--;
+                else if (currentSelection == 3) currentSelection = 5;
+            }
+        } else {
+            currentSelection += dy;
+            if (currentSelection < 0) currentSelection = 3;
+            if (currentSelection > 3) currentSelection = 0;
         }
+        menuCoords[menuNo] = currentSelection;
     }
 
     private function updateVisualSelection() {
-        for (i in 0...slotUIElements.length) {
-            if (i == selectedIndex) {
-                slotUIElements[i].makeGraphic(240, 40, 0xFF444488);
-            } else {
-                slotUIElements[i].makeGraphic(240, 40, 0xFF222244);
+        var sel = menuCoords[menuNo];
+        var targetX = 65;
+        var targetY = 72;
+
+        if (menuNo == 0) {
+            if (sel <= 2) {
+                targetX = 65;
+                targetY = 72 + (sel * 45);
+            } else if (sel == 3) {
+                targetX = 40;
+                targetY = 195;
+            } else if (sel == 4) {
+                targetX = 125;
+                targetY = 195;
+            } else if (sel == 5) {
+                targetX = 190;
+                targetY = 195;
+            } else if (sel == 6) {
+                targetX = 125;
+                targetY = 215;
+            } else if (sel == 7) {
+                targetX = 190;
+                targetY = 215;
             }
         }
 
-        var targetY = 56 + (selectedIndex * 50);
         CitroTween.cancelTweensFrom(soulCursor);
-        CitroTween.tweenObject(soulCursor, ["y" => targetY], 0.1, { ease: QUAD_OUT });
+        CitroTween.tweenObject(soulCursor, ["x" => targetX, "y" => targetY], 0.1, { ease: QUAD_OUT });
     }
 
-    private function updateSelectionLog() {
-        if (selectedIndex < 3) {
-            trace('Selected: Save Slot ${selectedIndex + 1}');
-        } else {
-            trace('Selected: Options Menu');
+    private function executeAction() {
+        var sel = menuCoords[menuNo];
+        if (menuNo == 0) {
+            if (sel <= 2) {
+                selectSlot(sel);
+            } else if (sel == 3) {
+                trace("Switching to Copy Mode");
+                menuNo = 2;
+            } else if (sel == 4) {
+                trace("Switching to Erase Mode");
+                menuNo = 5;
+            } else if (sel == 6) {
+                trace("Toggling Language options...");
+            } else if (sel == 7) {
+                trace("Exiting game program.");
+            }
         }
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
     }
 
     private function selectSlot(slotIndex:Int) {
         var slots:Array<Dynamic> = CitroG.save.data.slots;
         var currentSlotData = slots[slotIndex];
-
         CitroG.save.data.currentSlot = slotIndex;
 
         if (!currentSlotData.created) {
             currentSlotData.created = true;
             currentSlotData.name = "KRIS";
             currentSlotData.room = "room_clost";
-            trace('Created new save data in Slot ${slotIndex + 1}');
-        } else {
-            trace('Loaded existing save data from Slot ${slotIndex + 1} (${currentSlotData.name})');
         }
-
         CitroG.save.flush();
         CitroG.switchState(new PlayState());
     }
 
-    private function eraseSlot(slotIndex:Int) {
-        var slots:Array<Dynamic> = CitroG.save.data.slots;
-        slots[slotIndex] = { created: false, name: "EMPTY", playTime: 0, room: "R_START" };
-        
-        CitroG.save.flush();
-
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_break1.cwav');
-
-        CitroTimer.start(0.3, function() {
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_break2.cwav');
-        }, 1);
-        
-        var slotData = slots[slotIndex];
-        slotTexts[slotIndex].text = 'Slot ${slotIndex + 1}: EMPTY';
-        
-        trace('Erased Slot ${slotIndex + 1}');
-    }
-
     override public function destroy() {
         SoundPlayer.stopSound('assets/sounds/home.cwav');
-        
         super.destroy();
     }
 }
