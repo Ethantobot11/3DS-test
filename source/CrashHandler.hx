@@ -4,6 +4,7 @@ package;
 
 import haxe.CallStack;
 import sys.io.File;
+import sys.io.FileOutput;
 import sys.FileSystem;
 import citro.CitroG;
 import citro.state.CitroState;
@@ -16,10 +17,8 @@ class CrashHandler {
     private static var crashPath:String = "sdmc:/Deltarune/crash/latest_crash.txt";
     
     private static var originalTrace:Dynamic;
+    private static var logOutput:FileOutput = null;
 
-    /**
-     * Initializes the crash handler, ensures both directories exist, and redirects traces.
-     */
     public static function init() {
         try {
             if (!FileSystem.isDirectory(logsDir)) {
@@ -29,35 +28,41 @@ class CrashHandler {
                 FileSystem.createDirectory(crashDir);
             }
 
-            File.saveContent(logPath, "--- Citro Engine 3DS Session Started ---\n");
+            logOutput = File.append(logPath, false);
+            logOutput.writeString("--- Citro Engine 3DS Session Started ---\n");
+            logOutput.flush();
         } catch (e:Dynamic) {
+            trace("CRITICAL: Failed to initialize CrashHandler files: " + e);
         }
 
         originalTrace = haxe.Log.trace;
         haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
             originalTrace(v, infos);
 
-            var msg = '${infos.fileName}:${infos.lineNumber}: $v\n';
+            var fileName = (infos != null && infos.fileName != null) ? infos.fileName : "Unknown";
+            var lineNumber = (infos != null && infos.lineNumber != null) ? infos.lineNumber : 0;
+            var msg = '[$fileName:$lineNumber]: $v\n';
+            
             appendGeneralLog(msg);
         };
     }
 
-    /**
-     * Appends standard trace messages instantly to the logs folder.
-     */
     public static function appendGeneralLog(text:String) {
         try {
-            var file = File.append(logPath, false);
-            file.writeString(text);
-            file.flush();
-            file.close();
+            if (logOutput != null) {
+                logOutput.writeString(text);
+                logOutput.flush();
+            } else {
+                var file = File.append(logPath, false);
+                file.writeString(text);
+                file.flush();
+                file.close();
+            }
         } catch (e:Dynamic) {
+            originalTrace("Failed to write to general log: " + e);
         }
     }
 
-    /**
-     * Logs fatal exceptions and full call stacks into the crash folder.
-     */
     public static function logException(e:Dynamic, ?customMessage:String = "") {
         var stack = CallStack.toString(CallStack.exceptionStack());
         var fullLog = '\n[CRASH/ERROR] $customMessage\nException: $e\nCallStack:\n$stack\n-------------------\n';
@@ -68,15 +73,12 @@ class CrashHandler {
             file.flush();
             file.close();
         } catch (err:Dynamic) {
+            originalTrace("Failed to write crash file: " + err);
         }
 
         appendGeneralLog(fullLog);
     }
 
-    /**
-     * Wraps execution in a try-catch block. If a crash occurs, it logs the error 
-     * to the crash folder and safely returns the user back to the Main Menu.
-     */
     public static function protect(action:Void->Void, ?fallbackState:CitroState) {
         try {
             action();
