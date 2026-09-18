@@ -14,6 +14,10 @@ class IntroState extends CitroState
     {
         super.create();
 
+        var bg = new CitroSprite(0, 0);
+        bg.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, CitroColor.BLACK);
+        add(bg);
+
         logoIntro = new DeltaruneLogoIntro(0, 0, false);
         add(logoIntro);
     }
