@@ -9,6 +9,8 @@ import citro.object.CitroObject;
 import citro.object.CitroText;
 import citro.backend.CitroTimer;
 import sys.FileSystem;
+
+using StringTools;
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
