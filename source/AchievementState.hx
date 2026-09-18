@@ -83,23 +83,23 @@ class AchievementState extends CitroState {
 
     private function loadAchievements() {
         if (CitroG.save.data.achievements == null) {
-            CitroG.save.data.achievements = {
-                play_DELTARUNE_3DS: false,
-                first_steps: false,
-                boss_defeated: false,
-                secret_hunter: false
-            };
-            CitroG.save.flush();
+            CitroG.save.data.achievements = {};
         }
 
         var saved = CitroG.save.data.achievements;
+        achievements = [];
 
-        achievements = [
-            { id: "play_DELTARUNE_3DS", title: "Play DELTARUNE 3DS", desc: "Play for the first time.", unlocked: saved.play_DELTARUNE_3DS },
-            { id: "first_steps", title: "First Steps", desc: "Awaken in the dark room.", unlocked: saved.first_steps },
-            { id: "boss_defeated", title: "Challenger", desc: "Defeat your first encounter.", unlocked: saved.boss_defeated },
-            { id: "secret_hunter", title: "Secret Hunter", desc: "Discover a hidden pathway.", unlocked: saved.secret_hunter }
-        ];
+        for (id in AchievementManager.registry.keys()) {
+            var info = AchievementManager.registry.get(id);
+            var isUnlocked = Reflect.field(saved, id) == true;
+
+            achievements.push({
+                id: id,
+                title: info.title,
+                desc: info.desc,
+                unlocked: isUnlocked
+            });
+        }
     }
 
     private function updateVisualSelection() {
