@@ -19,6 +19,7 @@ class DSPlayer extends CitroAnimate
     public var facingDir:String = "down";
     public var isBusy:Bool = false;
     public var isDarkWorld:Bool = false;
+    private var paused:Bool = false;
     public var pathHistory:Array<PositionFrame> = [];
     
     private var lastPlayedFrame:Int = -1;
