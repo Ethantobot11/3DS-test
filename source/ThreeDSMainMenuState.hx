@@ -13,7 +13,7 @@ import haxe3ds.services.HID;
 class ThreeDSMainMenuState extends CitroState {
     
     private var selectedIndex:Int = 0;
-    private final TOTAL_MENU_ITEMS:Int = 4;
+    private final TOTAL_MENU_ITEMS:Int = 5;
 
     private var menuBackground:CitroSprite;
     
@@ -71,6 +71,16 @@ class ThreeDSMainMenuState extends CitroState {
         add(optionsText);
         slotTexts.push(optionsText);
 
+        var achBox = new CitroSprite(60, 40 + (3 * 50));
+        achBox.makeGraphic(240, 40, 0xFF222244);
+        add(achBox);
+        slotUIElements.push(achBox);
+        
+        var achText = new CitroText(80, 48 + (3 * 50), "Achievements");
+        achText.color = 0xFFFFFFFF;
+        add(achText);
+        slotTexts.push(achText);
+
         soulCursor = new CitroSprite(40, 56);
         soulCursor.makeGraphic(8, 8, 0xFFFF0000);
         add(soulCursor);
@@ -108,6 +118,9 @@ class ThreeDSMainMenuState extends CitroState {
         if (HID.keyPressed(HIDKey.A)) {
             if (selectedIndex < 3) {
                 selectSlot(selectedIndex);
+            } else if (selectedIndex == 3) {
+                trace("Opening Achievements State...");
+                CitroG.switchState(new AchievementState());
             } else {
                 trace("Opening Options Menu...");
                 CitroG.switchState(new OptionsState());
