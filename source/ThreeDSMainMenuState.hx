@@ -33,6 +33,10 @@ class ThreeDSMainMenuState extends CitroState {
 
         SoundPlayer.playSound('romfs:/assets/sounds/home.cwav');
 
+        if (CitroG.save.data == null) {
+            CitroG.save.data = {};
+        }
+
         if (CitroG.save.data.slots == null) {
             CitroG.save.data.slots = [
                 { created: false, name: "EMPTY", playTime: 0, room: "R_START" },

@@ -5,7 +5,6 @@ package;
 import citro.CitroG;
 import citro.object.CitroSprite;
 import haxe3ds.services.HID;
-import citro.object.CitroSprite;
 
 class DeltaruneLogoIntro extends CitroSprite
 {
@@ -33,6 +32,7 @@ class DeltaruneLogoIntro extends CitroSprite
     public function new(xPos:Float, yPos:Float, isIngame:Bool = true)
     {
         super(xPos, yPos);
+        trace("DeltaruneLogoIntro: Creating logo instance...");
         
         loadGraphic("romfs:/assets/images/spr_deltarunelogo.t3x");
 
@@ -59,11 +59,16 @@ class DeltaruneLogoIntro extends CitroSprite
         
         ingame = isIngame ? 1 : 0;
         
-        if (CitroG.save.data.plot == 0) ingame = 0;
+        if (Reflect.field(CitroG, "save") != null && CitroG.save.data != null) {
+            if (CitroG.save.data.plot == 0) ingame = 0;
+        } else {
+            ingame = 0;
+        }
 
         skipped = 0;
         skiptimer = 0;
         draw_screen = true;
+        trace("DeltaruneLogoIntro: Setup completed successfully.");
     }
 
     override public function update():Bool
@@ -89,8 +94,10 @@ class DeltaruneLogoIntro extends CitroSprite
 
         if (HID.keyPressed(HIDKey.START) || HID.keyPressed(HIDKey.A))
         {
+            trace("DeltaruneLogoIntro: Skip key detected (A or START pressed)!");
             skipped = 1;
         }
+        
         return true;
     }
 }
