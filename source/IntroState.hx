@@ -25,11 +25,11 @@ class IntroState extends CitroState
         add(logoIntro);
     }
 
-    override public function update():Bool
+    override public function update(delta:Int)
     {
-        super.update();
+        super.update(delta);
 
-        var dtSec = 1.0 / 60.0; 
+        var dtSec = delta / 1000.0;
         introTimer += dtSec;
 
         if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START))
@@ -43,8 +43,6 @@ class IntroState extends CitroState
         {
             finishIntro();
         }
-        
-        return true;
     }
 
     private function finishIntro()
