@@ -19,6 +19,7 @@ class LoadingState extends CitroState
     var totalFiles:Int = 0;
     var loadComplete:Bool = false;
     var waitTimer:Float = 0;
+    var frameCounter:Int = 0;
 
     override public function create()
     {
@@ -65,11 +66,14 @@ class LoadingState extends CitroState
 
         if (loadComplete) {
             waitTimer += delta / 1000.0;
-            if (waitTimer >= 0.4) {
+            if (waitTimer >= 1.0) {
                 CitroG.switchState(new IntroState());
             }
             return;
         }
+
+        frameCounter++;
+        if (frameCounter % 2 != 0) return;
 
         if (currentIndex < totalFiles) {
             var fullPath = filesToLoad[currentIndex];
