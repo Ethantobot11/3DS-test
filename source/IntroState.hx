@@ -5,8 +5,8 @@ package;
 import citro.CitroG;
 import citro.state.CitroState;
 import citro.object.CitroSprite;
-import citro.state.CitroState;
 import citro.backend.CitroColor;
+import haxe3ds.services.HID;
 
 class IntroState extends CitroState
 {
@@ -25,17 +25,26 @@ class IntroState extends CitroState
         add(logoIntro);
     }
 
-    override public function update(delta:Int)
+    override public function update():Bool
     {
-        super.update(delta);
+        super.update();
 
-        var dtSec = delta / 1000.0;
+        var dtSec = 1.0 / 60.0; 
         introTimer += dtSec;
+
+        if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START))
+        {
+            if (logoIntro != null) {
+                logoIntro.skipped = 1;
+            }
+        }
 
         if (introTimer >= 4.5 || (logoIntro != null && logoIntro.skipped == 1))
         {
             finishIntro();
         }
+        
+        return true;
     }
 
     private function finishIntro()
