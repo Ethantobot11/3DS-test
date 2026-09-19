@@ -75,34 +75,29 @@ class LoadingState extends CitroState
 
         if (loadComplete) {
             waitTimer += delta / 1000.0;
-            if (waitTimer >= 0.8) {
-                trace("LoadingState: Finished waiting, switching to IntroState.");
+            if (waitTimer >= 0.5) {
+                trace("LoadingState: Transitioning to IntroState.");
                 CitroG.switchState(new IntroState());
             }
             return;
         }
 
-        var processedThisFrame = 0;
-        while (processedThisFrame < chunkSize && currentIndex < totalFiles) {
+        var batchCount = 0;
+        while (batchCount < 5 && currentIndex < totalFiles) {
             var fullPath = filesToLoad[currentIndex];
-            
             if (fullPath.endsWith(".cwav")) {
                 SoundPlayer.preload(fullPath);
-            } else if (fullPath.endsWith(".t3x")) {
-                // CitroG.cache.preloadImage(fullPath);
             }
-            
-            trace('Preloaded chunk item [$currentIndex/$totalFiles]: $fullPath');
-
             currentIndex++;
-            processedThisFrame++;
+            batchCount++;
         }
 
-        loadingText.text = 'Preloading: $currentIndex / $totalFiles';
+        loadingText.text = 'Loading: $currentIndex / $totalFiles';
+        trace('Loading progress: $currentIndex / $totalFiles');
 
         if (currentIndex >= totalFiles) {
-            trace("LoadingState: All assets successfully processed.");
-            loadingText.text = "Loading complete!";
+            trace("LoadingState: All files loaded successfully.");
+            loadingText.text = "Complete!";
             loadComplete = true;
         }
     }
