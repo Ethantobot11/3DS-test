@@ -39,7 +39,7 @@ class DeltaruneLogoIntro extends CitroSprite
         w = width;
         h = height;
 
-        SoundPlayer.playSound('romfs:/assets/sounds/AUDIO_INTRONOISE.cwav');
+        SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
 
         siner = 0;
         factor = 1;
