@@ -7,51 +7,26 @@ import citro.object.CitroSprite;
 
 using StringTools;
 
-final keys:Array<String> = ["acceleration", "alpha", "angle", "bottom", "color", "scale"];
-private typedef CitroAnimateHeader = {
-    var frameX:Float;
-    var frameY:Float;
-    var sprite:CitroSprite;
+typedef CitroFrame = {
+    var srcX:Float;
+    var srcY:Float;
+    var srcWidth:Float;
+    var srcHeight:Float;
 }
 
-/**
- * A class for animation purpose.
- */
 class CitroAnimate extends CitroObject {
-
     var timeLeft:Float = 0;
-    var sprites:Map<String, CitroAnimateHeader> = [];
+    var frames:Map<String, CitroFrame> = [];
+    
+    var atlasSprite:CitroSprite = null;
+    var atlasPath:String = "";
 
-    /**
-     * The framerate for this animation to use.
-     */
     public var framerate:Float = 24;
-
-    /**
-     * The current frame for this animation playing.
-     */
     public var frame:Int = 0;
-
-    /**
-     * The current playing animation name that's gonna be used.
-     */
     public var curAnim:String = "";
-
-    /**
-     * Whetever or not the animation that's currently playing has finished.
-     */
     public var finished:Bool = false;
-
-    /**
-     * Whetever or not it should loop the entire animation when finished.
-     */
     public var looped:Bool = false;
 
-    /**
-     * Constructs this sprite.
-     * @param ceaFile Path to the `.cea` (Citro Engine Animate) file to parse.
-     * @param defaultAnim The default animation that's going to be used, if string is empty then uses the first animation that was parsed.
-     */
     public function new(ceaFile:String, defaultAnim:String = "") {
         super();
 
@@ -63,28 +38,35 @@ class CitroAnimate extends CitroObject {
             var firstAnimFound:String = "";
 
             for (line in file.split("\n")) {
-                if (line.trim() == "") continue;
-                final row:Array<String> = line.split("?");
-                if (row.length < 4) continue; 
-
-                final fullKey:String = row[3].trim();
+                line = line.trim();
+                if (line == "" || line.startsWith("#")) continue; 
                 
-                final dashIndex:Int = fullKey.lastIndexOf("-");
-                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
+                final row:Array<String> = line.split("?");
+                if (row.length < 6) continue; 
 
-                if (firstAnimFound == "") firstAnimFound = animName;
+                final atlasFile:String = row[0].trim();
+                final srcX:Float = Std.parseFloat(row[1]);
+                final srcY:Float = Std.parseFloat(row[2]);
+                final srcWidth:Float = Std.parseFloat(row[3]);
+                final srcHeight:Float = Std.parseFloat(row[4]);
+                final fullKey:String = row[5].trim();
 
-                final sprite:CitroSprite = new CitroSprite();
-                if (!sprite.loadGraphic('$dir/${row[0]}')) {
-                    sprite.destroy();
-                    continue;
+                if (atlasPath == "") {
+                    atlasPath = '$dir/$atlasFile';
+                    atlasSprite = new CitroSprite();
+                    if (!atlasSprite.loadGraphic(atlasPath)) {
+                        atlasSprite.destroy();
+                        atlasSprite = null;
+                        return; 
+                    }
                 }
 
-                final resultParse:Array<Null<Float>> = [for (i in 1...3) Std.parseFloat(row[i])];
-                sprites.set(fullKey, {
-                    frameX: resultParse[0] == null ? 0 : resultParse[0],
-                    frameY: resultParse[1] == null ? 0 : resultParse[1],
-                    sprite: sprite
+                final dashIndex:Int = fullKey.lastIndexOf("-");
+                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
+                if (firstAnimFound == "") firstAnimFound = animName;
+
+                frames.set(fullKey, {
+                    srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight
                 });
             }
 
@@ -94,81 +76,68 @@ class CitroAnimate extends CitroObject {
         play(defaultAnim);
     }
 
-    /**
-     * Plays a new animation that's found in the sprite's map.
-     * @param animation Animation name to play.
-     */
     public function play(animation:String):Bool {
-        if (isDestroyed) {
-            return false;
-        }
+        if (isDestroyed || atlasSprite == null) return false;
         
         final animFormat:String = '$animation-0';
-        if (sprites.exists(animFormat)) {
+        if (frames.exists(animFormat)) {
             timeLeft = 1000 / framerate;
             finished = false;
             curAnim = animation;
             frame = 0;
-
-            final spr:CitroSprite = sprites[animFormat].sprite;
-            width  = spr.width;
-            height = spr.height;
+            
+            final frm = frames[animFormat];
+            width = frm.srcWidth;
+            height = frm.srcHeight;
             return true;
         }
-
         return false;
     }
 
-    inline function format() {
-        return '${curAnim}-$frame';
-    }
+    inline function format():String return '${curAnim}-$frame';
 
     override function update():Bool {
-        if (isDestroyed) {
-            return false;
-        }
+        if (isDestroyed || atlasSprite == null) return false;
 
         if ((timeLeft -= CitroG.deltaTime) < 1) {
             timeLeft = 1000 / framerate;
             frame++;
-            if (!sprites.exists(format())) {
+            
+            if (!frames.exists(format())) {
                 finished = true;
-                if (looped) {
-                    frame = 0;
-                } else {
-                    frame--;
-                }
+                frame = looped ? 0 : frame - 1;
             } else {
-                final header:CitroSprite = sprites.get(format()).sprite;
-                width = header.width;
-                height = header.height;
+                final frm = frames[format()];
+                width = frm.srcWidth;
+                height = frm.srcHeight;
             }
         }
 
-        if (sprites.exists(format()) && visible) {
-            final header:CitroAnimateHeader = sprites.get(format());
-            final sprite:CitroSprite = header.sprite;
-
-            for (key in keys) Reflect.setProperty(sprite, key, Reflect.getProperty(this, key));
-            sprite.x = x - (header.frameX * scale.x);
-            sprite.y = y - (header.frameY * scale.y);
-            return sprite.update();
+        if (frames.exists(format()) && visible) {
+            final frm = frames[format()];
+            
+            atlasSprite.x = x;
+            atlasSprite.y = y;
+            atlasSprite.scale.x = scale.x;
+            atlasSprite.scale.y = scale.y;
+            atlasSprite.alpha = alpha;
+            atlasSprite.color = color;
+            
+            atlasSprite.setSourceRect(frm.srcX, frm.srcY, frm.srcWidth, frm.srcHeight);
+            
+            return atlasSprite.update();
         }
 
         return false;
     }
 
     override function destroy() {
-        if (sprites != null) {
-            for (header in sprites) {
-                if (header != null && header.sprite != null) {
-                    header.sprite.destroy();
-                }
-            }
-            sprites = null;
+        if (atlasSprite != null) {
+            atlasSprite.destroy();
+            atlasSprite = null;
         }
+        frames = null;
         super.destroy();
     }
 }
-
 #end
