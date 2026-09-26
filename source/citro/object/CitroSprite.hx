@@ -38,13 +38,12 @@ class CitroSprite extends CitroObject {
         return this;
     }
 
-    public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Void {
+    public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Dynamic {
         srcX = x;
         srcY = y;
         srcWidth = w;
         srcHeight = h;
         useSrcRect = true;
-        return;
     }
 
     public function loadGraphic(file:String):Bool {
