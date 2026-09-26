@@ -74,7 +74,7 @@ def main():
         
         print(f"  [1/3] Converting {png_path} to {t3x_path} using tex3ds...")
         try:
-            subprocess.run([tex3ds_path, "-i", png_path, "-o", t3x_path], check=True, env=os.environ)
+            subprocess.run([tex3ds_path, png_path, "-o", t3x_path, "-f", "rgba8"], check=True, env=os.environ)
         except subprocess.CalledProcessError as e:
             print(f"  ERROR: tex3ds failed on {png_path} (Exit code {e.returncode}). Skipping.")
             continue
