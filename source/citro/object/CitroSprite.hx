@@ -4,30 +4,20 @@ package citro.object;
 
 import citro.CitroG;
 import citro.backend.CitroColor;
-import citro.object.CitroObject;
+import cpp.Pointer;
+import cpp.Void;
 
 @:headerInclude("3ds.h")
 @:headerInclude("citro2d.h")
 @:headerInclude("citro3d.h")
 
-@:native("C2D_SpriteSheet")
-extern class C2D_SpriteSheet {}
-
-@:native("C2D_Image")
-extern class C2D_Image {
-    var tex:Dynamic;
-    var subtex:Dynamic;
-}
-
-/**
- * A class for rendering sprites.
- */
 class CitroSprite extends CitroObject {
+    
     @:native("ss")
-    var sheet:C2D_SpriteSheet;
+    var sheet:Pointer<Void>;
     
     @:native("image")
-    var img:C2D_Image;
+    var img:Pointer<Void>;
 
     public var srcX:Float = 0;
     public var srcY:Float = 0;
@@ -63,13 +53,13 @@ class CitroSprite extends CitroObject {
 
         untyped __cpp__('
             if (!this->ss) {
-                this->ss = C2D_SpriteSheetLoad(file.c_str());
+                this->ss = (C2D_SpriteSheet)C2D_SpriteSheetLoad(file.c_str());
                 if (!this->ss) return false;
             }
 
-            this->image = C2D_SpriteSheetGetImage(this->ss, 0);
-            width = this->image.subtex->width;
-            height = this->image.subtex->height;
+            this->img = (C2D_Image)C2D_SpriteSheetGetImage((C2D_SpriteSheet)this->ss, 0);
+            width = ((C2D_Image)this->img)->subtex->width;
+            height = ((C2D_Image)this->img)->subtex->height;
         ');
 
         CitroG.caches.set(file, untyped __cpp__('this->ss'));
@@ -90,7 +80,9 @@ class CitroSprite extends CitroObject {
             C2D_ViewScale(sw, sh);
             C2D_ViewTranslate(-this->width / 2.0, -this->height / 2.0);
 
-            if (this->image.tex == NULL || this->image.subtex == NULL) {
+            C2D_Image currentImage = (C2D_Image)this->img;
+
+            if (currentImage.tex == NULL || currentImage.subtex == NULL) {
                 CONVERT_TO_COMPATIBLE_COLOR(this->color)
                 C2D_DrawRectSolid(0, 0, 0, this->width, this->height, finalColor);
             } else {
@@ -110,16 +102,16 @@ class CitroSprite extends CitroObject {
                     Tex3DS_SubTexture srcSubTex;
                     srcSubTex.width = (u16)this->srcWidth;
                     srcSubTex.height = (u16)this->srcHeight;
-                    srcSubTex.left = this->srcX / this->image.tex->width;
-                    srcSubTex.right = (this->srcX + this->srcWidth) / this->image.tex->width;
-                    srcSubTex.top = this->srcY / this->image.tex->height;
-                    srcSubTex.bottom = (this->srcY + this->srcHeight) / this->image.tex->height;
+                    srcSubTex.left = this->srcX / currentImage.tex->width;
+                    srcSubTex.right = (this->srcX + this->srcWidth) / currentImage.tex->width;
+                    srcSubTex.top = this->srcY / currentImage.tex->height;
+                    srcSubTex.bottom = (this->srcY + this->srcHeight) / currentImage.tex->height;
                     
-                    C2D_Image drawImg = this->image;
+                    C2D_Image drawImg = currentImage;
                     drawImg.subtex = &srcSubTex;
                     C2D_DrawImageAt(drawImg, 0, 0, 0, &tint, 1, 1);
                 } else {
-                    C2D_DrawImageAt(this->image, 0, 0, 0, &tint, 1, 1);
+                    C2D_DrawImageAt(currentImage, 0, 0, 0, &tint, 1, 1);
                 }
             }
 
@@ -131,8 +123,9 @@ class CitroSprite extends CitroObject {
     override function destroy() {
         untyped __cpp__('
             if (this->ss) {
-                C2D_SpriteSheetFree(this->ss);
+                C2D_SpriteSheetFree((C2D_SpriteSheet)this->ss);
                 this->ss = nullptr;
+                this->img = nullptr;
             }
         ');
         super.destroy();

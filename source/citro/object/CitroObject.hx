@@ -26,7 +26,6 @@ typedef CitroAcceleration = {
 	 */
 	var angle:Float;
 }
-@:headerInclude("3ds.h")
 class CitroVector2D {
 	/**
 	 * X in vector.
