@@ -22,7 +22,6 @@ class PlayState extends CitroState
     {
         super.create();
 
-        // 1. Setup Camera
         camera = new CitroCamera(false);
         add(camera);
 
