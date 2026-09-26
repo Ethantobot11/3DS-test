@@ -50,7 +50,6 @@ class CitroGame {
 		for (i in 0...2) {
 			untyped __cpp__("C2D_SceneBegin({0} == 0 ? topScreen : bottomScreen)", i);
 			renderObjectsForScreen(state, i == 1);
-			untyped __cpp__("C2D_SceneEnd()");
 		}
 	}
 
