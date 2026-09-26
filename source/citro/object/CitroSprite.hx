@@ -4,8 +4,6 @@ package citro.object;
 
 import citro.CitroG;
 import citro.backend.CitroColor;
-import cpp.Pointer;
-import cpp.Void;
 
 @:headerInclude("3ds.h")
 @:headerInclude("citro2d.h")
@@ -13,11 +11,12 @@ import cpp.Void;
 
 class CitroSprite extends CitroObject {
     
+    // Using Dynamic for opaque C pointers avoids Haxe import conflicts
     @:native("ss")
-    var sheet:Pointer<Void>;
+    var sheet:Dynamic;
     
     @:native("image")
-    var img:Pointer<Void>;
+    var img:Dynamic;
 
     public var srcX:Float = 0;
     public var srcY:Float = 0;
