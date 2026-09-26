@@ -8,7 +8,7 @@ using StringTools;
 class DSLacie extends CitroAnimate
 {
     public var isFollowing:Bool = false;
-    public var target:DSNoelle;
+    public var target:DSPlayer;
     public var trailDelay:Int = 18; 
 
     public function new(x:Float, y:Float)
