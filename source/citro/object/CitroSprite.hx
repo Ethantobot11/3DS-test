@@ -103,11 +103,13 @@ class CitroSprite extends CitroObject {
                     Tex3DS_SubTexture srcSubTex;
                     srcSubTex.width = (u16)this->srcWidth;
                     srcSubTex.height = (u16)this->srcHeight;
-                    
-                    srcSubTex.left = this->srcX / this->image.tex->width;
-                    srcSubTex.right = (this->srcX + this->srcWidth) / this->image.tex->width;
-                    srcSubTex.top = this->srcY / this->image.tex->height;
-                    srcSubTex.bottom = (this->srcY + this->srcHeight) / this->image.tex->height;
+                    Tex3DS_SubTexture* orig = this->image.subtex;
+                    float uScale = (orig->right - orig->left) / orig->width;
+                    float vScale = (orig->bottom - orig->top) / orig->height;
+                    srcSubTex.left = orig->left + this->srcX * uScale;
+                    srcSubTex.right = orig->left + (this->srcX + this->srcWidth) * uScale;
+                    srcSubTex.top = orig->top + this->srcY * vScale;
+                    srcSubTex.bottom = orig->top + (this->srcY + this->srcHeight) * vScale;
                     
                     C2D_Image drawImg = this->image;
                     drawImg.subtex = &srcSubTex;
