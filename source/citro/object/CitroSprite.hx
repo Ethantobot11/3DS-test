@@ -11,12 +11,15 @@ import citro.backend.CitroColor;
 #include <citro3d.h>
 ')
 
+@:headerInclude("citro/object/CitroVector2D.h")
+
 @:headerClassCode('
     C2D_SpriteSheet ss;
     C2D_Image image;
 ')
-@:headerInclude("citro/object/CitroVector2D.h")
+
 class CitroSprite extends CitroObject {
+    
     public var srcX:Float = 0;
     public var srcY:Float = 0;
     public var srcWidth:Float = 0;
@@ -36,10 +39,6 @@ class CitroSprite extends CitroObject {
         return this;
     }
 
-    /**
-     * Sets the sub-rectangle of the texture to draw.
-     * IMPORTANT: This MUST update width/height so the GPU draws the correct quad size
-     */
     public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Bool {
         srcX = x;
         srcY = y;
@@ -48,7 +47,6 @@ class CitroSprite extends CitroObject {
         useSrcRect = true;
         width = w;
         height = h;
-        
         return true;
     }
 
@@ -62,7 +60,6 @@ class CitroSprite extends CitroObject {
                 this->ss = C2D_SpriteSheetLoad(file.c_str());
                 if (!this->ss) return false;
             }
-
             this->image = C2D_SpriteSheetGetImage(this->ss, 0);
             width = this->image.subtex->width;
             height = this->image.subtex->height;
@@ -107,7 +104,6 @@ class CitroSprite extends CitroObject {
                     srcSubTex.width = (u16)this->srcWidth;
                     srcSubTex.height = (u16)this->srcHeight;
                     
-                    // Calculate UVs based on the FULL TEXTURE SIZE (image.tex), not the frame size
                     srcSubTex.left = this->srcX / this->image.tex->width;
                     srcSubTex.right = (this->srcX + this->srcWidth) / this->image.tex->width;
                     srcSubTex.top = this->srcY / this->image.tex->height;
@@ -120,7 +116,6 @@ class CitroSprite extends CitroObject {
                     C2D_DrawImageAt(this->image, 0, 0, 0, &tint, 1, 1);
                 }
             }
-
             C2D_ViewRestore(&matrix);
         ');
         return true;
@@ -136,5 +131,4 @@ class CitroSprite extends CitroObject {
         super.destroy();
     }
 }
-
 #end
