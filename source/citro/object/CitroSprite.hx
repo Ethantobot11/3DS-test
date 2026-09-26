@@ -24,6 +24,11 @@ using StringTools;
 #include "3ds.h"
 ')
 class CitroSprite extends CitroObject {
+	public var srcX:Float = 0;
+	public var srcY:Float = 0;
+	public var srcWidth:Float = 0;
+	public var srcHeight:Float = 0;
+	public var useSrcRect:Bool = false;
 	/**
 	 * Creates a new Citro Sprite, which can load images, graphic and even more!
 	 * @param xPos The X Position to use.
@@ -40,6 +45,14 @@ class CitroSprite extends CitroObject {
 			data.image = {NULL, NULL};
 			//{0}
 		', this.scale);
+	}
+	
+	public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Void {
+	    srcX = x;
+	    srcY = y;
+	    srcWidth = w;
+	    srcHeight = h;
+	    useSrcRect = true;
 	}
 
 	/**
@@ -86,37 +99,52 @@ class CitroSprite extends CitroObject {
 	 */
 	override function update():Bool {
 		untyped __cpp__('
-			Float sw = scale->x, sh = scale->y;
-
-			C3D_Mtx matrix;
-			Mtx_Diagonal(&matrix, 1.0f, 1.0f, 1.0f, 1.0f);
-
-			C2D_ViewSave(&matrix);
-			C2D_ViewTranslate(x, y);
-			C2D_ViewTranslate(width * sw / 2.0, height * sh / 2.0);
-			C2D_ViewRotateDegrees(angle);
-			C2D_ViewScale(sw, sh);
-			C2D_ViewTranslate(-width / 2.0, -height / 2.0);
-
-			if (data.image.tex == NULL || data.image.subtex == NULL) {
-				CONVERT_TO_COMPATIBLE_COLOR(color)
-				C2D_DrawRectSolid(0, 0, 0, width, height, finalColor);
-			} else {
-				C2D_ImageTint tint;
-				C2D_PlainImageTint(
-					&tint,
-					C2D_Color32(
-						(color >> 16) & 0xFF,
-						(color >> 8) & 0xFF,
-						color & 0xFF,
-						((color >> 24) & 0xFF) * C2D_Clamp(alpha, 0, 1)
-					),
-					fabs(((Float)(color & 0xFFFFFF) / 16777215.0) - 1) / 2.0
-				);
-				C2D_DrawImageAt(data.image, 0, 0, 0, &tint, 1, 1);
-			}
-
-			C2D_ViewRestore(&matrix)
+		    Float sw = scale->x, sh = scale->y;
+		
+		    C3D_Mtx matrix;
+		    Mtx_Diagonal(&matrix, 1.0f, 1.0f, 1.0f, 1.0f);
+		
+		    C2D_ViewSave(&matrix);
+		    C2D_ViewTranslate(x, y);
+		    C2D_ViewTranslate(width * sw / 2.0, height * sh / 2.0);
+		    C2D_ViewRotateDegrees(angle);
+		    C2D_ViewScale(sw, sh);
+		    C2D_ViewTranslate(-width / 2.0, -height / 2.0);
+		
+		    if (data.image.tex == NULL || data.image.subtex == NULL) {
+		        CONVERT_TO_COMPATIBLE_COLOR(color)
+		        C2D_DrawRectSolid(0, 0, 0, width, height, finalColor);
+		    } else {
+		        C2D_ImageTint tint;
+		        C2D_PlainImageTint(
+		            &tint,
+		            C2D_Color32(
+		                (color >> 16) & 0xFF,
+		                (color >> 8) & 0xFF,
+		                color & 0xFF,
+		                ((color >> 24) & 0xFF) * C2D_Clamp(alpha, 0, 1)
+		            ),
+		            fabs(((Float)(color & 0xFFFFFF) / 16777215.0) - 1) / 2.0
+		        );
+		        
+		        if (useSrcRect) {
+		            C2D_SubTex srcSubTex;
+		            srcSubTex.width = srcWidth;
+		            srcSubTex.height = srcHeight;
+		            srcSubTex.left = srcX / data.image.tex->width;
+		            srcSubTex.right = (srcX + srcWidth) / data.image.tex->width;
+		            srcSubTex.top = srcY / data.image.tex->height;
+		            srcSubTex.bottom = (srcY + srcHeight) / data.image.tex->height;
+		            
+		            C2D_Image drawImg = data.image;
+		            drawImg.subtex = &srcSubTex;
+		            C2D_DrawImageAt(drawImg, 0, 0, 0, &tint, 1, 1);
+		        } else {
+		            C2D_DrawImageAt(data.image, 0, 0, 0, &tint, 1, 1);
+		        }
+		    }
+		
+		    C2D_ViewRestore(&matrix)
 		');
 		 return true;
 	}
