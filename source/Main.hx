@@ -8,6 +8,7 @@ import citro.CitroGame;
 import citro.object.CitroText;
 
 using StringTools;
+@:headerInclude("3ds.h")
 #else
 import leafy.LfEngine;
 import leafy.backend.sdl.LfWindowRender;
