@@ -70,6 +70,9 @@ class CitroSprite extends CitroObject {
     }
 
     override function update():Bool {
+
+        if (!visible || alpha <= 0) return false;
+        
         untyped __cpp__('
             Float sw = this->scale->x, sh = this->scale->y;
 
@@ -126,7 +129,6 @@ class CitroSprite extends CitroObject {
     override function destroy() {
         untyped __cpp__('
             if (this->ss) {
-                C2D_SpriteSheetFree(this->ss);
                 this->ss = nullptr;
             }
         ');

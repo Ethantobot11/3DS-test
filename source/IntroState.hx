@@ -14,6 +14,9 @@ class IntroState extends CitroState
     var introTimer:Float = 0;
     var isTransitioning:Bool = false;
 
+    var logoIntro:DeltaruneLogoIntro;
+    var introTimer:Float = 0;
+
     override public function create()
     {
         super.create();
@@ -30,7 +33,13 @@ class IntroState extends CitroState
     {
         super.update(delta);
 
-        if (isTransitioning) return;
+        if (isTransitioning) {
+            switchDelay -= delta;
+            if (switchDelay <= 0) {
+                CitroG.switchState(new ThreeDSMainMenuState());
+            }
+            return;
+        }
 
         var dtSec = delta / 1000.0;
         introTimer += dtSec;
@@ -52,7 +61,7 @@ class IntroState extends CitroState
     {
         if (isTransitioning) return;
         isTransitioning = true;
-        CitroG.switchState(new ThreeDSMainMenuState());
+        switchDelay = 50;
     }
 }
 

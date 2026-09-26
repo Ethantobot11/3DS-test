@@ -38,9 +38,11 @@ class DSDialogueBox extends citro.object.CitroObject
 
         boxBorder = new CitroSprite(0, 0);
         boxBorder.makeGraphic(280, 68, CitroColor.WHITE);
+        boxBorder.visible = false;
 
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
+        boxBorder.visible = false;
 
         portrait = new CitroAnimate("romfs:/assets/images/noelle_face.cea", "spr_face_n_matome-0");
         portrait.visible = false;

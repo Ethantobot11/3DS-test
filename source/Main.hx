@@ -38,7 +38,7 @@ class Main
 
         AchievementManager.unlock("play_DELTARUNE_3DS");
 
-        CitroGame.start(new ThreeDSMainMenuState());
+        CitroGame.start(new LoadingState());
         
         #else
         LfEngine.initEngine("Deltarune", DRC, new WiiUMainMenuState());

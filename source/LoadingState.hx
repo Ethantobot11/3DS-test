@@ -19,8 +19,6 @@ class LoadingState extends CitroState
     var totalFiles:Int = 0;
     var loadComplete:Bool = false;
     var waitTimer:Float = 0;
-    
-    var chunkSize:Int = 15;
 
     override public function create()
     {
@@ -82,20 +80,20 @@ class LoadingState extends CitroState
             return;
         }
 
-        var batchCount = 0;
-        while (batchCount < 5 && currentIndex < totalFiles) {
+        if (currentIndex < totalFiles) {
             var fullPath = filesToLoad[currentIndex];
+            
             if (fullPath.endsWith(".cwav")) {
                 SoundPlayer.preload(fullPath);
+            } else if (fullPath.endsWith(".t3x")) {
+                var dummy = new CitroSprite();
+                dummy.loadGraphic(fullPath);
+                dummy.destroy(); 
             }
+            
             currentIndex++;
-            batchCount++;
-        }
-
-        loadingText.text = 'Loading: $currentIndex / $totalFiles';
-        trace('Loading progress: $currentIndex / $totalFiles');
-
-        if (currentIndex >= totalFiles) {
+            loadingText.text = 'Loading: $currentIndex / $totalFiles';
+        } else {
             trace("LoadingState: All files loaded successfully.");
             loadingText.text = "Complete!";
             loadComplete = true;

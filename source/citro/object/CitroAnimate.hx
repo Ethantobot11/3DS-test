@@ -115,6 +115,8 @@ class CitroAnimate extends CitroObject {
     override function update():Bool {
         if (isDestroyed || atlasSprite == null) return false;
 
+        if (!visible || alpha <= 0) return false;
+
         if ((timeLeft -= CitroG.deltaTime) < 1) {
             timeLeft = 1000 / framerate;
             frame++;

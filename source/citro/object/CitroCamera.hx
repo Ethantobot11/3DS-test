@@ -62,8 +62,6 @@ class CitroCamera extends CitroObject {
 		curY = CitroMath.lerp(curY, y, lerp);
 		bottom = bottomCam;
 
-		untyped __cpp__("C2D_SceneBegin(this->bottomCam ? bottomScreen : topScreen)");
-
 		untyped __cpp__('
 			C3D_Mtx camMtx;
 			Mtx_Diagonal(&camMtx, 1.0f, 1.0f, 1.0f, 1.0f);

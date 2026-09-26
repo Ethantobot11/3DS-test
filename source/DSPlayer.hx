@@ -108,6 +108,8 @@ class DSPlayer extends CitroAnimate
             else if (facingDir == "left") currentStanding = isDarkWorld ? "spr_krisl_dark" : "spr_krisl";
             else if (facingDir == "right") currentStanding = isDarkWorld ? "spr_krisr_dark" : "spr_krisr";
             
+            timeLeft = 999999;
+            
             if (curAnim != currentStanding) {
                 play(currentStanding);
             }
