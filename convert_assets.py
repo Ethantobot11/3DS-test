@@ -4,22 +4,15 @@ import shutil
 import xml.etree.ElementTree as ET
 
 def get_tool_path(tool_name: str) -> str:
-    """
-    Finds the path to a devkitPro tool. 
-    Checks the system PATH first, then falls back to standard GitHub Runner paths.
-    """
     tool_path = shutil.which(tool_name)
     if tool_path:
         return tool_path
-        
     linux_path = f"/opt/devkitpro/tools/bin/{tool_name}"
     if os.path.exists(linux_path):
         return linux_path
-        
     win_path = f"C:\\devkitPro\\tools\\bin\\{tool_name}.exe"
     if os.path.exists(win_path):
         return win_path
-        
     return tool_name
 
 def main():
@@ -65,6 +58,7 @@ def main():
                     print(f"Warning: Found {file_path} but no corresponding {name}.png")
             else:
                 other_files.append((root, name, ext, file_path))
+
     for root, name, xml_path, png_path in sprite_sheets:
         t3x_name = name + ".t3x"
         t3x_path = os.path.join(root, t3x_name)
@@ -79,7 +73,7 @@ def main():
             print(f"  ERROR: tex3ds failed on {png_path} (Exit code {e.returncode}). Skipping.")
             continue
         except FileNotFoundError:
-            print(f"  ERROR: '{tex3ds_path}' not found. Ensure devkitPro tools are installed on the runner.")
+            print(f"  ERROR: '{tex3ds_path}' not found. Ensure devkitPro tools are installed.")
             continue
 
         print(f"  [2/3] Generating {cea_path} from {xml_path}...")
@@ -98,7 +92,7 @@ def main():
                 if "_" in frame_name and frame_name.split("_")[-1].isdigit():
                     parts = frame_name.rsplit("_", 1)
                     anim_name = parts[0]
-                    frame_idx = int(parts[1])
+                    frame_idx = int(parts[1]) // 10000
                     cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{anim_name}-{frame_idx}"
                 elif frame_name and frame_name.isdigit():
                     cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{name}-{int(frame_name)}"
@@ -131,7 +125,6 @@ def main():
         if ext == ".mp3":
             if os.path.normpath(file_path) in excluded_files:
                 continue
-
             out_path = os.path.join(root, name + ".ogg")
             print(f"Converting {file_path} to OGG...")
             try:
@@ -144,17 +137,13 @@ def main():
         elif ext in [".wav", ".ogg"]:
             if os.path.normpath(file_path) in excluded_files:
                 continue
-
             out_path = os.path.join(root, name + ".cwav")
             print(f"Converting {file_path} to CWAV...")
             try:
                 cmd = [cwavtool_path, "-i", file_path, "-o", out_path]
-                
                 if os.path.normpath(file_path) in looped_files:
                     cmd.extend(["-ls", "0", "-le", "end"])
-
                 subprocess.run(cmd, check=True, env=os.environ)
-                
                 if ext == ".wav" and os.path.exists(file_path):
                     os.remove(file_path)
             except Exception as e:
