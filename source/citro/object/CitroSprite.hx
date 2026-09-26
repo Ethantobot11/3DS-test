@@ -5,21 +5,18 @@ package citro.object;
 import citro.CitroG;
 import citro.backend.CitroColor;
 
-@:headerCode("
+@:headerCode('
 #include <3ds.h>
-#include <citro3d.h>
 #include <citro2d.h>
-")
+#include <citro3d.h>
+')
 
-@:cppFileCode("#include \"citro/object/CitroVector2D.h\"")
-
-@:headerClassCode("
+@:headerClassCode('
     C2D_SpriteSheet ss;
     C2D_Image image;
-")
+')
 
 class CitroSprite extends CitroObject {
-    
     public var srcX:Float = 0;
     public var srcY:Float = 0;
     public var srcWidth:Float = 0;
@@ -39,6 +36,10 @@ class CitroSprite extends CitroObject {
         return this;
     }
 
+    /**
+     * Sets the sub-rectangle of the texture to draw.
+     * IMPORTANT: This MUST update width/height so the GPU draws the correct quad size
+     */
     public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Bool {
         srcX = x;
         srcY = y;
@@ -47,6 +48,7 @@ class CitroSprite extends CitroObject {
         useSrcRect = true;
         width = w;
         height = h;
+        
         return true;
     }
 
@@ -104,6 +106,8 @@ class CitroSprite extends CitroObject {
                     Tex3DS_SubTexture srcSubTex;
                     srcSubTex.width = (u16)this->srcWidth;
                     srcSubTex.height = (u16)this->srcHeight;
+                    
+                    // Calculate UVs based on the FULL TEXTURE SIZE (image.tex), not the frame size
                     srcSubTex.left = this->srcX / this->image.tex->width;
                     srcSubTex.right = (this->srcX + this->srcWidth) / this->image.tex->width;
                     srcSubTex.top = this->srcY / this->image.tex->height;
