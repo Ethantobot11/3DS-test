@@ -49,7 +49,7 @@ class PlayState extends CitroState
         camera.add(noelle);
 
         lacie = new DSLacie(CitroG.WIDTH / 2 + 120, CitroG.HEIGHT / 2);
-        lacie.target = noelle;
+        lacie.target = kris;
         camera.add(lacie);
 
         camera.follow(kris, true);
