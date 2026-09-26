@@ -44,8 +44,9 @@ class DSPlayer extends CitroAnimate
     {
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
-        loadPlayerAnimations();
-        play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
+        var suffix = isDarkWorld ? "_dark" : "";
+        
+        reloadCEA('romfs:/assets/images/chars/spr_kris${suffix}.cea', 'spr_krisd$suffix');
     }
 
     override public function update():Bool {
@@ -91,8 +92,6 @@ class DSPlayer extends CitroAnimate
                 play(desiredAnim);
             }
     
-            paused = false;
-    
             if (Std.int(frame) != lastPlayedFrame) {
                 lastPlayedFrame = Std.int(frame);
                 if (lastPlayedFrame == 1 || lastPlayedFrame == 4) {
@@ -113,9 +112,7 @@ class DSPlayer extends CitroAnimate
                 play(currentStanding);
             }
     
-            paused = true;
             frame = 0;
-    
             lastPlayedFrame = -1;
         }
     }

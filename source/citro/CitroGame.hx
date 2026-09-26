@@ -50,6 +50,7 @@ class CitroGame {
 		for (i in 0...2) {
 			untyped __cpp__("C2D_SceneBegin({0} == 0 ? topScreen : bottomScreen)", i);
 			renderObjectsForScreen(state, i == 1);
+			untyped __cpp__("C2D_SceneEnd()");
 		}
 	}
 
@@ -76,7 +77,7 @@ class CitroGame {
 
 			untyped __cpp__('
 				C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-				C2D_TargetClear(topScreen, 0xFF000000);
+				C2D_TargetClear(topScreen, 0xFF1D1D24);
 				C2D_TargetClear(bottomScreen, 0xFF000000);
 			');
 
@@ -94,7 +95,10 @@ class CitroGame {
 				renderState(sub);
 			}
 
-			untyped __cpp__('C3D_FrameEnd(0)');
+			untyped __cpp__('
+				C2D_Flush();
+				C3D_FrameEnd(0);
+			');
 
 			var elapsed = OS.time.toInt() - startTime;
 

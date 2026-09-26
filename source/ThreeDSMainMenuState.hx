@@ -82,8 +82,8 @@ class ThreeDSMainMenuState extends CitroState {
         }
 
         soulCursor = new CitroSprite(65, 72);
-        soulCursor.loadGraphic('romfs:/soul/soul.t3x');
-        //soulCursor.makeGraphic(8, 8, 0xFFFF0000);
+        //soulCursor.loadGraphic('romfs:/soul/soul.t3x');
+        soulCursor.makeGraphic(8, 8, 0xFFFF0000);
         add(soulCursor);
 
         super.create();

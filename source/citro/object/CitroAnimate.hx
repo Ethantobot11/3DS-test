@@ -94,6 +94,53 @@ class CitroAnimate extends CitroObject {
         return false;
     }
 
+    public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
+        if (atlasSprite != null) atlasSprite.destroy();
+        frames = [];
+        atlasPath = "";
+
+        final file:String = File.getContent(ceaFile);
+        var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
+        if (dir == "") dir = ".";
+
+        if (file != "") {
+            var firstAnimFound:String = "";
+            for (line in file.split("\n")) {
+                line = line.trim();
+                if (line == "" || line.startsWith("#")) continue; 
+                final row:Array<String> = line.split("?");
+                if (row.length < 6) continue; 
+
+                final atlasFile:String = row[0].trim();
+                final srcX:Float = Std.parseFloat(row[1]);
+                final srcY:Float = Std.parseFloat(row[2]);
+                final srcWidth:Float = Std.parseFloat(row[3]);
+                final srcHeight:Float = Std.parseFloat(row[4]);
+                final fullKey:String = row[5].trim();
+
+                if (atlasPath == "") {
+                    atlasPath = '$dir/$atlasFile';
+                    atlasSprite = new CitroSprite();
+                    if (!atlasSprite.loadGraphic(atlasPath)) {
+                        atlasSprite.destroy();
+                        atlasSprite = null;
+                        return; 
+                    }
+                }
+
+                final dashIndex:Int = fullKey.lastIndexOf("-");
+                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
+                if (firstAnimFound == "") firstAnimFound = animName;
+
+                frames.set(fullKey, {
+                    srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight
+                });
+            }
+            if (defaultAnim == "") defaultAnim = firstAnimFound;
+        }
+        play(defaultAnim);
+    }
+
     inline function format():String return '${curAnim}-$frame';
 
     override function update():Bool {

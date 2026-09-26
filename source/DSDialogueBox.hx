@@ -3,6 +3,7 @@ package;
 
 import citro.object.CitroSprite;
 import citro.object.CitroText;
+import citro.object.CitroAnimate;
 import citro.backend.CitroColor;
 import citro.backend.CitroTimer;
 import citro.CitroG;
@@ -12,7 +13,7 @@ class DSDialogueBox extends citro.object.CitroObject
 {
     var boxBg:CitroSprite;
     var boxBorder:CitroSprite;
-    public var portrait:CitroSprite;
+    public var portrait:CitroAnimate; // Changed from CitroSprite to CitroAnimate
     var textDisplay:CitroText;
 
     public var soulCursor:CitroSprite;
@@ -41,16 +42,17 @@ class DSDialogueBox extends citro.object.CitroObject
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
 
-        portrait = new CitroSprite(8, 6);
+        portrait = new CitroAnimate("romfs:/assets/images/noelle_face.cea", "spr_face_n_matome-0");
         portrait.visible = false;
+        portrait.framerate = 12;
 
         textDisplay = new CitroText(15, 10, "");
         textDisplay.color = CitroColor.WHITE;
 
         soulCursor = new CitroSprite(0, 0);
         try {
-            if (sys.FileSystem.exists("romfs:/assets/images/soul/iconOG.png")) {
-                soulCursor.loadGraphic("romfs:/assets/images/soul/iconOG.png");
+            if (sys.FileSystem.exists("romfs:/soul/iconOG.t3x")) {
+                soulCursor.loadGraphic("romfs:/soul/iconOG.t3x");
             } else {
                 soulCursor.makeGraphic(8, 8, CitroColor.RED);
             }
@@ -81,7 +83,7 @@ class DSDialogueBox extends citro.object.CitroObject
         }
     }
 
-    public function startDialogue(text:String, faceAtlas:String = null, expressionFrame:String = null, style:String = "light", withChoices:Bool = false, snd:String = "snd_txtnoe.cwav")
+    public function startDialogue(text:String, faceAtlas:String = "noelle_face", expressionFrame:String = null, style:String = "light", withChoices:Bool = false, snd:String = "snd_txtnoe.cwav")
     {
         boxBorder.makeGraphic(280, 68, (style == "dark") ? 0xFF000080 : CitroColor.WHITE);
 
@@ -100,28 +102,22 @@ class DSDialogueBox extends citro.object.CitroObject
 
         if (faceAtlas != null && expressionFrame != null)
         {
-            var ceaPath = 'romfs:/assets/images/${faceAtlas}.cea';
-            if (sys.FileSystem.exists(ceaPath))
-            {
-                var file:String = sys.io.File.getContent(ceaPath);
-                var dir:String = "romfs:/assets/images";
-                
-                for (line in file.split("\n"))
-                {
-                    if (line.trim() == "") continue;
-                    var row:Array<String> = line.split("?");
-                    if (row.length < 3) continue;
-                    var frameKey = row[3].trim();
-                    
-                    if (frameKey == expressionFrame || frameKey.indexOf(expressionFrame) != -1)
-                    {
-                        portrait.loadGraphic('$dir/${row[0]}');
-                        break;
-                    }
-                }
+            var frameToPlay:String = expressionFrame;
+            
+            if (expressionFrame.indexOf("-") == -1 && ~/^[0-9]+$/.match(expressionFrame)) {
+                frameToPlay = 'spr_face_n_matome-$expressionFrame';
             }
-            portrait.visible = true;
-            textDisplay.x = x + 68;
+
+            if (portrait.play(frameToPlay)) {
+                portrait.visible = true;
+                textDisplay.x = x + 68;
+            } else {
+                portrait.visible = false;
+                textDisplay.x = x + 15;
+            }
+        } else {
+            portrait.visible = false;
+            textDisplay.x = x + 15;
         }
 
         textDisplay.text = "";
@@ -230,6 +226,7 @@ class DSDialogueBox extends citro.object.CitroObject
         {
             portrait.x = x + 8;
             portrait.y = y + 6;
+            portrait.update(); 
         }
 
         textDisplay.x = portrait.visible ? (x + 68) : (x + 15);
