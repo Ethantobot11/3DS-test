@@ -2,195 +2,141 @@ package citro.object;
 
 #if (!wiiu || !cafe)
 
-import sys.io.File;
-import citro.object.CitroSprite;
-import citro.object.CitroObject;
 import citro.CitroG;
+import citro.backend.CitroColor;
+import citro.object.CitroObject;
+import cpp.Pointer;
+import cpp.Void;
 
-using StringTools;
+// Ensure all 3DS and Citro headers are available in the generated .cpp file
+@:headerInclude("3ds.h")
+@:headerInclude("citro2d.h")
+@:headerInclude("citro3d.h")
 
-typedef CitroFrame = {
-    var srcX:Float;
-    var srcY:Float;
-    var srcWidth:Float;
-    var srcHeight:Float;
-}
-
-class CitroAnimate extends CitroObject {
-    var timeLeft:Float = 0;
-    var frames:Map<String, CitroFrame>;
+/**
+ * A class for rendering sprites.
+ */
+class CitroSprite extends CitroObject {
     
-    var atlasSprite:CitroSprite = null;
-    var atlasPath:String = "";
+    // Use cpp.Pointer<Void> to represent opaque C types. 
+    // This generates `void* ss;` and `void* image;` in C++, avoiding hxcpp class generation issues.
+    @:native("ss")
+    var sheet:Pointer<Void>;
+    
+    @:native("image")
+    var img:Pointer<Void>;
 
-    public var framerate:Float = 24;
-    public var frame:Int = 0;
-    public var curAnim:String = "";
-    public var finished:Bool = false;
-    public var looped:Bool = false;
+    public var srcX:Float = 0;
+    public var srcY:Float = 0;
+    public var srcWidth:Float = 0;
+    public var srcHeight:Float = 0;
+    public var useSrcRect:Bool = false;
 
-    public function new(ceaFile:String, defaultAnim:String = "") {
+    public function new(x:Float = 0, y:Float = 0) {
         super();
-        frames = new Map();
+        this.x = x;
+        this.y = y;
+    }
 
-        final file:String = File.getContent(ceaFile);
-        var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
-        if (dir == "") dir = ".";
+    inline public function makeGraphic(Width:Float, Height:Float, Col:CitroColor = 0xFFFFFFFF):CitroSprite {
+        width  = Width;
+        height = Height;
+        color  = Col;
+        return this;
+    }
 
-        if (file != "") {
-            var firstAnimFound:String = "";
+    public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Void {
+        srcX = x;
+        srcY = y;
+        srcWidth = w;
+        srcHeight = h;
+        useSrcRect = true;
+    }
 
-            for (line in file.split("\n")) {
-                line = line.trim();
-                if (line == "" || line.startsWith("#")) continue; 
-                
-                final row:Array<String> = line.split("?");
-                if (row.length < 6) continue; 
+    public function loadGraphic(file:String):Bool {
+        if (CitroG.caches.cache.exists(file)) {
+            untyped __cpp__('this->ss = (C2D_SpriteSheet){0}', CitroG.caches.get(file));
+        }
 
-                final atlasFile:String = row[0].trim();
-                final srcX:Float = Std.parseFloat(row[1]);
-                final srcY:Float = Std.parseFloat(row[2]);
-                final srcWidth:Float = Std.parseFloat(row[3]);
-                final srcHeight:Float = Std.parseFloat(row[4]);
-                final fullKey:String = row[5].trim();
-
-                if (atlasPath == "") {
-                    atlasPath = '$dir/$atlasFile';
-                    atlasSprite = new CitroSprite();
-                    if (!atlasSprite.loadGraphic(atlasPath)) {
-                        atlasSprite.destroy();
-                        atlasSprite = null;
-                        return; 
-                    }
-                }
-
-                final dashIndex:Int = fullKey.lastIndexOf("-");
-                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
-                if (firstAnimFound == "") firstAnimFound = animName;
-
-                frames.set(fullKey, {
-                    srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight
-                });
+        untyped __cpp__('
+            if (!this->ss) {
+                this->ss = (C2D_SpriteSheet)C2D_SpriteSheetLoad(file.c_str());
+                if (!this->ss) return false;
             }
 
-            if (defaultAnim == "") defaultAnim = firstAnimFound;
-        }
+            this->img = (C2D_Image)C2D_SpriteSheetGetImage((C2D_SpriteSheet)this->ss, 0);
+            width = ((C2D_Image)this->img)->subtex->width;
+            height = ((C2D_Image)this->img)->subtex->height;
+        ');
 
-        play(defaultAnim);
+        CitroG.caches.set(file, untyped __cpp__('this->ss'));
+        return true;
     }
-
-    public function play(animation:String):Bool {
-        if (isDestroyed || atlasSprite == null) return false;
-        
-        final animFormat:String = '$animation-0';
-        if (frames.exists(animFormat)) {
-            timeLeft = 1000 / framerate;
-            finished = false;
-            curAnim = animation;
-            frame = 0;
-            
-            final frm = frames[animFormat];
-            width = frm.srcWidth;
-            height = frm.srcHeight;
-            return true;
-        }
-        return false;
-    }
-
-    public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
-        if (atlasSprite != null) {
-            atlasSprite.destroy();
-            atlasSprite = null;
-        }
-        frames = new Map();
-        atlasPath = "";
-
-        final file:String = File.getContent(ceaFile);
-        var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
-        if (dir == "") dir = ".";
-
-        if (file != "") {
-            var firstAnimFound:String = "";
-            for (line in file.split("\n")) {
-                line = line.trim();
-                if (line == "" || line.startsWith("#")) continue; 
-                final row:Array<String> = line.split("?");
-                if (row.length < 6) continue; 
-
-                final atlasFile:String = row[0].trim();
-                final srcX:Float = Std.parseFloat(row[1]);
-                final srcY:Float = Std.parseFloat(row[2]);
-                final srcWidth:Float = Std.parseFloat(row[3]);
-                final srcHeight:Float = Std.parseFloat(row[4]);
-                final fullKey:String = row[5].trim();
-
-                if (atlasPath == "") {
-                    atlasPath = '$dir/$atlasFile';
-                    atlasSprite = new CitroSprite();
-                    if (!atlasSprite.loadGraphic(atlasPath)) {
-                        atlasSprite.destroy();
-                        atlasSprite = null;
-                        return; 
-                    }
-                }
-
-                final dashIndex:Int = fullKey.lastIndexOf("-");
-                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
-                if (firstAnimFound == "") firstAnimFound = animName;
-
-                frames.set(fullKey, {
-                    srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight
-                });
-            }
-            if (defaultAnim == "") defaultAnim = firstAnimFound;
-        }
-        play(defaultAnim);
-    }
-
-    inline function format():String return '${curAnim}-$frame';
 
     override function update():Bool {
-        if (isDestroyed || atlasSprite == null) return false;
+        untyped __cpp__('
+            Float sw = this->scale->x, sh = this->scale->y;
 
-        if ((timeLeft -= CitroG.deltaTime) < 1) {
-            timeLeft = 1000 / framerate;
-            frame++;
-            
-            if (!frames.exists(format())) {
-                finished = true;
-                frame = looped ? 0 : frame - 1;
+            C3D_Mtx matrix;
+            Mtx_Diagonal(&matrix, 1.0f, 1.0f, 1.0f, 1.0f);
+
+            C2D_ViewSave(&matrix);
+            C2D_ViewTranslate(this->x, this->y);
+            C2D_ViewTranslate(this->width * sw / 2.0, this->height * sh / 2.0);
+            C2D_ViewRotateDegrees(this->angle);
+            C2D_ViewScale(sw, sh);
+            C2D_ViewTranslate(-this->width / 2.0, -this->height / 2.0);
+
+            C2D_Image currentImage = (C2D_Image)this->img;
+
+            if (currentImage.tex == NULL || currentImage.subtex == NULL) {
+                CONVERT_TO_COMPATIBLE_COLOR(this->color)
+                C2D_DrawRectSolid(0, 0, 0, this->width, this->height, finalColor);
             } else {
-                final frm = frames[format()];
-                width = frm.srcWidth;
-                height = frm.srcHeight;
+                C2D_ImageTint tint;
+                C2D_PlainImageTint(
+                    &tint,
+                    C2D_Color32(
+                        (this->color >> 16) & 0xFF,
+                        (this->color >> 8) & 0xFF,
+                        this->color & 0xFF,
+                        ((this->color >> 24) & 0xFF) * C2D_Clamp(this->alpha, 0, 1)
+                    ),
+                    fabs(((Float)(this->color & 0xFFFFFF) / 16777215.0) - 1) / 2.0
+                );
+                
+                if (this->useSrcRect) {
+                    Tex3DS_SubTexture srcSubTex;
+                    srcSubTex.width = (u16)this->srcWidth;
+                    srcSubTex.height = (u16)this->srcHeight;
+                    srcSubTex.left = this->srcX / currentImage.tex->width;
+                    srcSubTex.right = (this->srcX + this->srcWidth) / currentImage.tex->width;
+                    srcSubTex.top = this->srcY / currentImage.tex->height;
+                    srcSubTex.bottom = (this->srcY + this->srcHeight) / currentImage.tex->height;
+                    
+                    C2D_Image drawImg = currentImage;
+                    drawImg.subtex = &srcSubTex;
+                    C2D_DrawImageAt(drawImg, 0, 0, 0, &tint, 1, 1);
+                } else {
+                    C2D_DrawImageAt(currentImage, 0, 0, 0, &tint, 1, 1);
+                }
             }
-        }
 
-        if (frames.exists(format()) && visible) {
-            final frm = frames[format()];
-            
-            atlasSprite.x = x;
-            atlasSprite.y = y;
-            atlasSprite.scale.x = scale.x;
-            atlasSprite.scale.y = scale.y;
-            atlasSprite.alpha = alpha;
-            atlasSprite.color = color;
-            
-            atlasSprite.setSourceRect(frm.srcX, frm.srcY, frm.srcWidth, frm.srcHeight);
-            
-            return atlasSprite.update();
-        }
-
-        return false;
+            C2D_ViewRestore(&matrix);
+        ');
+        return true;
     }
 
     override function destroy() {
-        if (atlasSprite != null) {
-            atlasSprite.destroy();
-            atlasSprite = null;
-        }
-        frames = new Map();
+        untyped __cpp__('
+            if (this->ss) {
+                C2D_SpriteSheetFree((C2D_SpriteSheet)this->ss);
+                this->ss = nullptr;
+                this->img = nullptr;
+            }
+        ');
         super.destroy();
     }
 }
+
 #end
