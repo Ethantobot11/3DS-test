@@ -7,15 +7,14 @@ import citro.state.CitroState;
 import citro.object.CitroSprite;
 import citro.backend.CitroColor;
 import haxe3ds.services.HID;
+
 @:headerInclude("3ds.h")
 class IntroState extends CitroState
 {
     var logoIntro:DeltaruneLogoIntro;
     var introTimer:Float = 0;
     var isTransitioning:Bool = false;
-
-    var logoIntro:DeltaruneLogoIntro;
-    var introTimer:Float = 0;
+    var switchDelay:Float = 0;
 
     override public function create()
     {
