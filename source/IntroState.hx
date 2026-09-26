@@ -7,7 +7,7 @@ import citro.state.CitroState;
 import citro.object.CitroSprite;
 import citro.backend.CitroColor;
 import haxe3ds.services.HID;
-
+@:headerInclude("3ds.h")
 class IntroState extends CitroState
 {
     var logoIntro:DeltaruneLogoIntro;
