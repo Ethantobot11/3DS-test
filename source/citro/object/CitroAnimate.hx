@@ -18,7 +18,7 @@ typedef CitroFrame = {
 
 class CitroAnimate extends CitroObject {
     var timeLeft:Float = 0;
-    var frames:Map<String, CitroFrame> = [];
+    var frames:Map<String, CitroFrame>;
     
     var atlasSprite:CitroSprite = null;
     var atlasPath:String = "";
@@ -31,6 +31,7 @@ class CitroAnimate extends CitroObject {
 
     public function new(ceaFile:String, defaultAnim:String = "") {
         super();
+        frames = new Map();
 
         final file:String = File.getContent(ceaFile);
         var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
@@ -97,8 +98,11 @@ class CitroAnimate extends CitroObject {
     }
 
     public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
-        if (atlasSprite != null) atlasSprite.destroy();
-        frames = [];
+        if (atlasSprite != null) {
+            atlasSprite.destroy();
+            atlasSprite = null;
+        }
+        frames = new Map();
         atlasPath = "";
 
         final file:String = File.getContent(ceaFile);
@@ -185,7 +189,7 @@ class CitroAnimate extends CitroObject {
             atlasSprite.destroy();
             atlasSprite = null;
         }
-        frames = null;
+        frames = new Map();
         super.destroy();
     }
 }

@@ -6,137 +6,137 @@ import citro.CitroG;
 import citro.backend.CitroColor;
 import citro.object.CitroObject;
 
+@:headerInclude("3ds.h")
+@:headerInclude("citro2d.h")
+@:headerInclude("citro3d.h")
+
+@:native("C2D_SpriteSheet")
+extern class C2D_SpriteSheet {}
+
+@:native("C2D_Image")
+extern class C2D_Image {
+    var tex:Dynamic;
+    var subtex:Dynamic;
+}
+
 /**
  * A class for rendering sprites.
  */
 class CitroSprite extends CitroObject {
-	
-	public var srcX:Float = 0;
-	public var srcY:Float = 0;
-	public var srcWidth:Float = 0;
-	public var srcHeight:Float = 0;
-	public var useSrcRect:Bool = false;
+    @:native("ss")
+    var sheet:C2D_SpriteSheet;
+    
+    @:native("image")
+    var img:C2D_Image;
 
-	public function new(x:Float = 0, y:Float = 0) {
-		super();
-		this.x = x;
-		this.y = y;
-	}
+    public var srcX:Float = 0;
+    public var srcY:Float = 0;
+    public var srcWidth:Float = 0;
+    public var srcHeight:Float = 0;
+    public var useSrcRect:Bool = false;
 
-	/**
-	 * Creates a graphic from sprite to be ready to be rendered.
-	 * @param Width The width to set as.
-	 * @param Height The height to set as.
-	 * @param Col The color in hex 0xAARRGGBB to set as.
-	 */
-	inline public function makeGraphic(Width:Float, Height:Float, Col:CitroColor = 0xFFFFFFFF):CitroSprite {
-		width  = Width;
-		height = Height;
-		color  = Col;
-		return this;
-	}
+    public function new(x:Float = 0, y:Float = 0) {
+        super();
+        this.x = x;
+        this.y = y;
+    }
 
-	/**
-	 * Sets the source rectangle for atlas rendering.
-	 */
-	public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Void {
-		srcX = x;
-		srcY = y;
-		srcWidth = w;
-		srcHeight = h;
-		useSrcRect = true;
-	}
+    inline public function makeGraphic(Width:Float, Height:Float, Col:CitroColor = 0xFFFFFFFF):CitroSprite {
+        width  = Width;
+        height = Height;
+        color  = Col;
+        return this;
+    }
 
-	/**
-	 * Loads an image graphic as a .t3x file
-	 * @param file File path to use, file must end with .t3x
-	 * @return true if successfully loaded, false if not loaded.
-	 */
-	public function loadGraphic(file:String):Bool {
-		if (CitroG.caches.cache.exists(file)) {
-			untyped __cpp__('data.ss = (C2D_SpriteSheet){0}', CitroG.caches.get(file));
-		}
+    public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Void {
+        srcX = x;
+        srcY = y;
+        srcWidth = w;
+        srcHeight = h;
+        useSrcRect = true;
+    }
 
-		untyped __cpp__('
-			if (!data.ss) {
-				data.ss = C2D_SpriteSheetLoad(file.c_str());
-				if (!data.ss) return false;
-			}
+    public function loadGraphic(file:String):Bool {
+        if (CitroG.caches.cache.exists(file)) {
+            untyped __cpp__('this->ss = (C2D_SpriteSheet){0}', CitroG.caches.get(file));
+        }
 
-			C2D_Image ret = C2D_SpriteSheetGetImage(data.ss, 0);
-			data.image = ret;
-			width = ret.subtex->width;
-			height = ret.subtex->height;
-		');
+        untyped __cpp__('
+            if (!this->ss) {
+                this->ss = C2D_SpriteSheetLoad(file.c_str());
+                if (!this->ss) return false;
+            }
 
-		CitroG.caches.set(file, untyped __cpp__('data.ss'));
-		return true;
-	}
+            this->image = C2D_SpriteSheetGetImage(this->ss, 0);
+            width = this->image.subtex->width;
+            height = this->image.subtex->height;
+        ');
 
-	/**
-	 * Updates sprite physics/acceleration and renders it.
-	 */
-	override function update():Bool {
-		untyped __cpp__('
-			Float sw = scale->x, sh = scale->y;
+        CitroG.caches.set(file, untyped __cpp__('this->ss'));
+        return true;
+    }
 
-			C3D_Mtx matrix;
-			Mtx_Diagonal(&matrix, 1.0f, 1.0f, 1.0f, 1.0f);
+    override function update():Bool {
+        untyped __cpp__('
+            Float sw = this->scale->x, sh = this->scale->y;
 
-			C2D_ViewSave(&matrix);
-			C2D_ViewTranslate(x, y);
-			C2D_ViewTranslate(width * sw / 2.0, height * sh / 2.0);
-			C2D_ViewRotateDegrees(angle);
-			C2D_ViewScale(sw, sh);
-			C2D_ViewTranslate(-width / 2.0, -height / 2.0);
+            C3D_Mtx matrix;
+            Mtx_Diagonal(&matrix, 1.0f, 1.0f, 1.0f, 1.0f);
 
-			if (data.image.tex == NULL || data.image.subtex == NULL) {
-				CONVERT_TO_COMPATIBLE_COLOR(color)
-				C2D_DrawRectSolid(0, 0, 0, width, height, finalColor);
-			} else {
-				C2D_ImageTint tint;
-				C2D_PlainImageTint(
-					&tint,
-					C2D_Color32(
-						(color >> 16) & 0xFF,
-						(color >> 8) & 0xFF,
-						color & 0xFF,
-						((color >> 24) & 0xFF) * C2D_Clamp(alpha, 0, 1)
-					),
-					fabs(((Float)(color & 0xFFFFFF) / 16777215.0) - 1) / 2.0
-				);
-				
-				if (useSrcRect) {
-					Tex3DS_SubTexture srcSubTex;
-					srcSubTex.width = (u16)srcWidth;
-					srcSubTex.height = (u16)srcHeight;
-					srcSubTex.left = srcX / data.image.tex->width;
-					srcSubTex.right = (srcX + srcWidth) / data.image.tex->width;
-					srcSubTex.top = srcY / data.image.tex->height;
-					srcSubTex.bottom = (srcY + srcHeight) / data.image.tex->height;
-					
-					C2D_Image drawImg = data.image;
-					drawImg.subtex = &srcSubTex;
-					C2D_DrawImageAt(drawImg, 0, 0, 0, &tint, 1, 1);
-				} else {
-					C2D_DrawImageAt(data.image, 0, 0, 0, &tint, 1, 1);
-				}
-			}
+            C2D_ViewSave(&matrix);
+            C2D_ViewTranslate(this->x, this->y);
+            C2D_ViewTranslate(this->width * sw / 2.0, this->height * sh / 2.0);
+            C2D_ViewRotateDegrees(this->angle);
+            C2D_ViewScale(sw, sh);
+            C2D_ViewTranslate(-this->width / 2.0, -this->height / 2.0);
 
-			C2D_ViewRestore(&matrix)
-		');
-		return true;
-	}
+            if (this->image.tex == NULL || this->image.subtex == NULL) {
+                CONVERT_TO_COMPATIBLE_COLOR(this->color)
+                C2D_DrawRectSolid(0, 0, 0, this->width, this->height, finalColor);
+            } else {
+                C2D_ImageTint tint;
+                C2D_PlainImageTint(
+                    &tint,
+                    C2D_Color32(
+                        (this->color >> 16) & 0xFF,
+                        (this->color >> 8) & 0xFF,
+                        this->color & 0xFF,
+                        ((this->color >> 24) & 0xFF) * C2D_Clamp(this->alpha, 0, 1)
+                    ),
+                    fabs(((Float)(this->color & 0xFFFFFF) / 16777215.0) - 1) / 2.0
+                );
+                
+                if (this->useSrcRect) {
+                    Tex3DS_SubTexture srcSubTex;
+                    srcSubTex.width = (u16)this->srcWidth;
+                    srcSubTex.height = (u16)this->srcHeight;
+                    srcSubTex.left = this->srcX / this->image.tex->width;
+                    srcSubTex.right = (this->srcX + this->srcWidth) / this->image.tex->width;
+                    srcSubTex.top = this->srcY / this->image.tex->height;
+                    srcSubTex.bottom = (this->srcY + this->srcHeight) / this->image.tex->height;
+                    
+                    C2D_Image drawImg = this->image;
+                    drawImg.subtex = &srcSubTex;
+                    C2D_DrawImageAt(drawImg, 0, 0, 0, &tint, 1, 1);
+                } else {
+                    C2D_DrawImageAt(this->image, 0, 0, 0, &tint, 1, 1);
+                }
+            }
 
-	override function destroy() {
-		untyped __cpp__('
-			if (data.ss) {
-				C2D_SpriteSheetFree(data.ss);
-				data.ss = nullptr;
-			}
-		');
-		super.destroy();
-	}
+            C2D_ViewRestore(&matrix);
+        ');
+        return true;
+    }
+
+    override function destroy() {
+        untyped __cpp__('
+            if (this->ss) {
+                C2D_SpriteSheetFree(this->ss);
+                this->ss = nullptr;
+            }
+        ');
+        super.destroy();
+    }
 }
 
 #end
