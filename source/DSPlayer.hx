@@ -19,71 +19,24 @@ class DSPlayer extends CitroAnimate
     public var facingDir:String = "down";
     public var isBusy:Bool = false;
     public var isDarkWorld:Bool = false;
-    private var paused:Bool = false;
     public var pathHistory:Array<PositionFrame> = [];
     
     private var lastPlayedFrame:Int = -1;
 
-    public function new(x:Float, y:Float, darkWorld:Bool = false)
-    {
+    public function new(x:Float, y:Float, darkWorld:Bool = false) {
         isDarkWorld = darkWorld;
+        var suffix = isDarkWorld ? "_dark" : "";
         
-        super("romfs:/assets/images/chars/spr_krisd.cea", "spr_krisd");
+        super('romfs:/assets/images/chars/spr_kris${suffix}.cea', 'spr_krisd$suffix');
         
         this.x = x;
         this.y = y;
         framerate = 6;
         looped = true;
 
-        loadPlayerAnimations();
-        play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
-
         var initialAnim = isDarkWorld ? "spr_krisd_dark" : "spr_krisd";
         for (i in 0...25) {
             pathHistory.push({x: x, y: y, anim: initialAnim});
-        }
-    }
-
-    private function loadPlayerAnimations():Void
-    {
-        var suffix = isDarkWorld ? "_dark" : "";
-
-        var ceaFiles = [
-            'spr_krisd${suffix}.cea',
-            'spr_krisl${suffix}.cea',
-            'spr_krisr${suffix}.cea',
-            'spr_krisu${suffix}.cea'
-        ];
-
-        for (ceaFile in ceaFiles) {
-            var ceaPath = 'romfs:/assets/images/chars/$ceaFile';
-            if (!sys.FileSystem.exists(ceaPath)) continue;
-
-            var file:String = sys.io.File.getContent(ceaPath);
-            var dir:String = "romfs:/assets/images/chars";
-
-            if (file != "") {
-                for (line in file.split("\n")) {
-                    if (line.trim() == "") continue;
-                    var row:Array<String> = line.split("?");
-                    if (row.length < 4) continue;
-                    
-                    final frameKey:String = row[3].trim();
-                    
-                    var sprite:citro.object.CitroSprite = new citro.object.CitroSprite();
-                    if (!sprite.loadGraphic('$dir/${row[0]}')) {
-                        sprite.destroy();
-                        continue;
-                    }
-
-                    var resultParse:Array<Null<Float>> = [for (idx in 1...3) Std.parseFloat(row[idx])];
-                    sprites.set(frameKey, {
-                        frameX: resultParse[0] == null ? 0 : resultParse[0],
-                        frameY: resultParse[1] == null ? 0 : resultParse[1],
-                        sprite: sprite
-                    });
-                }
-            }
         }
     }
 
@@ -95,24 +48,13 @@ class DSPlayer extends CitroAnimate
         play(isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
     }
 
-    override public function update():Bool
-    {
-        if (!isBusy)
-        {
-            handleMovement();
-        }
-        else
-        {
-            frame = 0;
-        }
+    override public function update():Bool {
+        if (!isBusy) handleMovement();
+        else frame = 0;
 
         var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
         pathHistory.unshift({x: x, y: y, anim: curAnimName});
-
-        if (pathHistory.length > 100)
-        {
-            pathHistory.pop();
-        }
+        if (pathHistory.length > 100) pathHistory.pop();
 
         return super.update();
     }
