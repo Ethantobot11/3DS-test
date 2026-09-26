@@ -4,6 +4,8 @@ package citro.object;
 
 import sys.io.File;
 import citro.object.CitroSprite;
+import citro.object.CitroObject;
+import citro.CitroG;
 
 using StringTools;
 
