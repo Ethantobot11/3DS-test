@@ -45,6 +45,8 @@ class CitroSprite extends CitroObject {
         srcWidth = w;
         srcHeight = h;
         useSrcRect = true;
+        width = w;
+        height = h;
         return true;
     }
 
