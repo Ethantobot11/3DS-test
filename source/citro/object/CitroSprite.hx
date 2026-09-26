@@ -44,6 +44,7 @@ class CitroSprite extends CitroObject {
         srcWidth = w;
         srcHeight = h;
         useSrcRect = true;
+        return;
     }
 
     public function loadGraphic(file:String):Bool {
