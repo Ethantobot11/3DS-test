@@ -15,7 +15,7 @@ import citro.backend.CitroColor;
     C2D_SpriteSheet ss;
     C2D_Image image;
 ')
-
+@:headerInclude("citro/object/CitroVector2D.h")
 class CitroSprite extends CitroObject {
     public var srcX:Float = 0;
     public var srcY:Float = 0;
