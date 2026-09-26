@@ -5,14 +5,11 @@ import xml.etree.ElementTree as ET
 
 def get_tool_path(tool_name: str) -> str:
     tool_path = shutil.which(tool_name)
-    if tool_path:
-        return tool_path
+    if tool_path: return tool_path
     linux_path = f"/opt/devkitpro/tools/bin/{tool_name}"
-    if os.path.exists(linux_path):
-        return linux_path
+    if os.path.exists(linux_path): return linux_path
     win_path = f"C:\\devkitPro\\tools\\bin\\{tool_name}.exe"
-    if os.path.exists(win_path):
-        return win_path
+    if os.path.exists(win_path): return win_path
     return tool_name
 
 def main():
@@ -30,10 +27,7 @@ def main():
         os.path.normpath("resources/audio.wav"),
         os.path.normpath("audio.wav")
     }
-
-    looped_files = {
-        os.path.normpath("assets/sounds/home.ogg"),
-    }
+    looped_files = { os.path.normpath("assets/sounds/home.ogg") }
 
     tex3ds_path = get_tool_path("tex3ds")
     cwavtool_path = get_tool_path("cwavtool")
@@ -69,19 +63,16 @@ def main():
         print(f"  [1/3] Converting {png_path} to {t3x_path} using tex3ds...")
         try:
             subprocess.run([tex3ds_path, png_path, "-o", t3x_path, "-f", "rgba8"], check=True, env=os.environ)
-        except subprocess.CalledProcessError as e:
-            print(f"  ERROR: tex3ds failed on {png_path} (Exit code {e.returncode}). Skipping.")
-            continue
-        except FileNotFoundError:
-            print(f"  ERROR: '{tex3ds_path}' not found. Ensure devkitPro tools are installed.")
+        except Exception as e:
+            print(f"  ERROR: tex3ds failed on {png_path}. Skipping. ({e})")
             continue
 
-        print(f"  [2/3] Generating {cea_path} from {xml_path}...")
+        print(f"  [2/3] Generating 10-column {cea_path} from {xml_path}...")
         try:
             tree = ET.parse(xml_path)
             root_elem = tree.getroot()
-            
             cea_lines = []
+            
             for subtex in root_elem.findall(".//SubTexture"):
                 frame_name = subtex.get("name")
                 x = subtex.get("x", "0")
@@ -89,24 +80,29 @@ def main():
                 width = subtex.get("width", "0")
                 height = subtex.get("height", "0")
                 
+                frameX = subtex.get("frameX", "0")
+                frameY = subtex.get("frameY", "0")
+                frameWidth = subtex.get("frameWidth", width)
+                frameHeight = subtex.get("frameHeight", height)
+                
                 if "_" in frame_name and frame_name.split("_")[-1].isdigit():
                     parts = frame_name.rsplit("_", 1)
                     anim_name = parts[0]
                     frame_idx = int(parts[1]) // 10000
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{anim_name}-{frame_idx}"
+                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{anim_name}-{frame_idx}"
                 elif frame_name and frame_name.isdigit():
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{name}-{int(frame_name)}"
+                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{name}-{int(frame_name)}"
                 elif not frame_name:
                     continue
                 else:
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frame_name}"
+                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{frame_name}"
                     
                 cea_lines.append(cea_line)
             
             with open(cea_path, "w", encoding="utf-8") as f:
                 f.write("\n".join(cea_lines) + "\n")
                 
-        except ET.ParseError as e:
+        except Exception as e:
             print(f"  ERROR: Failed to parse XML {xml_path}: {e}")
             continue
 
@@ -114,40 +110,26 @@ def main():
         try:
             os.remove(png_path)
             os.remove(xml_path)
-            print(f"  SUCCESS: {name} converted and cleaned up.")
+            print(f"  SUCCESS: {name} converted to 10-column CEA and cleaned up.")
         except Exception as e:
             print(f"  WARNING: Could not delete original files for {name}: {e}")
 
     for root, name, ext, file_path in other_files:
-        if not os.path.exists(file_path):
-            continue
-
-        if ext == ".mp3":
-            if os.path.normpath(file_path) in excluded_files:
-                continue
+        if not os.path.exists(file_path): continue
+        if ext == ".mp3" and os.path.normpath(file_path) not in excluded_files:
             out_path = os.path.join(root, name + ".ogg")
-            print(f"Converting {file_path} to OGG...")
             try:
                 subprocess.run(["ffmpeg", "-y", "-i", file_path, "-q:a", "4", out_path], check=True)
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-            except Exception as e:
-                print(f"Error converting {file_path} to OGG: {e}")
-
-        elif ext in [".wav", ".ogg"]:
-            if os.path.normpath(file_path) in excluded_files:
-                continue
+                os.remove(file_path)
+            except Exception as e: print(f"Error converting {file_path} to OGG: {e}")
+        elif ext in [".wav", ".ogg"] and os.path.normpath(file_path) not in excluded_files:
             out_path = os.path.join(root, name + ".cwav")
-            print(f"Converting {file_path} to CWAV...")
             try:
                 cmd = [cwavtool_path, "-i", file_path, "-o", out_path]
-                if os.path.normpath(file_path) in looped_files:
-                    cmd.extend(["-ls", "0", "-le", "end"])
+                if os.path.normpath(file_path) in looped_files: cmd.extend(["-ls", "0", "-le", "end"])
                 subprocess.run(cmd, check=True, env=os.environ)
-                if ext == ".wav" and os.path.exists(file_path):
-                    os.remove(file_path)
-            except Exception as e:
-                print(f"Error converting {file_path} to CWAV: {e}")
+                if ext == ".wav": os.remove(file_path)
+            except Exception as e: print(f"Error converting {file_path} to CWAV: {e}")
 
 if __name__ == "__main__":
     main()
