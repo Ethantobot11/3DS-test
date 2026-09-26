@@ -3,6 +3,8 @@ package citro.object;
 #if (!wiiu || !cafe)
 
 import citro.CitroG;
+import citro.backend.CitroColor;
+import citro.object.CitroObject;
 
 /**
  * A class for rendering sprites.
