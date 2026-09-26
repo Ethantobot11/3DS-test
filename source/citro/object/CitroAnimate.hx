@@ -118,7 +118,6 @@ class CitroAnimate extends CitroObject {
         if ((timeLeft -= CitroG.deltaTime) < 1) {
             timeLeft = 1000 / framerate;
             frame++;
-            
             if (!frames.exists(format())) {
                 finished = true;
                 frame = looped ? 0 : frame - 1;
@@ -134,15 +133,12 @@ class CitroAnimate extends CitroObject {
             
             width = frm.frameWidth;
             height = frm.frameHeight;
-            
             atlasSprite.x = x - frm.offsetX;
             atlasSprite.y = y - frm.offsetY;
-            
             atlasSprite.scale.x = scale.x;
             atlasSprite.scale.y = scale.y;
             atlasSprite.alpha = alpha;
             atlasSprite.color = color;
-            
             atlasSprite.setSourceRect(frm.srcX, frm.srcY, frm.srcWidth, frm.srcHeight);
             
             return atlasSprite.update();
