@@ -163,24 +163,23 @@ jobs:
           export PATH=${DEVKITPPC}/bin:${DEVKITPRO}/tools/bin:$PATH
           mkdir -p .haxelib
           haxelib setup .haxelib
-
-          haxelib install hxcpp --quiet
           
+          haxelib install hxcpp --quiet
           git clone https://github.com/Ethantobot11/HaxeWiiU.git hxCompileU_repo
           cd hxCompileU_repo
           haxe build.hxml
           cp export/haxeCompileU ../haxeCompileU
           cd ..
-
+          
           haxelib remove hxcpp
           haxelib git hxcpp https://github.com/Ethantobot11/hxcpp-wiiu --quiet
-
+          
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp
           haxe compile.hxml
-          cd ../../../../
-          
+
+          cd $GITHUB_WORKSPACE
           ./haxeCompileU --compile
 
       - name: Archive and Upload Workspace for Inspection (Wii U)
