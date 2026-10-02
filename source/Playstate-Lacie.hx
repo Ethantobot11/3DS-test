@@ -28,9 +28,11 @@ class PlayState extends CitroState
 
     var inputLockout:Float = 0;
 
+    function playerChar():String return "lacie";
+
     override public function create()
     {
-        AchievementManager.unlock("first_steps");
+        //AchievementManager.unlock("first_steps");
         
         inputLockout = 0.6;
 
@@ -41,11 +43,11 @@ class PlayState extends CitroState
         background.makeGraphic(1280, 720, 0xff1d1d24);
         camera.add(background);
 
-        lacie = new DSPlayer(CitroG.WIDTH / 2 + 120, CitroG.HEIGHT / 2);
-        lacie.target = kris;
+        lacie = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2, false, playerChar());
         camera.add(lacie);
 
         kris = new DSKris(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2);
+        kris.target = kris;
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
