@@ -1,5 +1,7 @@
 package;
 
+import Song.SwagSong;
+
 class Conductor {
     public static var bpm:Float = 100;
     public static var crochet:Float = ((60 / bpm) * 1000);
