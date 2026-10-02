@@ -101,6 +101,11 @@ class PlayStateLacie extends CitroState
            inputLockout = 0.6;
         }
 
+        if (HID.keyPressed(HIDKey.L)) {
+           CitroG.switchState(new FreeplayState());
+           inputLockout = 0.6;
+        }
+
         if (dialogueStage == 0 && interactPressed && !lacie.isBusy && CitroG.overlaps(lacie, closetDoor))
         {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');

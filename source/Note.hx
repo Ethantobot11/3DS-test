@@ -13,10 +13,10 @@ class Note extends CitroAnimate {
     public var hitHealth:Float = 0.023;
     public var missHealth:Float = 0.0475;
     
-    private var dirNames:Array<String> = ['purple', 'blue', 'green', 'red'];
+    private var noteNames:Array<String> = ['purple', 'blue', 'green', 'red'];
 
     public function new(strumTime:Float, noteData:Int) {
-        super("romfs:/assets/images/NOTE_assets.cea", dirNames[noteData % 4] + "Scroll");
+        super("romfs:/assets/images/NOTE_assets.cea", noteNames[noteData % 4]);
         this.strumTime = strumTime;
         this.noteData = noteData;
         this.scale.set(0.35, 0.35);
