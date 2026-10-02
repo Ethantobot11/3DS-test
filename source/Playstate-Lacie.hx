@@ -96,6 +96,11 @@ class PlayState extends CitroState
            inputLockout = 0.6;
         }
 
+        if (HID.keyPressed(HIDKey.R)) {
+           CitroG.switchState(new PlayState());
+           inputLockout = 0.6;
+        }
+
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
