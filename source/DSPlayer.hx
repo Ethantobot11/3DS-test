@@ -52,19 +52,17 @@ class DSPlayer extends CitroAnimate
 
     function animFor(action:String, dir:String):String {
         if (charName == "lacie") {
-            var hints = [action + "_" + dir, action + dir];
-            var found = getAnimByHint(hints);
-            if (found == "" && action != "walk") return animFor("walk", dir);
-            if (found == "" && dir != "down") return animFor(action, "down");
-            return found;
+            return action + "_" + dir;
         }
+        
         var suffix = isDarkWorld ? "_dark" : "";
-        return switch (dir) {
-            case "up":    'spr_krisu$suffix';
-            case "left":  'spr_krisl$suffix';
-            case "right": 'spr_krisr$suffix';
-            default:      'spr_krisd$suffix';
-        }
+        var dirChar = switch (dir) {
+            case "up": "u";
+            case "left": "l";
+            case "right": "r";
+            default: "d";
+        };
+        return 'spr_kris${dirChar}${suffix}';
     }
 
     public function setDarkWorld(darkWorld:Bool):Void
@@ -94,7 +92,7 @@ class DSPlayer extends CitroAnimate
         var down:Bool = HID.keyHeld(HIDKey.DOWN);
         var left:Bool = HID.keyHeld(HIDKey.LEFT);
         var right:Bool = HID.keyHeld(HIDKey.RIGHT);
-        var run:Bool = HID.keyHeld(HIDKey.B);
+        var run:Bool = HID.keyHeld(HIDKey.B); 
     
         if (up && down) up = down = false;
         if (left && right) left = right = false;
@@ -111,7 +109,7 @@ class DSPlayer extends CitroAnimate
         var currentFramerate:Float = 6;
         if (action == "run") {
             currentSpeed = moveSpeed * 1.8; 
-            currentFramerate = 12;        
+            currentFramerate = 12;          
         }
     
         if (up || down || left || right)
@@ -137,7 +135,7 @@ class DSPlayer extends CitroAnimate
     
             if (Std.int(frame) != lastPlayedFrame) {
                 lastPlayedFrame = Std.int(frame);
-            
+                
                 if (lastPlayedFrame == 0) {
                     SoundPlayer.playSound('romfs:/assets/sounds/snd_step1.cwav');
                 }
