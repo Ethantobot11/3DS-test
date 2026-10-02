@@ -8,6 +8,7 @@ import citro.math.CitroMath;
 import citro.backend.CitroColor;
 import haxe3ds.services.HID;
 import haxe3ds.services.HID.HIDKey;
+import Song.SwagSong;
 
 using StringTools;
 
