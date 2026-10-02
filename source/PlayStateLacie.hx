@@ -51,11 +51,11 @@ class PlayStateLacie extends CitroState
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
-        noelle.target = kris;
+        noelle.target = lacie;
         camera.add(noelle);
 
-        camera.follow(kris, true);
-        camera.target = kris;
+        camera.follow(lacie, true);
+        camera.target = lacie;
 
         dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT - 70);
         dialogueBox.visible = false;
@@ -80,7 +80,7 @@ class PlayStateLacie extends CitroState
             return;
         }
 
-        separate(kris, noelle, !noelle.isFollowing);
+        separate(lacie, noelle, !noelle.isFollowing);
         separate(noelle, closetDoor, true);
         separate(lacie, noelle, true);
         separate(lacie, kris, true);
@@ -90,7 +90,7 @@ class PlayStateLacie extends CitroState
                             HID.keyPressed(HIDKey.START) || 
                             HID.keyPressed(HIDKey.R);
 
-        if (HID.keyPressed(HIDKey.START) && !kris.isBusy && CitroG.substate == null) {
+        if (HID.keyPressed(HIDKey.START) && !lacie.isBusy && CitroG.substate == null) {
            CitroG.substate = new SaveMenuSubState();
            CitroG.substate.create();
            inputLockout = 0.6;
@@ -101,14 +101,14 @@ class PlayStateLacie extends CitroState
            inputLockout = 0.6;
         }
 
-        if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
+        if (dialogueStage == 0 && interactPressed && !lacie.isBusy && CitroG.overlaps(lacie, closetDoor))
         {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
             dialogueBox.visible = false;
             
             kris.isBusy = true;
             
-            var transition = new DSDarkWorldTransition(kris, closetDoor, camera);
+            var transition = new DSDarkWorldTransition(lacie, closetDoor, camera);
             transition.onComplete = function() {
                 spawnDarkWorldEntities();
             };
@@ -119,10 +119,10 @@ class PlayStateLacie extends CitroState
 
         if (rudinn != null)
         {
-            var distanceVal = CitroMath.distanceBetween(kris, rudinn);
+            var distanceVal = CitroMath.distanceBetween(lacie, rudinn);
             var isNear = distanceVal < 30;
 
-            if (!kris.isBusy && (CitroG.overlaps(kris, rudinn) || isNear))
+            if (!kris.isBusy && (CitroG.overlaps(lacie, rudinn) || isNear))
             {
                 kris.isBusy = true;
                 startBattle(rudinn);
@@ -241,14 +241,14 @@ class PlayStateLacie extends CitroState
             else if (dialogueStage == 2)
             {
                 dialogueBox.visible = false;
-                kris.isBusy = false;
+                lacie.isBusy = false;
                 dialogueStage = 0;
             }
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingNoelle())
         {
             dialogueStage = 1;
-            kris.isBusy = true;
+            lacie.isBusy = true;
             
             dialogueBox.startDialogue(
                 "* Hi Kris!\n* Want me to come with you?", 
@@ -261,7 +261,7 @@ class PlayStateLacie extends CitroState
         else if (dialogueStage == 0 && interactPressed && isKrisFacingLacie())
         {
             dialogueStage = 1;
-            kris.isBusy = true;
+            lacie.isBusy = true;
             
             dialogueBox.startDialogue(
                 "* Hi Kris! I'm Lacie!", 
@@ -278,10 +278,10 @@ class PlayStateLacie extends CitroState
         var distance = CitroMath.distanceBetween(kris, noelle);
         if (distance > 35) return false;
 
-        if (kris.facingDir == "right" && kris.x < noelle.x) return true;
-        if (kris.facingDir == "left" && kris.x > noelle.x) return true;
-        if (kris.facingDir == "up" && kris.y > noelle.y) return true;
-        if (kris.facingDir == "down" && kris.y < noelle.y) return true;
+        if (lacie.facingDir == "right" && lacie.x < noelle.x) return true;
+        if (lacie.facingDir == "left" && lacie.x > noelle.x) return true;
+        if (lacie.facingDir == "up" && lacie.y > noelle.y) return true;
+        if (lacie.facingDir == "down" && lacie.y < noelle.y) return true;
 
         return false;
     }
@@ -291,10 +291,10 @@ class PlayStateLacie extends CitroState
         var distance = CitroMath.distanceBetween(kris, lacie);
         if (distance > 35) return false;
 
-        if (kris.facingDir == "right" && kris.x < lacie.x) return true;
-        if (kris.facingDir == "left" && kris.x > lacie.x) return true;
-        if (kris.facingDir == "up" && kris.y > lacie.y) return true;
-        if (kris.facingDir == "down" && kris.y < lacie.y) return true;
+        if (lacie.facingDir == "right" && lacie.x < kris.x) return true;
+        if (lacie.facingDir == "left" && lacie.x > kris.x) return true;
+        if (lacie.facingDir == "up" && lacie.y > kris.y) return true;
+        if (lacie.facingDir == "down" && lacie.y < kris.y) return true;
 
         return false;
     }
