@@ -97,7 +97,7 @@ class PlayState extends CitroState
         }
 
         if (HID.keyPressed(HIDKey.R)) {
-           CitroG.switchState(new PlayState-Lacie());
+           CitroG.switchState(new PlayStateLacie());
            inputLockout = 0.6;
         }
 
