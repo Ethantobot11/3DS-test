@@ -106,7 +106,7 @@ class PlayStateLacie extends CitroState
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
             dialogueBox.visible = false;
             
-            kris.isBusy = true;
+            lacie.isBusy = true;
             
             var transition = new DSDarkWorldTransition(lacie, closetDoor, camera);
             transition.onComplete = function() {
@@ -122,9 +122,9 @@ class PlayStateLacie extends CitroState
             var distanceVal = CitroMath.distanceBetween(lacie, rudinn);
             var isNear = distanceVal < 30;
 
-            if (!kris.isBusy && (CitroG.overlaps(lacie, rudinn) || isNear))
+            if (!lacie.isBusy && (CitroG.overlaps(lacie, rudinn) || isNear))
             {
-                kris.isBusy = true;
+                lacie.isBusy = true;
                 startBattle(rudinn);
             }
         }
@@ -177,7 +177,7 @@ class PlayStateLacie extends CitroState
     {
         SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
         trace('[startBattle()] Entering startBattle function...');
-        kris.isBusy = true;
+        lacie.isBusy = true;
         
         var battleState = new BattleState(targetEnemy);
         
@@ -187,7 +187,7 @@ class PlayStateLacie extends CitroState
     function spawnDarkWorldEntities()
     {
         trace('[spawnDarkWorldEntities] Transition done. Unfreezing Kris and spawning Rudinn.');
-        kris.isBusy = false;
+        lacie.isBusy = false;
     }
 
     private function handleInputs()
