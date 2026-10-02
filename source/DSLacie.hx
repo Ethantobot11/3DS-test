@@ -28,6 +28,9 @@ class DSLacie extends CitroAnimate
             if (curAnim != "walk_down") {
                 play("walk_down");
             }
+
+            timeLeft = 999999;
+            frame = 0;
         }
         else
         {
