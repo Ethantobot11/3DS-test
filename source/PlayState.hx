@@ -28,6 +28,8 @@ class PlayState extends CitroState
 
     var inputLockout:Float = 0;
 
+    function playerChar():String return "kris";
+
     override public function create()
     {
         AchievementManager.unlock("first_steps");
@@ -41,7 +43,7 @@ class PlayState extends CitroState
         background.makeGraphic(1280, 720, 0xff1d1d24);
         camera.add(background);
 
-        kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2);
+        kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2, false, playerChar());
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
