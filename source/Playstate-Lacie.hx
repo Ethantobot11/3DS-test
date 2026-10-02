@@ -13,7 +13,7 @@ import citro.backend.CitroColor;
 
 import haxe3ds.services.HID;
 
-class PlayState extends CitroState
+class PlayState-Lacie extends CitroState
 {
     var rudinn:DSRudinn;
     public var kris:DSKris;
