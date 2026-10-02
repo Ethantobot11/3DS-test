@@ -18,6 +18,7 @@ class DSDarkWorldTransition extends CitroObject
     
     var bgOverlay:CitroSprite;
     var bgOverlayCreated:Bool = false;
+    var whiteOverlay:CitroSprite;
     var lineSpawnTimer:Float = 0;
     
     var startX:Float = 0;
@@ -52,6 +53,11 @@ class DSDarkWorldTransition extends CitroObject
         player.looped = true;
         player.play("spr_krisu_run");
 
+        whiteOverlay = new CitroSprite(0, 0);
+        whiteOverlay.makeGraphic(40, 60, 0xFFFFFFFF);
+        whiteOverlay.visible = false;
+        if (camera != null) camera.add(whiteOverlay);
+
         statePhase = 0; 
     }
 
@@ -62,7 +68,7 @@ class DSDarkWorldTransition extends CitroObject
 
         switch (statePhase)
         {
-            case 0:
+            case 0: 
                 player.y -= 72 * elapsed;
                 if (timer >= 0.5)
                 {
@@ -72,7 +78,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 1:
+            case 1: 
                 if (timer >= 0.3)
                 {
                     player.framerate = 8;
@@ -81,7 +87,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 2:
+            case 2: 
                 squareSoundTimer += elapsed;
                 if (squareSoundTimer >= 0.2 && squareSoundCount < 6)
                 {
@@ -100,7 +106,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 3:
+            case 3: 
                 player.x = swayBaseX + (Math.sin((timer * 150) * (Math.PI / 180)) * 60);
                 if (timer >= 0.7)
                 {
@@ -112,7 +118,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 4:
+            case 4: 
                 spawnLines(elapsed);
                 if (timer >= 0.3)
                 {
@@ -126,20 +132,24 @@ class DSDarkWorldTransition extends CitroObject
             case 5:
                 var sweep:Float = timer / 1.2;
                 if (sweep > 1) sweep = 1;
-                player.setClip(sweep);
+                
+                whiteOverlay.visible = true;
+                whiteOverlay.x = player.x - 20; 
+                whiteOverlay.y = player.y - 30; 
+                whiteOverlay.height = 60 * sweep;
 
                 spawnLines(elapsed);
 
                 if (timer >= 2.5)
                 {
-                    player.setClip(1);
+                    whiteOverlay.visible = false;
                     statePhase = 6;
                     timer = 0;
                     player.framerate = 6;
                     player.play("spr_kris_fall_d_dw");
                 }
 
-            case 6:
+            case 6: 
                 if (!bgOverlayCreated)
                 {
                     bgOverlayCreated = true;
@@ -148,7 +158,7 @@ class DSDarkWorldTransition extends CitroObject
                     if (camera != null) {
                         var idx = camera.members.indexOf(player);
                         if (idx == -1) camera.add(bgOverlay);
-                        else camera.insert(idx, bgOverlay);
+                        else camera.insert(idx, bgOverlay); 
                     }
                 }
                 positionOverlay();
@@ -163,7 +173,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 7:
+            case 7: 
                 positionOverlay();
                 spawnLines(elapsed);
                 if (timer >= 0.6)
@@ -176,7 +186,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 8:
+            case 8: 
                 positionOverlay();
                 player.y += fallSpeed * elapsed;
 
@@ -215,6 +225,7 @@ class DSDarkWorldTransition extends CitroObject
                     if (camera != null) camera.follow(player, true);
 
                     if (bgOverlay != null) bgOverlay.destroy();
+                    if (whiteOverlay != null) whiteOverlay.destroy();
 
                     if (onComplete != null) onComplete();
 
