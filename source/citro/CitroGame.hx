@@ -63,7 +63,6 @@ class CitroGame {
 		untyped __cpp__('
 			gfxSetDoubleBuffering(GFX_TOP, true);
 			gfxSetDoubleBuffering(GFX_BOTTOM, true);
-            gfxSet3D(false);
 
 			C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
 			C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
@@ -99,7 +98,7 @@ class CitroGame {
 
 			untyped __cpp__('
 				C2D_Flush();
-				C3D_FrameEnd(1);
+				C3D_FrameEnd(0);
 			');
 
 			var elapsed = OS.time.toInt() - startTime;
