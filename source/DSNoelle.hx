@@ -28,6 +28,9 @@ class DSNoelle extends CitroAnimate
             if (curAnim != "spr_noelle_walk_down_lw") {
                 play("spr_noelle_walk_down_lw");
             }
+
+            timeLeft = 999999;
+            frame = 0;
         }
         else
         {
