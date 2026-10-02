@@ -14,9 +14,6 @@ import haxe3ds.OS;
 
 import cpp.UInt64;
 
-/**
- * Literally everything to set up citro engine.
- */
 @:headerCode("
 #include <citro2d.h>
 #include <citro3d.h>
@@ -33,11 +30,13 @@ class CitroGame {
 	public static var _shouldQuit:Bool = false;
 
 	static function renderObjectsForScreen(state:CitroState, bottom:Bool) {
-		for (member in state.members) {
+        var i = state.members.length;
+        while (i-- > 0) {
+            var member = state.members[i];
 			if (member == null) continue;
 			
 			if (member.isDestroyed) {
-				state.members.remove(member);
+				state.members.splice(i, 1);
 				continue;
 			}
 
@@ -62,6 +61,10 @@ class CitroGame {
 		RomFS.init();
 
 		untyped __cpp__('
+			gfxSetDoubleBuffering(GFX_TOP, true);
+			gfxSetDoubleBuffering(GFX_BOTTOM, true);
+            gfxSet3D(false);
+
 			C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
 			C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
 			C2D_Prepare();
@@ -96,7 +99,7 @@ class CitroGame {
 
 			untyped __cpp__('
 				C2D_Flush();
-				C3D_FrameEnd(0);
+				C3D_FrameEnd(1);
 			');
 
 			var elapsed = OS.time.toInt() - startTime;
