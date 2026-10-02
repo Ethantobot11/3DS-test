@@ -19,24 +19,51 @@ class DSPlayer extends CitroAnimate
     public var facingDir:String = "down";
     public var isBusy:Bool = false;
     public var isDarkWorld:Bool = false;
+    public var charName:String = "kris";
     public var pathHistory:Array<PositionFrame> = [];
     
     private var lastPlayedFrame:Int = -1;
 
-    public function new(x:Float, y:Float, darkWorld:Bool = false) {
+    public function new(x:Float, y:Float, darkWorld:Bool = false, char:String = "kris") {
+        charName = char;
         isDarkWorld = darkWorld;
-        var suffix = isDarkWorld ? "_dark" : "";
         
-        super('romfs:/assets/images/chars/spr_kris${suffix}.cea', 'spr_krisd$suffix');
+        super(ceaPath(), "");
         
         this.x = x;
         this.y = y;
         framerate = 6;
         looped = true;
 
-        var initialAnim = isDarkWorld ? "spr_krisd_dark" : "spr_krisd";
+        play(animFor("walk", facingDir));
+        frame = 0;
+        timeLeft = 999999;
+
         for (i in 0...25) {
-            pathHistory.push({x: x, y: y, anim: initialAnim});
+            pathHistory.push({x: x, y: y, anim: curAnim});
+        }
+    }
+
+    function ceaPath():String {
+        if (charName == "lacie") return "romfs:/assets/images/chars/lacie_spritesheet_playable.cea";
+        var suffix = isDarkWorld ? "_dark" : "";
+        return 'romfs:/assets/images/chars/spr_kris${suffix}.cea';
+    }
+
+    function animFor(action:String, dir:String):String {
+        if (charName == "lacie") {
+            var hints = [action + "_" + dir, action + dir];
+            var found = getAnimByHint(hints);
+            if (found == "" && action != "walk") return animFor("walk", dir);
+            if (found == "" && dir != "down") return animFor(action, "down");
+            return found;
+        }
+        var suffix = isDarkWorld ? "_dark" : "";
+        return switch (dir) {
+            case "up":    'spr_krisu$suffix';
+            case "left":  'spr_krisl$suffix';
+            case "right": 'spr_krisr$suffix';
+            default:      'spr_krisd$suffix';
         }
     }
 
@@ -44,16 +71,17 @@ class DSPlayer extends CitroAnimate
     {
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
-        var suffix = isDarkWorld ? "_dark" : "";
-        
-        reloadCEA('romfs:/assets/images/chars/spr_kris${suffix}.cea', 'spr_krisd$suffix');
+        if (charName == "lacie") return; 
+        reloadCEA(ceaPath(), animFor("walk", facingDir));
+        frame = 0;
+        timeLeft = 999999;
     }
 
     override public function update():Bool {
         if (!isBusy) handleMovement();
-        else frame = 0;
+        else { frame = 0; timeLeft = 999999; }
 
-        var curAnimName = (curAnim != "") ? curAnim : (isDarkWorld ? "spr_krisd_dark" : "spr_krisd");
+        var curAnimName = (curAnim != "") ? curAnim : animFor("walk", "down");
         pathHistory.unshift({x: x, y: y, anim: curAnimName});
         if (pathHistory.length > 100) pathHistory.pop();
 
@@ -66,58 +94,69 @@ class DSPlayer extends CitroAnimate
         var down:Bool = HID.keyHeld(HIDKey.DOWN);
         var left:Bool = HID.keyHeld(HIDKey.LEFT);
         var right:Bool = HID.keyHeld(HIDKey.RIGHT);
+        var run:Bool = HID.keyHeld(HIDKey.B);
     
         if (up && down) up = down = false;
         if (left && right) left = right = false;
     
         var vx:Float = 0;
         var vy:Float = 0;
-        var suffix = isDarkWorld ? "_dark" : "";
+        
+        var action:String = "walk";
+        if (charName == "lacie" && run) {
+            action = "run";
+        }
+        
+        var currentSpeed:Float = moveSpeed;
+        var currentFramerate:Float = 6;
+        if (action == "run") {
+            currentSpeed = moveSpeed * 1.8; 
+            currentFramerate = 12;        
+        }
     
         if (up || down || left || right)
         {
             var desiredAnim = "";
     
-            if (up) { vy = -moveSpeed; facingDir = "up"; desiredAnim = 'spr_krisu$suffix'; }
-            else if (down) { vy = moveSpeed; facingDir = "down"; desiredAnim = 'spr_krisd$suffix'; }
+            if (up) { vy = -currentSpeed; facingDir = "up"; desiredAnim = animFor(action, "up"); }
+            else if (down) { vy = currentSpeed; facingDir = "down"; desiredAnim = animFor(action, "down"); }
     
-            if (left) { vx = -moveSpeed; facingDir = "left"; desiredAnim = 'spr_krisl$suffix'; }
-            else if (right) { vx = moveSpeed; facingDir = "right"; desiredAnim = 'spr_krisr$suffix'; }
+            if (left) { vx = -currentSpeed; facingDir = "left"; desiredAnim = animFor(action, "left"); }
+            else if (right) { vx = currentSpeed; facingDir = "right"; desiredAnim = animFor(action, "right"); }
     
             var dt = CitroG.deltaTime / 1000; 
             x += vx * dt;
             y += vy * dt;
+            
+            framerate = currentFramerate;
     
             if (curAnim != desiredAnim) {
                 play(desiredAnim);
+                lastPlayedFrame = -1;
             }
     
             if (Std.int(frame) != lastPlayedFrame) {
                 lastPlayedFrame = Std.int(frame);
-                if (lastPlayedFrame == 1 || lastPlayedFrame == 4) {
+            
+                if (lastPlayedFrame == 0) {
                     SoundPlayer.playSound('romfs:/assets/sounds/snd_step1.cwav');
-                } else if (lastPlayedFrame == 2 || lastPlayedFrame == 5) {
-                    SoundPlayer.playSound('romfs:/assets/sounds/snd_step2.cwav');
                 }
             }
         }
         else
         {
-            var currentStanding = isDarkWorld ? "spr_krisd_dark" : "spr_krisd";
-            if (facingDir == "up") currentStanding = isDarkWorld ? "spr_krisu_dark" : "spr_krisu";
-            else if (facingDir == "left") currentStanding = isDarkWorld ? "spr_krisl_dark" : "spr_krisl";
-            else if (facingDir == "right") currentStanding = isDarkWorld ? "spr_krisr_dark" : "spr_krisr";
-            
-            timeLeft = 999999;
+            var idleAction = (charName == "lacie") ? "idle" : "walk";
+            var currentStanding = animFor(idleAction, facingDir);
             
             if (curAnim != currentStanding) {
                 play(currentStanding);
             }
     
+            timeLeft = 999999;
             frame = 0;
             lastPlayedFrame = -1;
+            framerate = 6;
         }
     }
 }
-
 #end
