@@ -29,9 +29,9 @@ class FreeplayState extends CitroState
     
     override function create()
     {
-        songs.push(new SongMetadata("Bopeebo", "dad", 0xFF9271FD));
-        songs.push(new SongMetadata("Fresh", "dad", 0xFF9271FD));
-        songs.push(new SongMetadata("Dad Battle", "dad", 0xFF9271FD));
+        songs.push(new SongMetadata("bopeebo", "dad", 0xFF9271FD));
+        songs.push(new SongMetadata("fresh", "dad", 0xFF9271FD));
+        songs.push(new SongMetadata("dad-battle", "dad", 0xFF9271FD));
 
         bg = new CitroSprite();
         bg.loadGraphic('romfs:/assets/images/menuDesat.t3x');
