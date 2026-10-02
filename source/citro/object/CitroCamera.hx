@@ -71,10 +71,12 @@ class CitroCamera extends CitroObject {
 			C2D_ViewTranslate(-(Float){2} - (Float){0}, -(Float){3} - 120.0f);
 		', scX, zoom, curX, curY);
 
-		for (spr in members) {
+        var i = members.length;
+        while (i-- > 0) {
+            var spr = members[i];
 			if (spr == null) continue;
 			if (spr.isDestroyed) {
-				members.remove(spr);
+				members.splice(i, 1);
 				continue;
 			}
 			if (!spr.visible || spr.alpha <= 0) continue;
