@@ -13,7 +13,7 @@ class DSKris extends CitroAnimate
 
     public function new(x:Float, y:Float)
     {
-        uper('romfs:/assets/images/chars/spr_kris.cea', 'spr_krisd');
+        super('romfs:/assets/images/chars/spr_kris.cea', 'spr_krisd');
         
         this.x = x;
         this.y = y;
