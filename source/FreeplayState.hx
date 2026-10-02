@@ -1,0 +1,146 @@
+package;
+
+import citro.CitroG;
+import citro.state.CitroState;
+import citro.object.CitroSprite;
+import citro.object.CitroText;
+import citro.math.CitroMath;
+import citro.backend.CitroColor;
+import haxe3ds.services.HID;
+import haxe3ds.services.HID.HIDKey;
+
+using StringTools;
+
+class FreeplayState extends CitroState
+{
+    var songs:Array<SongMetadata> = [];
+    var curSelected:Int = 0;
+    var curDifficulty:Int = 0;
+    
+    var difficulties:Array<String> = ["easy", "normal", "hard"];
+
+    var scoreText:CitroText;
+    var diffText:CitroText;
+
+    private var songTexts:Array<CitroText> = [];
+    private var iconArray:Array<HealthIcon> = [];
+
+    var bg:CitroSprite;
+    
+    override function create()
+    {
+        songs.push(new SongMetadata("Bopeebo", "dad", 0xFF9271FD));
+        songs.push(new SongMetadata("Fresh", "dad", 0xFF9271FD));
+        songs.push(new SongMetadata("Dad Battle", "dad", 0xFF9271FD));
+
+        bg = new CitroSprite();
+        bg.loadGraphic('romfs:/assets/images/menuDesat.t3x');
+        bg.scale.set(0.35, 0.35);
+        bg.screenCenter();
+        add(bg);
+
+        for (i in 0...songs.length) {
+            var songText:CitroText = new CitroText(0, 60 + (i * 30), songs[i].songName);
+            songText.screenCenter(X);
+            songText.scale.set(0.5, 0.5);
+            songTexts.push(songText);
+            add(songText);
+
+            var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
+            icon.sprTracker = songText;
+            icon.scale.set(0.5, 0.5);
+            iconArray.push(icon);
+            add(icon);
+        }
+
+        scoreText = new CitroText(CitroG.WIDTH - 10, 5, "BEST: 0");
+        scoreText.alignment = RIGHT;
+        scoreText.scale.set(0.5, 0.5);
+        add(scoreText);
+
+        diffText = new CitroText(scoreText.x - 50, scoreText.y + 12, "< normal >");
+        diffText.scale.set(0.5, 0.5);
+        add(diffText);
+
+        var textBG:CitroSprite = new CitroSprite(0, CitroG.HEIGHT - 12).makeGraphic(CitroG.WIDTH, 12, CitroColor.BLACK);
+        textBG.alpha = 0.6;
+        add(textBG);
+
+        var text:CitroText = new CitroText(5, textBG.y + 1, "A:Play  B:Back  Left/Right:Diff");
+        text.alignment = LEFT;
+        text.scale.set(0.35, 0.35);
+        add(text);
+        
+        changeSelection();
+        changeDiff();
+        
+        super.create();
+    }
+
+    override function update(delta:Int) 
+    {
+        if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) changeSelection(-1);
+        if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) changeSelection(1);
+
+        if (HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.CPAD_LEFT)) changeDiff(-1);
+        if (HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.CPAD_RIGHT)) changeDiff(1);
+
+        if (HID.keyPressed(HIDKey.B)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/cancelMenu.cwav');
+            trace("Backing out of Freeplay...");
+            CitroG.switchState(new PlayState());
+        }
+
+        if (HID.keyPressed(HIDKey.A)) {
+            SoundPlayer.playSound('romfs:/assets/sounds/confirmMenu.cwav');
+            
+            var songName = songs[curSelected].songName.toLowerCase().replace(" ", "-");
+            var chart = ChartParser.parse(songName);
+            
+            if (chart != null) {
+                PlayState.SONG = chart;
+                PlayState.storyDifficulty = curDifficulty;
+                CitroG.switchState(new PlayState());
+            } else {
+                trace("Chart not found for " + songName);
+            }
+        }
+
+        super.update(delta);
+    }
+
+    function changeDiff(change:Int = 0):Void {
+        curDifficulty += change;
+        if (curDifficulty < 0) curDifficulty = difficulties.length - 1;
+        if (curDifficulty >= difficulties.length) curDifficulty = 0;
+
+        diffText.text = '< ' + difficulties[curDifficulty] + ' >';
+    }
+
+    function changeSelection(change:Int = 0) {
+        SoundPlayer.playSound('romfs:/assets/sounds/scrollMenu.cwav');
+        curSelected += change;
+        if (curSelected < 0) curSelected = songs.length - 1;
+        if (curSelected >= songs.length) curSelected = 0;
+
+        for (i in 0...iconArray.length) iconArray[i].alpha = 0.6;
+        iconArray[curSelected].alpha = 1;
+
+        for (i in 0...songTexts.length) {
+            songTexts[i].alpha = 0.6;
+            if (i == curSelected) songTexts[i].alpha = 1;
+        }
+    }
+}
+
+class SongMetadata {
+    public var songName:String = "";
+    public var songCharacter:String = "";
+    public var color:CitroColor = 0xFF9271FD;
+
+    public function new(song:String, songCharacter:String, color:CitroColor) {
+        this.songName = song;
+        this.songCharacter = songCharacter;
+        this.color = color;
+    }
+}
