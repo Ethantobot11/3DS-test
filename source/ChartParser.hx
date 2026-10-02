@@ -5,6 +5,8 @@ import sys.FileSystem;
 import haxe.Json;
 import Song.SwagSong;
 
+using StringTools;
+
 class ChartParser
 {
     static public function parse(songName:String):SwagSong
