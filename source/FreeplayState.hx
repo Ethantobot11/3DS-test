@@ -98,9 +98,9 @@ class FreeplayState extends CitroState
             var chart = ChartParser.parse(songName);
             
             if (chart != null) {
-                PlayState.SONG = chart;
-                PlayState.storyDifficulty = curDifficulty;
-                CitroG.switchState(new PlayState());
+                FNFPlaystate.SONG = chart;
+                FNFPlaystate.storyDifficulty = curDifficulty;
+                CitroG.switchState(new FNFPlaystate());
             } else {
                 trace("Chart not found for " + songName);
             }

@@ -1,7 +1,15 @@
 package;
 
-import Section.SwagSection;
-import haxe.Json;
+typedef SwagSection = {
+    var sectionNotes:Array<Dynamic>;
+    var sectionBeats:Float;
+    var typeOfSection:Int;
+    var mustHitSection:Bool;
+    var gfSection:Bool;
+    var bpm:Float;
+    var changeBPM:Bool;
+    var altAnim:Bool;
+}
 
 typedef SwagSong = {
     var song:String;
@@ -19,29 +27,11 @@ typedef SwagSong = {
     var validScore:Bool;
 }
 
-class Song
-{
+class Song {
     public static function parseJSONshit(rawJson:String):SwagSong {
-        var swagShit:SwagSong = cast Json.parse(rawJson).song;
+        var swagShit:SwagSong = cast haxe.Json.parse(rawJson).song;
         swagShit.validScore = true;
-        
-        if(swagShit.events == null) {
-            swagShit.events = [];
-            for (secNum in 0...swagShit.notes.length) {
-                var sec:SwagSection = swagShit.notes[secNum];
-                var i:Int = 0;
-                var notes:Array<Dynamic> = sec.sectionNotes;
-                var len:Int = notes.length;
-                while(i < len) {
-                    var note:Array<Dynamic> = notes[i];
-                    if(note[1] < 0) {
-                        swagShit.events.push([note[0], [[note[2], note[3], note[4]]]]);
-                        notes.remove(note);
-                        len = notes.length;
-                    } else i++;
-                }
-            }
-        }
+        if(swagShit.events == null) swagShit.events = [];
         return swagShit;
     }
 }
