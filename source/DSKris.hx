@@ -5,7 +5,7 @@ package;
 import citro.object.CitroAnimate;
 using StringTools;
 
-class DSNoelle extends CitroAnimate
+class DSKris extends CitroAnimate
 {
     public var isFollowing:Bool = false;
     public var target:DSPlayer;
