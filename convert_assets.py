@@ -69,9 +69,12 @@ def main():
 
         print(f"  [2/3] Generating 10-column {cea_path} from {xml_path}...")
         try:
+            import re
             tree = ET.parse(xml_path)
             root_elem = tree.getroot()
             cea_lines = []
+            
+            anim_counters = {}
             
             for subtex in root_elem.findall(".//SubTexture"):
                 frame_name = subtex.get("name")
@@ -85,17 +88,21 @@ def main():
                 frameWidth = subtex.get("frameWidth", width)
                 frameHeight = subtex.get("frameHeight", height)
                 
-                if "_" in frame_name and frame_name.split("_")[-1].isdigit():
-                    parts = frame_name.rsplit("_", 1)
-                    anim_name = parts[0]
-                    frame_idx = int(parts[1]) // 10000
+                match = re.search(r'^(.*?)(\d+)$', frame_name)
+                if match:
+                    anim_name = match.group(1)
+                    if anim_name.endswith('_'):
+                        anim_name = anim_name[:-1]
+                        
+                    if anim_name not in anim_counters:
+                        anim_counters[anim_name] = 0
+                        
+                    frame_idx = anim_counters[anim_name]
+                    anim_counters[anim_name] += 1
+                        
                     cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{anim_name}-{frame_idx}"
-                elif frame_name and frame_name.isdigit():
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{name}-{int(frame_name)}"
-                elif not frame_name:
-                    continue
                 else:
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{frame_name}"
+                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{frame_name}-0"
                     
                 cea_lines.append(cea_line)
             
