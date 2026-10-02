@@ -54,7 +54,7 @@ class FNFPlaystate extends CitroState {
         add(dad);
         
         bf = new CitroSprite(250, 100);
-        bf.makeGraphic(40, 60, CitroColor.CYAN);
+        bf.makeGraphic(40, 60, 0xFF00FFFF);
         add(bf);
         
         healthBarBG = new CitroSprite(50, 210);
