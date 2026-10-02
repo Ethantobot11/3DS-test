@@ -9,12 +9,11 @@ class DSLacie extends CitroAnimate
 {
     public var isFollowing:Bool = false;
     public var target:DSPlayer;
-    public var trailDelay:Int = 18; 
+    public var trailDelay:Int = 36;
 
     public function new(x:Float, y:Float)
     {
         super("romfs:/assets/images/chars/lacie_spritesheet_playable.cea", "walk_down");
-        
         this.x = x;
         this.y = y;
         framerate = 6;
@@ -25,21 +24,15 @@ class DSLacie extends CitroAnimate
     {
         if (!isFollowing)
         {
-            if (curAnim != "walk_down") {
-                play("walk_down");
-            }
-
+            if (curAnim != "walk_down") play("walk_down");
+            
             timeLeft = 999999;
             frame = 0;
         }
         else
         {
-            if (target != null)
-            {
-                followPathTrail();
-            }
+            if (target != null) followPathTrail();
         }
-        
         return super.update();
     }
 
@@ -59,11 +52,8 @@ class DSLacie extends CitroAnimate
             else if (targetFrame.anim.indexOf("l") != -1) desiredAnim = "walk_left";
             else if (targetFrame.anim.indexOf("r") != -1) desiredAnim = "walk_right";
 
-            if (curAnim != desiredAnim) {
-                play(desiredAnim);
-            }
+            if (curAnim != desiredAnim) play(desiredAnim);
         }
     }
 }
-
 #end
