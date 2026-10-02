@@ -13,7 +13,7 @@ import citro.backend.CitroColor;
 
 import haxe3ds.services.HID;
 
-class PlayState-Lacie extends CitroState
+class PlayStateLacie extends CitroState
 {
     var rudinn:DSRudinn;
     public var kris:DSKris;
@@ -47,7 +47,7 @@ class PlayState-Lacie extends CitroState
         camera.add(lacie);
 
         kris = new DSKris(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2);
-        kris.target = kris;
+        kris.target = lacie;
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
