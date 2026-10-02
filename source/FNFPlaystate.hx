@@ -9,6 +9,8 @@ import citro.backend.CitroColor;
 import haxe3ds.services.HID;
 import haxe3ds.services.HID.HIDKey;
 
+using StringTools;
+
 class FNFPlaystate extends CitroState {
     public static var SONG:SwagSong = null;
     public static var storyDifficulty:Int = 1;
