@@ -35,21 +35,30 @@ class FreeplayState extends CitroState
         songs.push(new SongMetadata("dad-battle", "dad", 0xFF9271FD));
 
         bg = new CitroSprite();
-        bg.loadGraphic('romfs:/assets/images/menuDesat.t3x');
+        bg.loadGraphic('romfs:/assets/images/menuBG.t3x');
         bg.scale.set(0.35, 0.35);
         bg.screenCenter();
         add(bg);
 
+        var listBG = new CitroSprite(20, 40);
+        listBG.makeGraphic(CitroG.WIDTH - 40, 120, 0x88000000);
+        add(listBG);
+
         for (i in 0...songs.length) {
-            var songText:CitroText = new CitroText(0, 60 + (i * 30), songs[i].songName);
-            songText.screenCenter(X);
-            songText.scale.set(0.5, 0.5);
+            var songText:CitroText = new CitroText(0, 50 + (i * 30), songs[i].songName);
+            songText.scale.set(0.6, 0.6);
+            songText.color = 0xFFFFFFFF;
+            
+            songText.x = (400 / 2) - ((songText.width * 0.6) / 2); 
+            
             songTexts.push(songText);
             add(songText);
 
             var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
             icon.sprTracker = songText;
-            icon.scale.set(0.5, 0.5);
+            icon.scale.set(0.4, 0.4);
+            icon.x = songText.x - 40; 
+            icon.y = songText.y - 5;
             iconArray.push(icon);
             add(icon);
         }
@@ -57,19 +66,22 @@ class FreeplayState extends CitroState
         scoreText = new CitroText(CitroG.WIDTH - 10, 5, "BEST: 0");
         scoreText.alignment = RIGHT;
         scoreText.scale.set(0.5, 0.5);
+        scoreText.color = 0xFFFFFFFF;
         add(scoreText);
 
-        diffText = new CitroText(scoreText.x - 50, scoreText.y + 12, "< normal >");
-        diffText.scale.set(0.5, 0.5);
+        diffText = new CitroText(0, 160, "< normal >");
+        diffText.scale.set(0.6, 0.6);
+        diffText.color = 0xFFFFFFFF;
+        diffText.screenCenter(X);
         add(diffText);
 
-        var textBG:CitroSprite = new CitroSprite(0, CitroG.HEIGHT - 12).makeGraphic(CitroG.WIDTH, 12, CitroColor.BLACK);
-        textBG.alpha = 0.6;
+        var textBG:CitroSprite = new CitroSprite(0, CitroG.HEIGHT - 16).makeGraphic(CitroG.WIDTH, 16, 0xCC000000);
         add(textBG);
 
-        var text:CitroText = new CitroText(5, textBG.y + 1, "A:Play  B:Back  Left/Right:Diff");
+        var text:CitroText = new CitroText(5, textBG.y + 2, "A:Play  B:Back  L/R:Diff");
         text.alignment = LEFT;
-        text.scale.set(0.35, 0.35);
+        text.scale.set(0.4, 0.4);
+        text.color = 0xFFFFFFFF;
         add(text);
         
         changeSelection();
