@@ -20,7 +20,7 @@ on:
         type: string
 
 env:
-  HAXE_VERSION: 4.3.6
+  HAXE_VERSION: 4.3.7
 
 jobs:
   build-console:
@@ -40,33 +40,17 @@ jobs:
       - name: Install System Dependencies (Wii U)
         if: inputs.name == 'Wii U'
         run: |
-          apt-get update && apt-get install -y build-essential git wget curl       
+          apt-get update && apt-get install -y build-essential git wget curl zip
 
       - name: Install Console Toolchains & Dependencies
         run: |
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
             dkp-pacman -S --noconfirm --needed 3ds-dev citro3d citro2d 3ds-portlibs general-tools
             git clone https://github.com/PabloMK7/libcwav.git --recursive
-            cd libcwav
-            make install
+            cd libcwav && make install
             cp lib/libcwav.a /opt/devkitpro/portlibs/3ds/lib/libcwav.a
             cp include/cwav.h /opt/devkitpro/portlibs/3ds/include/
-            if [ -f "libncsnd/lib/libncsnd.a" ]; then
-                cp libncsnd/lib/libncsnd.a /opt/devkitpro/portlibs/3ds/lib/libncsnd.a
-                cp libncsnd/include/ncsnd.h /opt/devkitpro/portlibs/3ds/include/
-            fi
-            cd ..
-            rm -rf libcwav
-            git clone https://github.com/PabloMK7/cwavtool.git
-            cd cwavtool
-            rm -rf buildtools
-            git clone https://github.com/Steveice10/buildtools.git buildtools
-            make
-            mkdir -p /opt/devkitpro/tools/bin
-            cp output/linux-x86_64/cwavtool /opt/devkitpro/tools/bin/cwavtool
-            chmod +x /opt/devkitpro/tools/bin/cwavtool
-            cd ..
-            rm -rf cwavtool
+            cd .. && rm -rf libcwav
             wget -q https://github.com/diasurgical/bannertool/releases/download/1.2.0/bannertool.zip -O bannertool.zip
             unzip -q bannertool.zip -d bannertool_extracted
             find bannertool_extracted -type f -name "bannertool" -exec cp {} /opt/devkitpro/tools/bin/ \;
@@ -76,34 +60,22 @@ jobs:
             find makerom_extracted -type f -name "makerom" -exec cp {} /opt/devkitpro/tools/bin/ \;
             chmod +x /opt/devkitpro/tools/bin/makerom
             rm -rf bannertool.zip bannertool_extracted makerom.zip makerom_extracted
-            
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools wiiu-dev
-            haxelib git hxu_wut https://github.com/Ethantobot11/HxU_WUT --quiet
-            haxelib git hxu_libnotifications https://github.com/Ethantobot11/HxU_LibNotifications --quiet
-            haxelib git hxu_libmappedmemory https://github.com/Ethantobot11/HxU_LibMappedMemory --quiet
-            haxelib git slushiutilsU https://github.com/Ethantobot11/slushiUtilsU --quiet
-            haxelib git hxu_sdl2 https://github.com/Ethantobot11/HxU_SDL2 --quiet
-            haxelib git hxu_sdl_fontcache https://github.com/Ethantobot11/HxU_SDL_FontCache --quiet
-            haxelib git hxu_jansson https://github.com/Ethantobot11/HxU_Jansson --quiet
-            haxelib git hxu_vorbis https://github.com/Ethantobot11/HxU_Vorbis --quiet
-            
-            haxelib list
           fi
 
-      - name: Build HXCPP Runner and Tools (3DS)
-        if: inputs.name == 'Nintendo 3DS'
+      - name: Setup Haxelib
         run: |
           mkdir -p .haxelib
           haxelib setup .haxelib
+          
           haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet
-
+          
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp
           haxe compile.hxml
-          cd ../../../../          
-          
+          cd $GITHUB_WORKSPACE
 
       - name: Setup Virtual Environment and Install Pillow (3DS)
         if: inputs.name == 'Nintendo 3DS'
@@ -118,80 +90,53 @@ jobs:
         run: |
           python3 convert_assets.py
 
-      - name: Build and Install 3DS Audio Libraries (3DS)
+      - name: Install 3DS Specific Haxelibs (3DS)
         if: inputs.name == 'Nintendo 3DS'
         run: |
-          export DEVKITPRO=/opt/devkitpro
-          export DEVKITARM=${DEVKITPRO}/devkitARM
-          export PATH=${DEVKITARM}/bin:${DEVKITPRO}/tools/bin:$PATH
-          export CXX=arm-none-eabi-g++
-          export CC=arm-none-eabi-gcc
-          export AR=arm-none-eabi-ar
-          export RANLIB=arm-none-eabi-ranlib
-
           haxelib git libcwav https://github.com/PabloMK7/libcwav.git --quiet
           haxelib git libncsnd https://github.com/PabloMK7/libncsnd.git --quiet
-          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git --quiet
+          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git beta --quiet
 
-          haxelib run haxe3ds -c -Dnx -Dno_pch
-
-      - name: Verify RomFS Inside Built CIA (3DS)
-        if: always() && inputs.name == 'Nintendo 3DS'
-        run: |
-          export PATH=/opt/devkitpro/tools/bin:$PATH
-          if [ -f "buildFiles/output.cia" ]; then
-            echo "=== Inspecting CIA RomFS Structure ==="
-            ls -lh buildFiles/output.cia
-          else
-            echo "output.cia not found!"
-          fi
-
-      - name: Archive and Upload Workspace for Inspection (3DS)
-        if: always() && inputs.name == 'Nintendo 3DS'
-        uses: actions/upload-artifact@v4
-        with:
-          name: workspace-debug-3ds
-          path: |
-            buildFiles/
-          if-no-files-found: ignore
-          
-      - name: Compile for Wii U via HxCompileU
+      - name: Install Wii U Specific Haxelibs (Wii U)
         if: inputs.name == 'Wii U'
         run: |
+          haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git beta --quiet
+
+      - name: Compile Application (Unified via haxe3ds tool)
+        run: |
           export DEVKITPRO=/opt/devkitpro
-          export DEVKITPPC=${DEVKITPRO}/devkitPPC
-          export PATH=${DEVKITPPC}/bin:${DEVKITPRO}/tools/bin:$PATH
-          mkdir -p .haxelib
-          haxelib setup .haxelib
+          export PATH=${DEVKITPRO}/tools/bin:$PATH
           
-          haxelib install hxcpp --quiet
-          git clone https://github.com/Ethantobot11/HaxeWiiU.git hxCompileU_repo
-          cd hxCompileU_repo
-          haxe build.hxml
-          cp export/haxeCompileU ../haxeCompileU
-          cd ..
-          
-          haxelib remove hxcpp
-          haxelib git hxcpp https://github.com/Ethantobot11/hxcpp-wiiu --quiet
-          
-          cd .haxelib/hxcpp/git/tools/run
-          haxe compile.hxml
-          cd ../hxcpp
-          haxe compile.hxml
+          if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
+            export DEVKITARM=${DEVKITPRO}/devkitARM
+            export CXX=arm-none-eabi-g++
+            export CC=arm-none-eabi-gcc
+            export AR=arm-none-eabi-ar
+            export RANLIB=arm-none-eabi-ranlib
+            haxelib run haxe3ds -c -Dnx -Dno_pch
+          else
+            export DEVKITPPC=${DEVKITPRO}/devkitPPC
+            haxelib run haxe3ds -c -Dwiiu -Dno_pch
+          fi
 
-          cd $GITHUB_WORKSPACE
-          ./haxeCompileU --compile
+      - name: Verify Build Output
+        if: always()
+        run: |
+          echo "=== Checking build output ==="
+          ls -lh export/output/ || echo "No output directory"
+          ls -lh buildFiles/ || echo "No buildFiles directory"
 
-      - name: Archive and Upload Workspace for Inspection (Wii U)
-        if: always() && inputs.name == 'Wii U'
+      - name: Archive and Upload Workspace for Inspection
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: workspace-debug-wiiu
+          name: workspace-debug-${{ inputs.name == 'Nintendo 3DS' && '3ds' || 'wiiu' }}
           path: |
-            output/
+            export/
+            buildFiles/
           if-no-files-found: ignore
 
-      - name: Upload Artifact
+      - name: Upload Final Artifact
         uses: actions/upload-artifact@main
         with:
           name: ${{ inputs.artifactName }}
