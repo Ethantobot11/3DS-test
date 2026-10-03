@@ -45,6 +45,7 @@ def main():
 
     sprite_sheets = []
     other_files = []
+    processed_pngs = set()
 
     for root, dirs, files in os.walk("assets"):
         for file in files:
@@ -56,17 +57,35 @@ def main():
                 png_path = os.path.join(root, name + ".png")
                 if os.path.exists(png_path):
                     sprite_sheets.append((root, name, file_path, png_path))
+                    processed_pngs.add(os.path.normpath(png_path))
                 else:
                     print(f"Warning: Found {file_path} but no corresponding {name}.png")
-            else:
+
+    for root, dirs, files in os.walk("assets"):
+        for file in files:
+            file_path = os.path.join(root, file)
+            name, ext = os.path.splitext(file)
+            ext = ext.lower()
+            
+            if ext == ".png":
+                norm_path = os.path.normpath(file_path)
+                if norm_path not in processed_pngs:
+                    sprite_sheets.append((root, name, None, file_path))
+
+    for root, dirs, files in os.walk("assets"):
+        for file in files:
+            file_path = os.path.join(root, file)
+            name, ext = os.path.splitext(file)
+            ext = ext.lower()
+            if ext in [".mp3", ".wav", ".ogg"]:
                 other_files.append((root, name, ext, file_path))
 
     for root, name, xml_path, png_path in sprite_sheets:
         t3x_name = name + ".t3x"
         t3x_path = os.path.join(root, t3x_name)
-        cea_path = os.path.join(root, name + ".cea")
+        cea_path = os.path.join(root, name + ".cea") if xml_path else None
         
-        print(f"\nProcessing sprite sheet: {name}")
+        print(f"\nProcessing image: {name} (in {root})")
         
         scale_x, scale_y = 1.0, 1.0
         MAX_TEX_SIZE = 1024
@@ -74,7 +93,6 @@ def main():
         if HAS_PILLOW and os.path.exists(png_path):
             try:
                 img = Image.open(png_path)
-                
                 img = img.convert("RGBA")
                 
                 orig_w, orig_h = img.size
@@ -91,73 +109,80 @@ def main():
             except Exception as e:
                 print(f"  WARNING: Could not process {png_path}: {e}")
 
-        print(f"  [1/3] Converting {png_path} to {t3x_path} using tex3ds...")
+        print(f"  [1/2] Converting {png_path} to {t3x_path} using tex3ds...")
         tex3ds_success = False
+        
+        abs_png = os.path.abspath(png_path)
+        abs_t3x = os.path.abspath(t3x_path)
+        
         try:
-            subprocess.run([tex3ds_path, png_path, "-o", t3x_path, "-f", "rgba8"], check=True, env=os.environ)
+            subprocess.run([tex3ds_path, abs_png, "-o", abs_t3x, "-f", "rgba8"], check=True, env=os.environ)
             tex3ds_success = True
         except Exception as e:
             print(f"  ERROR: tex3ds failed on {png_path}. ({e})")
 
-        print(f"  [2/3] Generating 10-column {cea_path} from {xml_path}...")
-        try:
-            tree = ET.parse(xml_path)
-            root_elem = tree.getroot()
-            cea_lines = []
-            anim_counters = {}
-            
-            for subtex in root_elem.findall(".//SubTexture"):
-                x = float(subtex.get("x", "0"))
-                y = float(subtex.get("y", "0"))
-                width = float(subtex.get("width", "0"))
-                height = float(subtex.get("height", "0"))
+        if xml_path:
+            print(f"  [2/2] Generating 10-column {cea_path} from {xml_path}...")
+            try:
+                tree = ET.parse(xml_path)
+                root_elem = tree.getroot()
+                cea_lines = []
+                anim_counters = {}
                 
-                frameX = float(subtex.get("frameX", "0"))
-                frameY = float(subtex.get("frameY", "0"))
-                frameWidth = float(subtex.get("frameWidth", str(width)))
-                frameHeight = float(subtex.get("frameHeight", str(height)))
-
-                if scale_x != 1.0 or scale_y != 1.0:
-                    x = round(x * scale_x)
-                    y = round(y * scale_y)
-                    width = round(width * scale_x)
-                    height = round(height * scale_y)
-                    frameX = round(frameX * scale_x)
-                    frameY = round(frameY * scale_y)
-                    frameWidth = round(frameWidth * scale_x)
-                    frameHeight = round(frameHeight * scale_y)
-
-                frame_name = subtex.get("name")
-                
-                match = re.search(r'^(.*?)(\d+)$', frame_name)
-                if match:
-                    anim_name = match.group(1)
-                    if anim_name.endswith('_'):
-                        anim_name = anim_name[:-1]
-                        
-                    if anim_name not in anim_counters:
-                        anim_counters[anim_name] = 0
-                        
-                    frame_idx = anim_counters[anim_name]
-                    anim_counters[anim_name] += 1
-                        
-                    cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{anim_name}-{frame_idx}"
-                else:
-                    cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{frame_name}-0"
+                for subtex in root_elem.findall(".//SubTexture"):
+                    x = float(subtex.get("x", "0"))
+                    y = float(subtex.get("y", "0"))
+                    width = float(subtex.get("width", "0"))
+                    height = float(subtex.get("height", "0"))
                     
-                cea_lines.append(cea_line)
-            
-            with open(cea_path, "w", encoding="utf-8") as f:
-                f.write("\n".join(cea_lines) + "\n")
-                
-        except Exception as e:
-            print(f"  ERROR: Failed to parse XML {xml_path}: {e}")
+                    frameX = float(subtex.get("frameX", "0"))
+                    frameY = float(subtex.get("frameY", "0"))
+                    frameWidth = float(subtex.get("frameWidth", str(width)))
+                    frameHeight = float(subtex.get("frameHeight", str(height)))
 
-        print(f"  [3/3] Cleaning up...")
+                    if scale_x != 1.0 or scale_y != 1.0:
+                        x = round(x * scale_x)
+                        y = round(y * scale_y)
+                        width = round(width * scale_x)
+                        height = round(height * scale_y)
+                        frameX = round(frameX * scale_x)
+                        frameY = round(frameY * scale_y)
+                        frameWidth = round(frameWidth * scale_x)
+                        frameHeight = round(frameHeight * scale_y)
+
+                    frame_name = subtex.get("name")
+                    
+                    match = re.search(r'^(.*?)(\d+)$', frame_name)
+                    if match:
+                        anim_name = match.group(1)
+                        if anim_name.endswith('_'):
+                            anim_name = anim_name[:-1]
+                            
+                        if anim_name not in anim_counters:
+                            anim_counters[anim_name] = 0
+                            
+                        frame_idx = anim_counters[anim_name]
+                        anim_counters[anim_name] += 1
+                            
+                        cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{anim_name}-{frame_idx}"
+                    else:
+                        cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{frame_name}-0"
+                        
+                    cea_lines.append(cea_line)
+                
+                with open(cea_path, "w", encoding="utf-8") as f:
+                    f.write("\n".join(cea_lines) + "\n")
+                    
+            except Exception as e:
+                print(f"  ERROR: Failed to parse XML {xml_path}: {e}")
+        else:
+            print(f"  [2/2] Standalone PNG detected. Skipping CEA generation.")
+
+        print(f"  Cleaning up...")
         if tex3ds_success:
             try:
                 if os.path.exists(png_path): os.remove(png_path)
-                if os.path.exists(xml_path): os.remove(xml_path)
+                if xml_path and os.path.exists(xml_path): os.remove(xml_path)
                 print(f"  SUCCESS: {name} fully converted and cleaned up.")
             except Exception as e:
                 print(f"  WARNING: Could not delete original files: {e}")
