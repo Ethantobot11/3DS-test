@@ -2,6 +2,14 @@ import os
 import subprocess
 import shutil
 import xml.etree.ElementTree as ET
+import re
+
+try:
+    from PIL import Image
+    HAS_PILLOW = True
+except ImportError:
+    HAS_PILLOW = False
+    print("WARNING: Pillow not installed. Auto-resize disabled. Run: pip install Pillow")
 
 def get_tool_path(tool_name: str) -> str:
     tool_path = shutil.which(tool_name)
@@ -60,33 +68,62 @@ def main():
         
         print(f"\nProcessing sprite sheet: {name}")
         
+        scale_x, scale_y = 1.0, 1.0
+        MAX_TEX_SIZE = 2048
+        
+        if HAS_PILLOW and os.path.exists(png_path):
+            try:
+                img = Image.open(png_path)
+                orig_w, orig_h = img.size
+                if orig_w > MAX_TEX_SIZE or orig_h > MAX_TEX_SIZE:
+                    scale = min(MAX_TEX_SIZE / orig_w, MAX_TEX_SIZE / orig_h)
+                    new_w = int(orig_w * scale)
+                    new_h = int(orig_h * scale)
+                    print(f"  [RESIZE] {orig_w}x{orig_h} exceeds {MAX_TEX_SIZE}px. Resizing to {new_w}x{new_h}")
+                    img = img.resize((new_w, new_h), Image.LANCZOS)
+                    img.save(png_path)
+                    scale_x = new_w / orig_w
+                    scale_y = new_h / orig_h
+            except Exception as e:
+                print(f"  WARNING: Could not resize {png_path}: {e}")
+
         print(f"  [1/3] Converting {png_path} to {t3x_path} using tex3ds...")
+        tex3ds_success = False
         try:
             subprocess.run([tex3ds_path, png_path, "-o", t3x_path, "-f", "rgba8"], check=True, env=os.environ)
+            tex3ds_success = True
         except Exception as e:
-            print(f"  ERROR: tex3ds failed on {png_path}. Skipping. ({e})")
-            continue
+            print(f"  ERROR: tex3ds failed on {png_path}. ({e})")
 
         print(f"  [2/3] Generating 10-column {cea_path} from {xml_path}...")
         try:
-            import re
             tree = ET.parse(xml_path)
             root_elem = tree.getroot()
             cea_lines = []
-            
             anim_counters = {}
             
             for subtex in root_elem.findall(".//SubTexture"):
-                frame_name = subtex.get("name")
-                x = subtex.get("x", "0")
-                y = subtex.get("y", "0")
-                width = subtex.get("width", "0")
-                height = subtex.get("height", "0")
+                x = float(subtex.get("x", "0"))
+                y = float(subtex.get("y", "0"))
+                width = float(subtex.get("width", "0"))
+                height = float(subtex.get("height", "0"))
                 
-                frameX = subtex.get("frameX", "0")
-                frameY = subtex.get("frameY", "0")
-                frameWidth = subtex.get("frameWidth", width)
-                frameHeight = subtex.get("frameHeight", height)
+                frameX = float(subtex.get("frameX", "0"))
+                frameY = float(subtex.get("frameY", "0"))
+                frameWidth = float(subtex.get("frameWidth", str(width)))
+                frameHeight = float(subtex.get("frameHeight", str(height)))
+
+                if scale_x != 1.0 or scale_y != 1.0:
+                    x = round(x * scale_x)
+                    y = round(y * scale_y)
+                    width = round(width * scale_x)
+                    height = round(height * scale_y)
+                    frameX = round(frameX * scale_x)
+                    frameY = round(frameY * scale_y)
+                    frameWidth = round(frameWidth * scale_x)
+                    frameHeight = round(frameHeight * scale_y)
+
+                frame_name = subtex.get("name")
                 
                 match = re.search(r'^(.*?)(\d+)$', frame_name)
                 if match:
@@ -100,9 +137,9 @@ def main():
                     frame_idx = anim_counters[anim_name]
                     anim_counters[anim_name] += 1
                         
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{anim_name}-{frame_idx}"
+                    cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{anim_name}-{frame_idx}"
                 else:
-                    cea_line = f"{t3x_name}?{x}?{y}?{width}?{height}?{frameX}?{frameY}?{frameWidth}?{frameHeight}?{frame_name}-0"
+                    cea_line = f"{t3x_name}?{int(x)}?{int(y)}?{int(width)}?{int(height)}?{int(frameX)}?{int(frameY)}?{int(frameWidth)}?{int(frameHeight)}?{frame_name}-0"
                     
                 cea_lines.append(cea_line)
             
@@ -111,15 +148,17 @@ def main():
                 
         except Exception as e:
             print(f"  ERROR: Failed to parse XML {xml_path}: {e}")
-            continue
 
-        print(f"  [3/3] Cleaning up original {name}.png and {name}.xml...")
-        try:
-            os.remove(png_path)
-            os.remove(xml_path)
-            print(f"  SUCCESS: {name} converted to 10-column CEA and cleaned up.")
-        except Exception as e:
-            print(f"  WARNING: Could not delete original files for {name}: {e}")
+        print(f"  [3/3] Cleaning up...")
+        if tex3ds_success:
+            try:
+                if os.path.exists(png_path): os.remove(png_path)
+                if os.path.exists(xml_path): os.remove(xml_path)
+                print(f"  SUCCESS: {name} fully converted and cleaned up.")
+            except Exception as e:
+                print(f"  WARNING: Could not delete original files: {e}")
+        else:
+            print(f"  WARNING: Kept PNG/XML for debugging since tex3ds failed.")
 
     for root, name, ext, file_path in other_files:
         if not os.path.exists(file_path): continue
