@@ -69,23 +69,27 @@ def main():
         print(f"\nProcessing sprite sheet: {name}")
         
         scale_x, scale_y = 1.0, 1.0
-        MAX_TEX_SIZE = 2048
+        MAX_TEX_SIZE = 1024
         
         if HAS_PILLOW and os.path.exists(png_path):
             try:
                 img = Image.open(png_path)
+                
+                img = img.convert("RGBA")
+                
                 orig_w, orig_h = img.size
                 if orig_w > MAX_TEX_SIZE or orig_h > MAX_TEX_SIZE:
                     scale = min(MAX_TEX_SIZE / orig_w, MAX_TEX_SIZE / orig_h)
-                    new_w = int(orig_w * scale)
-                    new_h = int(orig_h * scale)
+                    new_w = max(1, int(orig_w * scale))
+                    new_h = max(1, int(orig_h * scale))
                     print(f"  [RESIZE] {orig_w}x{orig_h} exceeds {MAX_TEX_SIZE}px. Resizing to {new_w}x{new_h}")
                     img = img.resize((new_w, new_h), Image.LANCZOS)
-                    img.save(png_path)
                     scale_x = new_w / orig_w
                     scale_y = new_h / orig_h
+                    
+                img.save(png_path)
             except Exception as e:
-                print(f"  WARNING: Could not resize {png_path}: {e}")
+                print(f"  WARNING: Could not process {png_path}: {e}")
 
         print(f"  [1/3] Converting {png_path} to {t3x_path} using tex3ds...")
         tex3ds_success = False
