@@ -1,9 +1,8 @@
 package sdl2;
 
 import cpp.Pointer;
-import cpp.NativeArray;
-import cpp.Char;
 import cpp.UInt8;
+import cpp.UInt16;
 import cpp.UInt32;
 
 @:native("SDL_Color")
@@ -13,7 +12,7 @@ extern class SDL_Color {
     public var g:UInt8;
     public var b:UInt8;
     public var a:UInt8;
-    public function new() {}
+    public function new();
 }
 
 @:native("SDL_Palette")
@@ -23,7 +22,7 @@ extern class SDL_Palette {
     public var colors:Pointer<SDL_Color>;
     public var version:UInt32;
     public var refcount:Int;
-    public function new() {}
+    public function new();
 }
 
 @:native("SDL_PixelFormat")
@@ -33,7 +32,7 @@ extern class SDL_PixelFormat {
     public var palette:Pointer<SDL_Palette>;
     public var BitsPerPixel:UInt8;
     public var BytesPerPixel:UInt8;
-    public var padding:NativeArray<Char>;
+    public var padding:UInt16;
     public var Rmask:UInt32;
     public var Gmask:UInt32;
     public var Bmask:UInt32;
@@ -49,7 +48,7 @@ extern class SDL_PixelFormat {
     public var refcount:Int;
     public var next:Pointer<SDL_PixelFormat>;
 
-    public function new() {}
+    public function new();
 }
 
 extern class SDL_PixelsClass {
