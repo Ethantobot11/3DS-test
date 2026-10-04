@@ -2,7 +2,6 @@ package sdl2;
 
 import cpp.Pointer;
 import cpp.Int64;
-import cpp.Float;
 import cpp.UInt32;
 
 @:native("SDL_TouchID")
