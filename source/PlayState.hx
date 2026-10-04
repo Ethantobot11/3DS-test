@@ -1,7 +1,5 @@
 package;
 
-#if (!wiiu || !cafe)
-
 import citro.state.CitroState;
 import citro.object.CitroSprite;
 import citro.object.CitroCamera;
@@ -304,5 +302,3 @@ class PlayState extends CitroState
         return false;
     }
 }
-
-#end
