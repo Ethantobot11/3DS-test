@@ -2,10 +2,12 @@ package citro.object;
 
 import citro.CitroG;
 import citro.backend.CitroColor;
+#if !HAXE3DS
 import sdl2.SDL;
 import sdl2.SDL_Render;
 import sdl2.SDL_Image;
 import cpp.Pointer;
+#end
 
 #if HAXE3DS
 @:headerCode('
