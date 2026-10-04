@@ -1,4 +1,4 @@
-package vorbis;
+package sld2;
 
 import cpp.Pointer;
 import cpp.RawPointer;

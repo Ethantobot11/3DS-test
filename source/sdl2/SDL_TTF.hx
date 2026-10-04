@@ -2,7 +2,6 @@ package sdl2;
 
 import cpp.Pointer;
 import cpp.ConstCharStar;
-import cpp.Int32;
 import sdl2.SDL_Surface.SDL_Surface;
 import sdl2.SDL_Pixels.SDL_Color;
 

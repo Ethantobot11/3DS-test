@@ -1,12 +1,10 @@
 package sdl2;
 
 import cpp.Pointer;
-import cpp.Const;
 import cpp.NativeArray;
 import cpp.Char;
 import cpp.UInt8;
 import cpp.UInt32;
-import cpp.Int;
 
 @:native("SDL_Color")
 @:structAccess
@@ -56,5 +54,5 @@ extern class SDL_PixelFormat {
 
 extern class SDL_PixelsClass {
     @:native("SDL_PIXELFORMAT_RGBA8888") extern public static var SDL_PIXELFORMAT_RGBA8888:UInt32;
-    @:native("SDL_MapRGBA") extern public static function SDL_MapRGBA(format:Const<Pointer<SDL_PixelFormat>>, r:UInt8, g:UInt8, b:UInt8, a:UInt8):UInt32;
+    @:native("SDL_MapRGBA") extern public static function SDL_MapRGBA(format:Pointer<SDL_PixelFormat>, r:UInt8, g:UInt8, b:UInt8, a:UInt8):UInt32;
 }
