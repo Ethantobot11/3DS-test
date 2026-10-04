@@ -1,7 +1,5 @@
 package citro.util;
 
-#if (!wiiu || !cafe)
-
 import citro.math.CitroMath;
 
 /**
@@ -46,5 +44,3 @@ class CitroStringUtil {
 		return '${text.substr(0, 1).toUpperCase()}${text.substr(1)}';
 	}
 }
-
-#end

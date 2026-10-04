@@ -2,6 +2,7 @@ package citro.c2d;
 
 import citro.backend.CitroColor;
 
+#if haxe3ds
 @:headerCode('
 #include <citro2d.h>
 #include <citro3d.h>
@@ -21,10 +22,12 @@ static inline u32 colorConvert(int color) {
     );
 }
 ')
+#end
 
 class CitroObjectDraw {
 
 	public static function drawTriangle(arrayX:Array<Float>, arrayY:Array<Float>, arrayC:Array<CitroColor>):Bool {
+		#if haxe3ds
 		if (arrayX.length > 2 && arrayY.length > 2 && arrayC.length > 0) {
 			while (arrayC.length < 3) {
 				arrayC.push(arrayC[0]);
@@ -40,10 +43,12 @@ class CitroObjectDraw {
 			');
 			return true;
 		}
+		#end
 		return false;
 	}
 
 	public static function drawLine(arrayX:Array<Float>, arrayY:Array<Float>, arrayC:Array<CitroColor>, thickness:Float = 4):Bool {
+		#if haxe3ds
 		if (arrayX.length > 1 && arrayY.length > 1 && arrayC.length > 1) {
 			if (arrayC.length == 1) {
 				arrayC.push(arrayC[0]);
@@ -58,10 +63,12 @@ class CitroObjectDraw {
 			');
 			return true;
 		}
+		#end
 		return false;
 	}
 
 	public static function drawRect(x:Float, y:Float, w:Float, h:Float, color:Array<CitroColor>):Bool {
+		#if haxe3ds
 		return color.length > 1 ? {
 			while (color.length < 4)
 				color.push(color[0]);
@@ -73,9 +80,13 @@ class CitroObjectDraw {
 			');
 			true;
 		} : false;
+		#else
+		return false;
+		#end
 	}
 	
 	public static function drawCircle(x:Float, y:Float, radius:Float, color:Array<CitroColor>):Bool {
+		#if haxe3ds
 		if (color.length == 0)
 			return false;
 		
@@ -86,9 +97,13 @@ class CitroObjectDraw {
 			C2D_DrawCircle(x, y, 1, radius, colorConvert(color->__get(0)), colorConvert(color->__get(1)), colorConvert(color->__get(2)), colorConvert(color->__get(3)))
 		');
 		return true;
+		#else
+		return false;
+		#end
 	}
 
 	public static function drawEllipse(x:Float, y:Float, w:Float, h:Float, color:Array<CitroColor>):Bool {
+		#if haxe3ds
 		if (color.length == 0)
 			return false;
 		
@@ -96,8 +111,11 @@ class CitroObjectDraw {
 			color.push(color[0]);
 	
 		untyped __cpp__('
-			C2D_DrawEllipse(x, y, 1, w, y, colorConvert(color->__get(0)), colorConvert(color->__get(1)), colorConvert(color->__get(2)), colorConvert(color->__get(3)))
+			C2D_DrawEllipse(x, y, 1, w, h, colorConvert(color->__get(0)), colorConvert(color->__get(1)), colorConvert(color->__get(2)), colorConvert(color->__get(3)))
 		');
 		return true;
+		#else
+		return false;
+		#end
 	}
 }

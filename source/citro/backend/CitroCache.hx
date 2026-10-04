@@ -1,22 +1,24 @@
 package citro.backend;
 
-import citro.CitroG.VoidPtr;
+import cpp.Pointer;
+import cpp.Void;
+
+typedef VoidPtr = Pointer<Void>;
 
 @:cppFileCode('
 #include <cwav.h>
 #include <citro2d.h>
+
 void SUPER_FREE(void **ptr2ptr) {
 	if (ptr2ptr && *ptr2ptr) {
 		free(*ptr2ptr);
 		*ptr2ptr = NULL;
 	}
-}')
-
-@:cppFileCode('
-#include <cwav.h>
+}
 ')
+
 class CitroCache {
-	public var cache:Map<String, VoidPtr> = [];
+	public var cache:Map<String, VoidPtr> = new Map();
 
 	public function new() {}
 
@@ -51,20 +53,26 @@ class CitroCache {
 
 	function freeMemory(key:String) {
 		final ptr = cache[key];
-		untyped __cpp__('if (!{0}) return', ptr);
+		untyped __cpp__('if (!{0}) return;', ptr);
 
 		var extension = key.split(".");
 		var ext = extension[extension.length - 1].toLowerCase();
 		
 		switch (ext) {
 			case "t3x":
-				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet)ptr);');
+				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet){0});', ptr);
 			case "bcfnt":
-				untyped __cpp__('C2D_FontFree((C2D_Font)ptr);');
+				untyped __cpp__('C2D_FontFree((C2D_Font){0});', ptr);
 			case "cwav":
 				untyped __cpp__('cwavFileFree((CWAV*){0}); free({0});', ptr);
+			#if !haxe3ds
+			case "png":
+				untyped __cpp__('SDL_FreeSurface((SDL_Surface*){0});', ptr);
+			case "ttf":
+				untyped __cpp__('TTF_CloseFont((TTF_Font*){0});', ptr);
+			#end
 			default:
-				untyped __cpp__('SUPER_FREE((void**)&ptr)');
+				untyped __cpp__('SUPER_FREE((void**)&{0});', ptr);
 		}
 	}
 
