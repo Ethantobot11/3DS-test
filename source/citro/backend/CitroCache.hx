@@ -5,6 +5,7 @@ import cpp.Void;
 
 typedef VoidPtr = Pointer<Void>;
 
+#if HAXE3DS
 @:cppFileCode('
 #include <cwav.h>
 #include <citro2d.h>
@@ -16,6 +17,7 @@ void SUPER_FREE(void **ptr2ptr) {
 	}
 }
 ')
+#end
 
 class CitroCache {
 	public var cache:Map<String, VoidPtr> = new Map();
@@ -59,13 +61,14 @@ class CitroCache {
 		var ext = extension[extension.length - 1].toLowerCase();
 		
 		switch (ext) {
+			#if HAXE3DS
 			case "t3x":
 				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet){0});', ptr);
 			case "bcfnt":
 				untyped __cpp__('C2D_FontFree((C2D_Font){0});', ptr);
 			case "cwav":
 				untyped __cpp__('cwavFileFree((CWAV*){0}); free({0});', ptr);
-			#if !haxe3ds
+			#if !HAXE3DS
 			case "png":
 				untyped __cpp__('SDL_FreeSurface((SDL_Surface*){0});', ptr);
 			case "ttf":
@@ -73,6 +76,7 @@ class CitroCache {
 			#end
 			default:
 				untyped __cpp__('SUPER_FREE((void**)&{0});', ptr);
+			#end
 		}
 	}
 
