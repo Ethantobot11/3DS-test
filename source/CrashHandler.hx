@@ -6,6 +6,7 @@ import sys.io.FileOutput;
 import sys.FileSystem;
 import citro.CitroG;
 import citro.state.CitroState;
+using StringTools;
 
 class CrashHandler {
     #if haxe3ds
