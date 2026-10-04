@@ -1,6 +1,11 @@
 package citro.object;
 
 import citro.backend.CitroColor;
+import sdl2.SDL_TTF;
+import sdl2.SDL_Surface;
+import sdl2.SDL_Render;
+import cpp.Pointer;
+
 using StringTools;
 
 enum abstract Align(Int) {
@@ -35,11 +40,12 @@ void createText(citro::object::CitroText_obj* value) {
 }')
 #else
 @:cppFileCode('
-#include <gx2.h>
-#include <gx2/draw.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
+extern "C" SDL_Renderer* gRenderer;
+extern "C" TTF_Font* gDefaultFont;
 namespace textUtil {
-void createText(void* value) {
-}
+void createText(void* value) {}
 }')
 #end
 
@@ -47,8 +53,8 @@ void createText(void* value) {
 @:headerCode('#include <citro2d.h>\n#include <citro3d.h>')
 @:headerClassCode('C2D_Font defaultFont;')
 #else
-@:headerCode('#include <coreinit.h>\n#include <gx2.h>')
-@:headerClassCode('void* fontTexture = nullptr;')
+@:headerCode('#include <SDL.h>\n#include <SDL_ttf.h>')
+@:headerClassCode('TTF_Font* defaultFont = nullptr;')
 #end
 
 class CitroText extends CitroObject {
@@ -112,6 +118,24 @@ class CitroText extends CitroObject {
 		', bottom);
 		#else
 		untyped __cpp__('
+			if (!defaultFont || !gRenderer) return true;
+			
+			SDL_Color fg = { (Uint8)((this->color >> 16) & 0xFF), (Uint8)((this->color >> 8) & 0xFF), (Uint8)(this->color & 0xFF), (Uint8)(this->alpha * 255.0f) };
+			SDL_Surface* textSurface = TTF_RenderText_Blended(defaultFont, this->text.utf8_str(), fg);
+			if (textSurface) {
+				SDL_Texture* textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+				if (textTexture) {
+					SDL_Rect dstRect;
+					dstRect.x = (int)this->x;
+					dstRect.y = (int)this->y;
+					dstRect.w = (int)(textSurface->w * this->scale->x);
+					dstRect.h = (int)(textSurface->h * this->scale->y);
+					
+					SDL_RenderCopy(gRenderer, textTexture, NULL, &dstRect);
+					SDL_DestroyTexture(textTexture);
+				}
+				SDL_FreeSurface(textSurface);
+			}
 		');
 		#end
 		return true;
@@ -129,7 +153,10 @@ class CitroText extends CitroObject {
 		}
 		return success;
 		#else
-		return false;
+		untyped __cpp__('
+			this->defaultFont = TTF_OpenFont(path.c_str(), 24);
+			return this->defaultFont != nullptr;
+		');
 		#end
 	}
 
@@ -145,7 +172,7 @@ class CitroText extends CitroObject {
 		#if HAXE3DS
 		untyped __cpp__('if (defaultFont) { C2D_FontFree(defaultFont); defaultFont = nullptr; }');
 		#else
-		untyped __cpp__('if (fontTexture != nullptr) { fontTexture = nullptr; }');
+		untyped __cpp__('if (defaultFont != nullptr) { TTF_CloseFont(defaultFont); defaultFont = nullptr; }');
 		#end
 	}
 }
