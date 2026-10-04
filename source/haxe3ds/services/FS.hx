@@ -3,53 +3,20 @@ package haxe3ds.services;
 import cpp.UInt16;
 import haxe3ds.types.Result;
 
-/**
- * Media Type for File System.
- * 
- * @since 1.6.0
- */
 enum abstract FSMediaType(Int) {
-	/**
-	 * NAND
-	 */
 	var NAND = 0;
-
-	/**
-	 * SD Card
-	 */
 	var SD = 1;
-
-	/**
-	 * Game Card (Although rarely used.)
-	 */
 	var CARD = 2;
 }
 
-/**
- * File System Service.
- * 
- * This service includes features such as mounting a save, getting and setting the play coins, and SDMC utility!
- * 
- * @since 1.1.0
- */
+#if HAXE3DS
 @:cppFileCode('
-// https://www.3dbrew.org/wiki/RomFS#Hash_Table_Structure
 int getHashTableLength(int numEntries) {
 	int count = numEntries;
-	if (count < 3) {
-		count = 3;
-	} else if (count < 19) {
-		count |= 1;
-	} else {
-		while (count % 2 == 0 
-			|| count % 3 == 0 
-			|| count % 5 == 0 
-			|| count % 7 == 0 
-			|| count % 11 == 0 
-			|| count % 13 == 0 
-			|| count % 17 == 0) {
-			count++;
-		}
+	if (count < 3) count = 3;
+	else if (count < 19) count |= 1;
+	else {
+		while (count % 2 == 0 || count % 3 == 0 || count % 5 == 0 || count % 7 == 0 || count % 11 == 0 || count % 13 == 0 || count % 17 == 0) count++;
 	}
 	return count;
 }')
@@ -58,213 +25,149 @@ int getHashTableLength(int numEntries) {
 namespace FSD {
     inline FS_Archive sdmcRoot = 0;
     inline FS_Archive get_sdmcRoot() {
-        if (sdmcRoot == 0) {
-            FSUSER_OpenArchive(&sdmcRoot, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
-        }
+        if (sdmcRoot == 0) FSUSER_OpenArchive(&sdmcRoot, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
         return sdmcRoot;
     }
 }
 ')
+#end
+
 class FS {
-	/**
-	 * Variable property that gets whether an SD card is detected.
-	 * 
-	 * If the SDMC is found and detected, it returns `true`, else `false`.
-	 */
 	public static var isSDMCDetected(get, null):Bool;
 	static function get_isSDMCDetected():Bool {
+		#if HAXE3DS
 		return untyped __cpp__('API_GETTER(bool, FSUSER_IsSdmcDetected, 0)');
+		#else
+		return true;
+		#end
 	}
 
-	/**
-	 * Gets whether the SD card is writable.
-	 * 
-	 * If the SDMC can be written, it returns `true`, else `false`
-	 */
 	public static var isSDMCWritable(get, null):Bool;
 	static function get_isSDMCWritable():Bool {
+		#if HAXE3DS
 		return untyped __cpp__('API_GETTER(bool, FSUSER_IsSdmcWritable, 0)');
+		#else
+		return true;
+		#end
 	}
 
+	#if HAXE3DS
 	#if IS_CIA
-	/**
-	 * Mounts a save data from the console, will format the whole save data in this app if something has gone wrong!
-	 * 
-	 * This has PROPER error handling mounts, if errors then formats, check fail, if not try again, if failed returns false, else returns true.
-	 * 
-	 * *Note*: This is practically not possible if it's a 3DSX app, CIA would defidently work well.
-	 * 
-	 * @param partition Partition of the save data to use, Leave default for `ext`
-	 * @param files Files to actually store in the save data (will be calculated by `getHashTableLength`).
-	 * @param dirs Same as `files`.
-	 * @return Result code of Whether something from the services went wrong.
-	 * @since 1.3.0
-	 */
 	public static function mountSaveData(partition:String = "ext", files:Int = 1, dirs:Int = 1):Result {
 		var res:Result = 0;
-
 		untyped __cpp__('
 			const char* p = partition.c_str();
-
 			FS_Path path = fsMakePath(PATH_EMPTY, "");
-			if ((res = archiveMount(ARCHIVE_SAVEDATA, path, p)) == 0xC8A04554) { // save format error
-				if R_FAILED(
-					res = FSUSER_FormatSaveData(ARCHIVE_SAVEDATA, path, 0x200, dirs, files, getHashTableLength(dirs), getHashTableLength(files), false)
-				) return res;
-
+			if ((res = archiveMount(ARCHIVE_SAVEDATA, path, p)) == 0xC8A04554) {
+				if R_FAILED(res = FSUSER_FormatSaveData(ARCHIVE_SAVEDATA, path, 0x200, dirs, files, getHashTableLength(dirs), getHashTableLength(files), false)) return res;
 				res = archiveMount(ARCHIVE_SAVEDATA, path, p);
 			}
 		');
-
 		return res;
 	}
 
-	/**
-	 * Flushes and Commits the save data to this software, this will OVERWRITE the old data and can only be restored if the user has it saved in his backups.
-	 * 
-	 * *Note*: Doesn't seem to be flushed in 3DS but can in AZAHAR?
-	 * 
-	 * @param partition Partition of the save data to use, Leave default for `ext`
-	 * @return Result code of Whether something from the services went wrong.
-	 * @since 1.3.0
-	 */
 	public static function flushAndCommit(partition:String = "ext"):Result {
 		return untyped __cpp__('archiveCommitSaveData(partition.c_str())');
 	}
 	#end
+	#end
 
-	/**
-	 * Variable for the concurrent Play Coins in your system found by `/gamecoin.dat`.
-	 * 
-	 * Minimum 0, Maximum 300.
-	 * 
-	 * Note: If any of the FS API failed, `-1` will be returned!
-	 * 
-	 * @since 1.3.0
-	 */
 	public static var playCoins(get, set):UInt16;
 	
 	static function get_playCoins():UInt16 {
+		#if HAXE3DS
 		var out:UInt16 = -1;
 		untyped __cpp__('
 			FS_Archive archive;
 			u32 path[3] = {MEDIATYPE_NAND, 0xF000000B, 0x00048000};
-			if (R_FAILED(FSUSER_OpenArchive(&archive, ARCHIVE_SHARED_EXTDATA, (FS_Path){PATH_BINARY, 0xC, path}))) {
-				goto end1;
-			}
-
+			if (R_FAILED(FSUSER_OpenArchive(&archive, ARCHIVE_SHARED_EXTDATA, (FS_Path){PATH_BINARY, 0xC, path}))) goto end1;
 			Handle fileHandle;
-			if (R_FAILED(FSUSER_OpenFile(&fileHandle, archive, fsMakePath(PATH_UTF16, u"/gamecoin.dat"), FS_OPEN_READ | FS_OPEN_WRITE, FS_ATTRIBUTE_ARCHIVE))) {
-				goto end2;
-			}
-
+			if (R_FAILED(FSUSER_OpenFile(&fileHandle, archive, fsMakePath(PATH_UTF16, u"/gamecoin.dat"), FS_OPEN_READ | FS_OPEN_WRITE, FS_ATTRIBUTE_ARCHIVE))) goto end2;
 			u32 _;
 			FSFILE_Read(fileHandle, &_, 4, &out, sizeof(out));
-
 			FSFILE_Close(fileHandle);
-			end2:
-			FSUSER_CloseArchive(archive);
+			end2: FSUSER_CloseArchive(archive);
 			end1:
 		');
 		return out;
+		#else
+		return 0;
+		#end
 	}
 	
 	static function set_playCoins(playCoins):UInt16 {
+		#if HAXE3DS
 		playCoins = playCoins > 300 ? 300 : playCoins < 0 ? 0 : playCoins;
-
 		untyped __cpp__('
 			FS_Archive archive;
 			u32 path[3] = {MEDIATYPE_NAND, 0xF000000B, 0x00048000};
 			u8 coinBytes[2] = {(u8)(playCoins & 0xFF), (u8)((playCoins >> 8) & 0xFF)};
 			bool fail = true;
-			if (R_FAILED(FSUSER_OpenArchive(&archive, ARCHIVE_SHARED_EXTDATA, (FS_Path){PATH_BINARY, 0xC, path}))) {
-				goto end1;
-			}
-
+			if (R_FAILED(FSUSER_OpenArchive(&archive, ARCHIVE_SHARED_EXTDATA, (FS_Path){PATH_BINARY, 0xC, path}))) goto end1;
 			Handle fileHandle;
-			if (R_FAILED(FSUSER_OpenFile(&fileHandle, archive, fsMakePath(PATH_UTF16, u"/gamecoin.dat"), FS_OPEN_READ | FS_OPEN_WRITE, FS_ATTRIBUTE_ARCHIVE))) {
-				goto end2;
-			}
-
+			if (R_FAILED(FSUSER_OpenFile(&fileHandle, archive, fsMakePath(PATH_UTF16, u"/gamecoin.dat"), FS_OPEN_READ | FS_OPEN_WRITE, FS_ATTRIBUTE_ARCHIVE))) goto end2;
 			u32 _;
 			fail = R_FAILED(FSFILE_Write(fileHandle, &_, 4, coinBytes, sizeof(coinBytes), FS_WRITE_FLUSH));
-
 			FSFILE_Close(fileHandle);
-			end2:
-			FSUSER_CloseArchive(archive);
+			end2: FSUSER_CloseArchive(archive);
 			end1:
-
-			if (fail) {
-				return -1;
-			}
+			if (fail) return -1;
 		');
 		return playCoins;
+		#else
+		return playCoins;
+		#end
 	}
 
-	/**
-	 * Deletes a file located in SDMC
-	 * @param path Path to delete.
-	 * @return Result of Whether the function succeded or not.
-	 * @since 1.4.0
-	 */
 	public static function deleteFile(path:String):Result {
+		#if HAXE3DS
 		return untyped __cpp__('FSUSER_DeleteFile(FSD::get_sdmcRoot(), fsMakePath(PATH_ASCII, path.c_str()))');
+		#else
+		return 0;
+		#end
 	}
 
-	/**
-	 * Renames a file in SDMC from `source` to `destination`.
-	 * 
-	 * Possible Result Code(s):
-	 * - `0xC82047EF` - File's source does not exist, destination already exist or it's source/destination had illegal characters.
-	 * 
-	 * @param source The source file to find and rename.
-	 * @param destination The new file name to use.
-	 * @return Result of Whether the function succeded or not.
-	 */
 	public static function renameFile(source:String, destination:String):Result {
+		#if HAXE3DS
 		return untyped __cpp__('FSUSER_RenameFile(FSD::get_sdmcRoot(), fsMakePath(PATH_ASCII, source.c_str()), FSD::get_sdmcRoot(), fsMakePath(PATH_ASCII, destination.c_str()))');
+		#else
+		return 0;
+		#end
 	}
 
-	/**
-	 * Deletes a directory or even recursively deletes a directory!
-	 * @param source Source Directory to Use.
-	 * @param recursive Whether or not should recursively delete the directory.
-	 * @return Result of Whether the function succeded or not.
-	 * @since 1.5.0
-	 */
 	public static function deleteDir(source:String, recursive:Bool = false):Result {
+		#if HAXE3DS
 		untyped __cpp__('FS_Path p = fsMakePath(PATH_ASCII, source.c_str())');
 		return untyped __cpp__('recursive ? FSUSER_DeleteDirectoryRecursively(FSD::get_sdmcRoot(), p) : FSUSER_DeleteDirectory(FSD::get_sdmcRoot(), p)');
+		#else
+		return 0;
+		#end
 	}
 
-	/**
-	 * The current CTR Root Path in `sdmc` with this format: `/Nintendo 3DS/<id0>/<id1>`
-	 * 
-	 * ID0 and ID1 are randomly generated Base16 codes with the length of 32, example: `0d8f84f6c9a6af5ab0f61111e952aa9d`.
-	 * 
-	 * @since 1.6.0
-	 */
 	public static var ctrRootPath(default, null):String = "";
 	static function get_ctrRootPath():String {
+		#if HAXE3DS
 		untyped __cpp__('
 			u16 root[256] = { 0};
 			FSUSER_GetSdmcCtrRootPath((u8*)root, 512)
 		');
 		return untyped __cpp__('u16ToString(root)');
+		#else
+		return "/vol/external01/";
+		#end
 	}
 
-	/**
-	 * Closes SDMC Archive and Exits FS.
-	 */
 	public static function exit() {
+		#if HAXE3DS
 		untyped __cpp__('
 			FSUSER_CloseArchive(FSD::get_sdmcRoot());
 			fsExit()
 		');
+		#else
+		#end
 	}
-}
 
-/**
+	/**
  * The Application Title Metadata.
  * @since 1.6.0
  */
@@ -537,7 +440,7 @@ class FSSMDH {
 
 		final flags:Array<FSSMDHAppGameRatingsFlag> = [CERO, ESRB, USK, PEGI_GEN, PEGI_PRT, PEGI_BBFC, COB, GRB, CGSRR];
 		for (i in 0...12) {
-			if (i == 2 || i == 5) continue; // reserved flag
+			if (i == 2 || i == 5) continue;
 
 			if (untyped __cpp__('smdhData.settings.gameRatings[{0}]', i)) {
 				var j:Int = i;

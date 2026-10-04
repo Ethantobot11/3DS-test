@@ -1,7 +1,5 @@
 package haxe3ds;
 
-#if (!wiiu || !cafe)
-
 import cpp.UInt8;
 import cpp.UInt16;
 import cpp.UInt64;
@@ -230,5 +228,3 @@ class SVC {
 		}
 	}
 }
-
-#end

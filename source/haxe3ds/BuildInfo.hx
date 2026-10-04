@@ -1,7 +1,5 @@
 package haxe3ds;
 
-#if (!wiiu || !cafe)
-
 import sys.io.File;
 
 /**
@@ -55,5 +53,3 @@ class BuildInfo {
 		}
 	}
 }
-
-#end

@@ -1,7 +1,5 @@
 package haxe3ds;
 
-#if (!wiiu || !cafe)
-
 /**
  * Screen Graphical Enum
  */
@@ -111,5 +109,3 @@ class Console {
 		Sys.print("\\x1b[2J");
 	}
 }
-
-#end

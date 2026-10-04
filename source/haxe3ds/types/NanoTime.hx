@@ -1,7 +1,5 @@
 package haxe3ds.types;
 
-#if (!wiiu || !cafe)
-
 import cpp.UInt64;
 
 /**
@@ -78,5 +76,3 @@ enum abstract NanoTime(UInt64) from UInt64 to UInt64 {
 	function get_day():Int return Std.int(this.toInt() / 1000 / 1000 / 1000 / 60 / 60 / 24);
 	function set_day(_:Int):Int return this.toInt();
 }
-
-#end
