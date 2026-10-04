@@ -1,58 +1,33 @@
 package vorbis;
 
+import cpp.Pointer;
+import cpp.RawPointer;
+import cpp.Void;
+import cpp.Int64;
+import cpp.Int;
+import cpp.Float;
 import vorbis.Codec.Vorbis_info;
 
 @:native("OggVorbis_File")
 @:include("vorbis/vorbisfile.h")
 @:structAccess
 extern class OggVorbis_File {
-    @:include("vorbis/vorbisfile.h")
-    public var datasource:VoidPtr;
-    @:include("vorbis/vorbisfile.h")
-    public var seekable:Int;
-    @:include("vorbis/vorbisfile.h")
-    public var offset:Int64;
-    @:include("vorbis/vorbisfile.h")
-    public var end:Int64;
-
-    // Unknown variable type
-    // @:include("vorbis/vorbisfile.h")
-    // public var oy:;
-
-    @:include("vorbis/vorbisfile.h")
-    public var links:Int;
-    @:include("vorbis/vorbisfile.h")
-    public var offsets:Ptr<Int64>;
-    @:include("vorbis/vorbisfile.h")
-    public var dataoffsets:Ptr<Int64>;
-    @:include("vorbis/vorbisfile.h")
-    public var serialnos:Ptr<Int>;
-    @:include("vorbis/vorbisfile.h")
-    public var pcmlengths:Ptr<Int64>;
-
-    @:include("vorbis/vorbisfile.h")
-    public var vi:Ptr<Vorbis_info>;
-
-    // Unknown variable type
-    // @:include("vorbis/vorbisfile.h")
-    // public var vc:;
-
-    @:include("vorbis/vorbisfile.h")
-    public var pcm_offset:Int64;
-    @:include("vorbis/vorbisfile.h")
-    public var ready_state:Int;
-    @:include("vorbis/vorbisfile.h")
-    public var current_serialno:Int;
-    @:include("vorbis/vorbisfile.h")
-    public var current_link:Int;
-    @:include("vorbis/vorbisfile.h")
-    public var bittrack:Float;
-    @:include("vorbis/vorbisfile.h")
-    public var samptrack:Float;
-
-    // Unknown variable type
-    // @:include("vorbis/vorbisfile.h")
-    // public var callbacks:;
+    @:include("vorbis/vorbisfile.h") public var datasource:RawPointer<Void>;
+    @:include("vorbis/vorbisfile.h") public var seekable:Int;
+    @:include("vorbis/vorbisfile.h") public var offset:Int64;
+    @:include("vorbis/vorbisfile.h") public var end:Int64;
+    @:include("vorbis/vorbisfile.h") public var links:Int;
+    @:include("vorbis/vorbisfile.h") public var offsets:Pointer<Int64>;
+    @:include("vorbis/vorbisfile.h") public var dataoffsets:Pointer<Int64>;
+    @:include("vorbis/vorbisfile.h") public var serialnos:Pointer<Int>;
+    @:include("vorbis/vorbisfile.h") public var pcmlengths:Pointer<Int64>;
+    @:include("vorbis/vorbisfile.h") public var vi:Pointer<Vorbis_info>;
+    @:include("vorbis/vorbisfile.h") public var pcm_offset:Int64;
+    @:include("vorbis/vorbisfile.h") public var ready_state:Int;
+    @:include("vorbis/vorbisfile.h") public var current_serialno:Int;
+    @:include("vorbis/vorbisfile.h") public var current_link:Int;
+    @:include("vorbis/vorbisfile.h") public var bittrack:Float;
+    @:include("vorbis/vorbisfile.h") public var samptrack:Float;
 
     @:haxe.warning("-WExternWithExpr")
     public function new() {}
@@ -62,31 +37,29 @@ extern class OggVorbis_File {
 extern class VorbisFile {
     @:native("ov_fopen")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_fopen(path:ConstCharPtr, vf:Ptr<OggVorbis_File>):Int;
+    extern public static function ov_fopen(path:cpp.ConstCharStar, vf:Pointer<OggVorbis_File>):Int;
 
     @:native("ov_clear")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_clear(vf:Ptr<OggVorbis_File>):Int;
+    extern public static function ov_clear(vf:Pointer<OggVorbis_File>):Int;
 
     @:native("ov_read")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_read(vf:Ptr<OggVorbis_File>, buffer:Ptr<Char>, length:Int, bigendianp:Int, word:Int, sgned:Int, bitstream:Ptr<Int>):Int;
+    extern public static function ov_read(vf:Pointer<OggVorbis_File>, buffer:Pointer<cpp.Char>, length:Int, bigendianp:Int, word:Int, sgned:Int, bitstream:Pointer<cpp.Int>):Int;
 
     @:native("ov_time_tell")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_time_tell(vf:Ptr<OggVorbis_File>):Float;
+    extern public static function ov_time_tell(vf:Pointer<OggVorbis_File>):Float;
 
     @:native("ov_info")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_info(vf:Ptr<OggVorbis_File>, link:Int):Ptr<Vorbis_info>;
+    extern public static function ov_info(vf:Pointer<OggVorbis_File>, link:Int):Pointer<Vorbis_info>;
 
     @:native("ov_time_total")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_time_total(vf:Ptr<OggVorbis_File>, i:Int):Float;
+    extern public static function ov_time_total(vf:Pointer<OggVorbis_File>, i:Int):Float;
 
     @:native("ov_time_seek")
     @:include("vorbis/vorbisfile.h")
-    extern public static function ov_time_seek(vf:Ptr<OggVorbis_File>, t:Float):Int;
+    extern public static function ov_time_seek(vf:Pointer<OggVorbis_File>, t:Float):Int;
 }
-
-

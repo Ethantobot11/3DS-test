@@ -1,59 +1,30 @@
 package sdl2;
 
-@:cppInclude("SDL2/SDL_surface.h") @:include("SDL2/SDL_surface.h")
+import cpp.Pointer;
+import cpp.Int64;
+import cpp.Float;
+import cpp.UInt32;
 
-@:native("SDL_BlitMap")
+@:native("SDL_TouchID")
+typedef SDL_TouchID = Int64;
+
+@:native("SDL_FingerID")
+typedef SDL_FingerID = Int64;
+
+@:native("SDL_Finger")
 @:structAccess
-extern class SDL_BlitMap {
-    @:haxe.warning("-WExternWithExpr")
+extern class SDL_Finger {
+    public var id:SDL_FingerID;
+    public var x:Float;
+    public var y:Float;
+    public var pressure:Float;
     public function new() {}
 }
 
-@:include("SDL2/SDL_surface.h")
-@:native("SDL_Surface")
-@:structAccess
-extern class SDL_Surface {
-    @:include("SDL2/SDL_surface.h")
-	public var flags:UInt32;
-    @:include("SDL2/SDL_surface.h")
-    public var format:Ptr<SDL_Pixels.SDL_PixelFormat>;
-    @:include("SDL2/SDL_surface.h")
-    public var w:UInt32;
-    @:include("SDL2/SDL_surface.h")
-    public var h:UInt32;
-    @:include("SDL2/SDL_surface.h")
-    public var pitch:UInt32;
-    @:include("SDL2/SDL_surface.h")
-    public var pixels:VoidPtr;
-    @:include("SDL2/SDL_surface.h")
-    public var userdata:VoidPtr;
-    @:include("SDL2/SDL_surface.h")
-    public var locked:UInt32;
-    @:include("SDL2/SDL_surface.h")
-    public var lock_data:VoidPtr;
-    @:include("SDL2/SDL_surface.h")
-    public var clip_rect:SDL_Rect;
-    @:include("SDL2/SDL_surface.h")
-    public var map:Ptr<SDL_BlitMap>;
-    @:include("SDL2/SDL_surface.h")
-    public var refcount:Int;
-
-    @:haxe.warning("-WExternWithExpr")
-    public function new() {}
-}
-
-@:cppInclude("SDL2/SDL_surface.h") 
-@:include("SDL2/SDL_surface.h")
-extern class SDL_SurfaceClass {
-    @:native("SDL_FreeSurface")
-    @:include("SDL2/SDL_surface.h")
-    extern public static function SDL_FreeSurface(surface:Ptr<SDL_Surface>):Int;
-
-    @:native("SDL_CreateRGBSurface")
-    @:include("SDL2/SDL_surface.h")
-    extern public static function SDL_CreateRGBSurface(flags:UInt32, width:UInt32, height:UInt32, depth:UInt32, Rmask:UInt32, Gmask:UInt32, Bmask:UInt32, Amask:UInt32):Ptr<SDL_Surface>;
-
-    @:native("SDL_FillRect")
-    @:include("SDL2/SDL_surface.h")
-    extern public static function SDL_FillRect(dst:Ptr<SDL_Surface>, rect:Ptr<SDL_Rect>, color:UInt32):Int;
+extern class SDL_Touch {
+    @:native("SDL_TOUCH_MOUSEID") extern public static var SDL_TOUCH_MOUSEID:UInt32;
+    @:native("SDL_GetNumTouchDevices") extern public static function SDL_GetNumTouchDevices():Int;
+    @:native("SDL_GetTouchDevice") extern public static function SDL_GetTouchDevice(index:Int):SDL_TouchID;
+    @:native("SDL_GetNumTouchFingers") extern public static function SDL_GetNumTouchFingers(touchID:SDL_TouchID):Int;
+    @:native("SDL_GetTouchFinger") extern public static function SDL_GetTouchFinger(touchID:SDL_TouchID, index:Int):Pointer<SDL_Finger>;
 }
