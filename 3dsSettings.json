@@ -3,17 +3,18 @@
 		"linkOptions": {
 			"ip": "",
 			"openEmuIfTransferFailed": false,
-			"link3dsToConsole": true
+			"linkToConsole": false
 		},
 		"libraries": [
+			"hxcpp",
 			"haxe3ds",
 			"libcwav",
 			"libncsnd"
 		],
 		"defines": [],
-		"compileAsCIA": true,
+		"compileAsPlugin": true,
 		"optimizations": {
-			"o2Flag": false,
+			"o2Flag": true,
 			"gFlag": false
 		},
 		"deleteTempFiles": true
