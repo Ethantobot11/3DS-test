@@ -2,9 +2,6 @@ package citro.math;
 
 import citro.object.CitroObject;
 
-// 100% from haxeflixel https://github.com/HaxeFlixel/flixel/blob/dev/flixel/math/FlxMath.hx
-// maybe not.
-
 /**
  * Math class for creating new types of numbers.
  */

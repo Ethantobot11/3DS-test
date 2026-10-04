@@ -90,11 +90,8 @@ class CitroTween {
 
 	static function createOptions(option:Null<CitroTweenOptions>):CitroTweenOptions {
 		if (option == null) {
-			return {
-				ease: LINEAR
-			}
+			return { ease: LINEAR };
 		}
-
 		if (option.ease == null) option.ease = LINEAR;
 		return option;
 	}
@@ -146,7 +143,7 @@ class CitroTween {
 			var field = object;
 			if (fieldPaths.length > 1) {
 				for (index => path in fieldPaths) {
-					if (index == fieldPaths.length-1) {
+					if (index == fieldPaths.length - 1) {
 						break;
 					}
 
@@ -186,7 +183,7 @@ class CitroTween {
 	}
 
 	/**
-	 * Updates all tweens, should not be used.
+	 * Updates all tweens, should not be used directly.
 	 * @param delta Time since last frame in milliseconds.
 	 */
 	public static function update() {
@@ -202,7 +199,6 @@ class CitroTween {
 				switch (spr.tweenType) {
 					case OBJECT:
 						Reflect.setProperty(prop.prop, prop.variableToUse, res);
-
 					case VARIABLE:
 						useVar = res;
 				}

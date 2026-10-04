@@ -1,10 +1,10 @@
 package citro;
 
-#if (!wiiu || !cafe)
-
 import haxe.Json;
+#if haxe3ds
 import haxe3ds.Env;
 import haxe3ds.services.FS;
+#end
 import sys.FileSystem;
 import sys.io.File;
 
@@ -24,6 +24,7 @@ enum CitroSaveStatus {
 
 	/**
 	 * Status says that Application is using a 3DSX instead of CIA, which doesn't support saves.
+	 * (On Wii U, this is not applicable, saves always work).
 	 */
 	USES_3DSX;
 }
@@ -34,6 +35,12 @@ enum CitroSaveStatus {
  * This only works if the Save Status is Successful.
  */
 class CitroSave {
+	#if haxe3ds
+	private static var basePath:String = "sdmc:/Deltarune/";
+	#else
+	private static var basePath:String = "/vol/external01/Deltarune/";
+	#end
+
 	/**
 	 * The current status for this save, this can be used to determine if something went wrong, or some other miscellaneous enums.
 	 */
@@ -41,22 +48,6 @@ class CitroSave {
 
 	/**
 	 * Variable for all of the data that's stored, this can be used to set some properties to load everytime the user launches this application.
-	 * 
-	 * It's useful to track whether a property that you want for the game to be used, such as having to know how many cumulative points the user has.
-	 * 
-	 * Example Usage:
-	 * ```
-	 * if (CitroG.save.data.score == null) {
-	 * 	CitroG.save.data.score = 0; // this gets stored in the data variable, it will not be flushed, only if the game exits.
-	 * }
-	 * 
-	 * // incrementing the score:
-	 * override function update(delta:Int) {
-	 * 	if (HID.keyPressed(Key.A)) {
-	 * 		CitroG.save.data.score++; // increment the variable
-	 * 		CitroG.save.flush(); // you can use it to flush right away, this is not recommended since it's generally slower the more values it has in that data.
-	 * 	}
-	 * }
 	 */
 	public var data:Dynamic = {};
 
@@ -66,27 +57,45 @@ class CitroSave {
 	 * @param dirs How many directories that should be stored? Leave at 1 if you just want the root only.
 	 */
 	public function new(files:Int = 16, dirs:Int = 1) {
-		#if IS_3DSX
-		trace('how does saves work on 3dsx?');
-		status = USES_3DSX;
+		#if haxe3ds
+			#if IS_3DSX
+				trace('Saves are not supported in 3DSX builds. Please use a CIA.');
+				status = USES_3DSX;
+			#else
+				if (FS.mountSaveData("sdmc", files, dirs).isFail()) {
+					status = FS_ERROR;
+					trace('Failed to mount save data.');
+					return;
+				}
+				
+				ensureDirectoryExists();
+				loadSaveData();
+				status = SUCCESSFUL;
+			#end
 		#else
-		if (FS.mountSaveData("sdmc", files, dirs).isFail()) {
-			status = FS_ERROR;
-			trace('ran out of ideas');
-			return;
-		}
+			ensureDirectoryExists();
+			loadSaveData();
+			status = SUCCESSFUL;
+		#end
+	}
 
-		if (FileSystem.exists('sdmc:/Deltarune/save.json')) {
+	private function ensureDirectoryExists():Void {
+		if (!FileSystem.exists(basePath)) {
+			FileSystem.createDirectory(basePath);
+		}
+	}
+
+	private function loadSaveData():Void {
+		var savePath = basePath + "save.json";
+		if (FileSystem.exists(savePath)) {
 			try {
-				data = Json.parse(File.getContent('sdmc:/Deltarune/save.json'));
+				data = Json.parse(File.getContent(savePath));
 			} catch(error) {
-				trace('FS Failed to mount try again ig?');
-				FileSystem.deleteFile('sdmc:/Deltarune/save.json');
+				trace('Failed to parse save.json, deleting corrupted file.');
+				FileSystem.deleteFile(savePath);
+				data = {};
 			}
 		}
-
-		status = SUCCESSFUL;
-		#end
 	}
 
 	/**
@@ -99,13 +108,18 @@ class CitroSave {
 		}
 
 		try {
+			var savePath = basePath + "save.json";
+			File.saveContent(savePath, Json.stringify(data));
+			
+			#if haxe3ds
 			#if IS_CIA
-			trace('FS Is avaible on cias...but on 3dsx idk bro???');
-			File.saveContent("sdmc:/Deltarune/save.json", Json.stringify(data));
 			FS.flushAndCommit();
 			#end
+			#end
+			
 			return true;
 		} catch(e) {
+			trace('Failed to flush save data: ' + e);
 			return false;
 		}
 	}
@@ -125,13 +139,14 @@ class CitroSave {
 		}
 
 		try {
-			FileSystem.deleteFile("sdmc:/Deltarune/save.json");
-			trace('noooo goodbye!!!!');
+			var savePath = basePath + "save.json";
+			if (FileSystem.exists(savePath)) {
+				FileSystem.deleteFile(savePath);
+				trace('Save data deleted successfully.');
+			}
 			return true;
 		} catch(_) {
 			return false;
 		}
 	}
 }
-
-#end

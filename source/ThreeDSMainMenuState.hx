@@ -1,6 +1,5 @@
 package;
 
-#if (!wiiu || !cafe)
 import citro.CitroG;
 import citro.object.CitroObject;
 import citro.object.CitroSprite;
@@ -31,7 +30,9 @@ class ThreeDSMainMenuState extends CitroState {
     override public function create() {
         trace("Entering Deltarune-style MainMenuState.create()...");
 
+        #if HAXE3DS
         SoundPlayer.playSound('romfs:/assets/sounds/home.cwav');
+        #end
 
         if (CitroG.save.data == null) {
             CitroG.save.data = {};
@@ -97,22 +98,30 @@ class ThreeDSMainMenuState extends CitroState {
         var changed = false;
 
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
+            #if HAXE3DS
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            #end
             navigateGrid(0, -1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
+            #if HAXE3DS
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            #end
             navigateGrid(0, 1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.CPAD_LEFT)) {
+            #if HAXE3DS
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            #end
             navigateGrid(-1, 0);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.CPAD_RIGHT)) {
+            #if HAXE3DS
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
+            #end
             navigateGrid(1, 0);
             changed = true;
         }
@@ -128,7 +137,9 @@ class ThreeDSMainMenuState extends CitroState {
         if (HID.keyPressed(HIDKey.B)) {
             if (menuNo > 0) {
                 menuNo = 0;
+                #if HAXE3DS
                 SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
+                #end
                 updateVisualSelection();
             }
         }
@@ -209,7 +220,9 @@ class ThreeDSMainMenuState extends CitroState {
                 trace("Exiting game program.");
             }
         }
+        #if HAXE3DS
         SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
+        #end
     }
 
     private function selectSlot(slotIndex:Int) {
@@ -223,12 +236,15 @@ class ThreeDSMainMenuState extends CitroState {
             currentSlotData.room = "room_clost";
         }
         CitroG.save.flush();
+        #if HAXE3DS
         CitroG.switchState(new PlayState());
+        #end
     }
 
     override public function destroy() {
+        #if HAXE3DS
         SoundPlayer.stopSound('romfs:/assets/sounds/home.cwav');
+        #end
         super.destroy();
     }
 }
-#end

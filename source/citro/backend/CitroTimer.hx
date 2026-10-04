@@ -37,7 +37,7 @@ class CitroTimer {
 	}
 
 	/**
-	 * Should not be used.
+	 * Should not be used directly. Called by CitroGame.
 	 */
 	public static function update() {
 		if (timers.length == 0) {

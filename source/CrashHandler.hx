@@ -1,7 +1,5 @@
 package;
 
-#if (!wiiu || !cafe)
-
 import haxe.CallStack;
 import sys.io.File;
 import sys.io.FileOutput;
@@ -10,26 +8,32 @@ import citro.CitroG;
 import citro.state.CitroState;
 
 class CrashHandler {
-    private static var logsDir:String = "sdmc:/Deltarune/logs";
-    private static var crashDir:String = "sdmc:/Deltarune/crash";
+    #if haxe3ds
+    private static var basePath:String = "sdmc:/Deltarune/";
+    #else
+    private static var basePath:String = "/vol/external01/Deltarune/";
+    #end
+
+    private static var logsDir:String = basePath + "logs";
+    private static var crashDir:String = basePath + "crash";
     
-    private static var logPath:String = "sdmc:/Deltarune/logs/game_log.txt";
-    private static var crashPath:String = "sdmc:/Deltarune/crash/latest_crash.txt";
+    private static var logPath:String = basePath + "logs/game_log.txt";
+    private static var crashPath:String = basePath + "crash/latest_crash.txt";
     
     private static var originalTrace:Dynamic;
     private static var logOutput:FileOutput = null;
 
     public static function init() {
         try {
-            if (!FileSystem.isDirectory(logsDir)) {
+            if (!FileSystem.exists(logsDir)) {
                 FileSystem.createDirectory(logsDir);
             }
-            if (!FileSystem.isDirectory(crashDir)) {
+            if (!FileSystem.exists(crashDir)) {
                 FileSystem.createDirectory(crashDir);
             }
 
             logOutput = File.append(logPath, false);
-            logOutput.writeString("--- Citro Engine 3DS Session Started ---\n");
+            logOutput.writeString("--- Deltarune Session Started ---\n");
             logOutput.flush();
         } catch (e:Dynamic) {
             trace("CRITICAL: Failed to initialize CrashHandler files: " + e);
@@ -37,7 +41,7 @@ class CrashHandler {
 
         originalTrace = haxe.Log.trace;
         haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
-            originalTrace(v, infos);
+            if (originalTrace != null) originalTrace(v, infos);
 
             var fileName = (infos != null && infos.fileName != null) ? infos.fileName : "Unknown";
             var lineNumber = (infos != null) ? infos.lineNumber : 0;
@@ -59,40 +63,54 @@ class CrashHandler {
                 file.close();
             }
         } catch (e:Dynamic) {
-            originalTrace("Failed to write to general log: " + e);
+            if (originalTrace != null) originalTrace("Failed to write to general log: " + e);
         }
     }
 
     public static function logException(e:Dynamic, ?customMessage:String = "") {
         var stack = CallStack.toString(CallStack.exceptionStack());
-        var fullLog = '\n[CRASH/ERROR] $customMessage\nException: $e\nCallStack:\n$stack\n-------------------\n';
+        var fullLog = '\n========================================\n';
+        fullLog += '[CRASH/ERROR] ${Date.now().toString()}\n';
+        fullLog += 'Message: $customMessage\n';
+        fullLog += 'Exception: $e\n';
+        fullLog += 'CallStack:\n$stack\n';
+        fullLog += '========================================\n';
 
         try {
             var file = File.write(crashPath, false);
             file.writeString(fullLog);
             file.flush();
             file.close();
+            
+            var dateNow = Date.now().toString().replace(" ", "_").replace(":", "-");
+            var uniqueCrashPath = basePath + 'crash/crash_$dateNow.txt';
+            var uniqueFile = File.write(uniqueCrashPath, false);
+            uniqueFile.writeString(fullLog);
+            uniqueFile.flush();
+            uniqueFile.close();
+            
         } catch (err:Dynamic) {
-            originalTrace("Failed to write crash file: " + err);
+            if (originalTrace != null) originalTrace("Failed to write crash file: " + err);
         }
 
         appendGeneralLog(fullLog);
+        
+        trace(fullLog);
     }
 
     public static function protect(action:Void->Void, ?fallbackState:CitroState) {
         try {
             action();
         } catch (e:Dynamic) {
-            logException(e, "Runtime Crash Caught!");
+            logException(e, "Runtime Crash Caught in Protected Block!");
             
             try {
-                var menuState = fallbackState != null ? fallbackState : new ThreeDSMainMenuState();
+                var menuState:CitroState = (fallbackState != null) ? fallbackState : cast new ThreeDSMainMenuState();
                 CitroG.switchState(menuState);
             } catch (switchErr:Dynamic) {
                 appendGeneralLog("Critical Error: Failed to switch back to menu state: " + switchErr);
+                Sys.exit(1);
             }
         }
     }
 }
-
-#end
