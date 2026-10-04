@@ -4,7 +4,6 @@ import cpp.Pointer;
 import cpp.RawPointer;
 import cpp.Void;
 import cpp.Int64;
-import cpp.Int;
 import vorbis.Codec.Vorbis_info;
 
 @:native("OggVorbis_File")

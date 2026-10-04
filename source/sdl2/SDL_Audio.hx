@@ -7,7 +7,6 @@ import cpp.ConstCharStar;
 import cpp.UInt8;
 import cpp.UInt16;
 import cpp.UInt32;
-import cpp.Int;
 
 @:native("SDL_AudioFormat")
 typedef SDL_AudioFormat = UInt16;

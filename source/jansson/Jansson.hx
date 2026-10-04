@@ -5,7 +5,6 @@ import cpp.ConstCharStar;
 import cpp.NativeArray;
 import cpp.Char;
 import cpp.SizeT;
-import cpp.Int;
 
 @:native("json_error_t")
 @:structAccess

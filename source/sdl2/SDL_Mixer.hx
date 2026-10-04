@@ -7,7 +7,6 @@ import cpp.Void;
 import cpp.UInt8;
 import cpp.UInt16;
 import cpp.UInt32;
-import cpp.Int;
 
 @:native("MIX_InitFlags")
 extern enum MIX_InitFlags {

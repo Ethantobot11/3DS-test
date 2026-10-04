@@ -9,7 +9,7 @@ import cpp.Int32;
 import cpp.UInt32;
 import cpp.SizeT;
 
-import sdl2.SDL_Surface.SDL_Surface;
+import sdl2.SDL_Surface;
 import sdl2.SDL_RWops.SDL_RWops;
 import sdl2.SDL_Stdinc.SDL_bool;
 import sdl2.SDL_Render.SDL_Renderer;
