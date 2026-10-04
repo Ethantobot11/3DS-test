@@ -1,5 +1,8 @@
 package vorbis;
 
+import cpp.RawPointer;
+import cpp.Void;
+
 @:native("vorbis_info")
 @:include("vorbis/codec.h")
 @:structAccess
@@ -19,8 +22,8 @@ extern class Vorbis_info {
     @:include("vorbis/codec.h")
     public var bitrate_window:Int;
     @:include("vorbis/codec.h")
-    public var codec_setup:VoidPtr;
-
-    @:haxe.warning("-WExternWithExpr")
-    public function new() {}
+    public var codec_setup:RawPointer<Void>;
+    // i won't fix it because like wanring : D
+    // fix is : public function new(); lol
+    public function new() {};
 }
