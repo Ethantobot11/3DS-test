@@ -168,7 +168,7 @@ class FS {
 	}
 }
 
-	/**
+/**
  * The Application Title Metadata.
  * @since 1.6.0
  */
