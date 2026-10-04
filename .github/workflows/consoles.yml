@@ -123,6 +123,7 @@ jobs:
           
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
             export DEVKITARM=${DEVKITPRO}/devkitARM
+            export PATH=${DEVKITARM}/bin:$PATH
             export CXX=arm-none-eabi-g++
             export CC=arm-none-eabi-gcc
             export AR=arm-none-eabi-ar
@@ -130,10 +131,12 @@ jobs:
             haxelib run haxe3ds -c -Dnx -Dno_pch
           else
             export DEVKITPPC=${DEVKITPRO}/devkitPPC
+            export PATH=${DEVKITPPC}/bin:$PATH
             export CXX=powerpc-eabi-g++
             export CC=powerpc-eabi-gcc
             export AR=powerpc-eabi-ar
             export RANLIB=powerpc-eabi-ranlib
+            
             haxelib run haxe3ds -c -Dwiiu -Dno_pch
           fi
 
