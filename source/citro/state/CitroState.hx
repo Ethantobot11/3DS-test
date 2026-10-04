@@ -8,9 +8,9 @@ import citro.object.CitroText;
  * State for Handling What this state should do, Like for Adding Sprites, Checking Members, and More.
  */
 class CitroState {
-
+	#if haxe3ds
 	public static var fpsText:CitroText;
-	
+	#end
 	/**
 	 * Lists of members currently added in this state.
 	 */
@@ -26,11 +26,13 @@ class CitroState {
 	 * Constructor called when state is ready to be created.
 	 */
 	public function create() {
+	#if haxe3ds
 	if (fpsText != null)
 	{
 		fpsText = new FPS();
 		add(fpsText);
 	}
+	#end
 	};
 
 	/**

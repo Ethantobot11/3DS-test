@@ -29,7 +29,7 @@ class Main {
         #if !wiiu
         CitroGame.start(new LoadingState());
         #else
-        CitroGame.start(new ThreeDSMenuState());
+        CitroGame.start(new ThreeDSMainMenuState());
         #end
     }
 }

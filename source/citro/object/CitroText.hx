@@ -144,7 +144,7 @@ class CitroText extends CitroObject {
 	}
 
 	public function loadFont(path:String):Bool {
-		#if !wiiu
+		#if HAXE3DS
 		var success = false;
 		if (CitroG.caches.cache.exists(path)) {
 			untyped __cpp__('defaultFont = (C2D_Font){0}; success = defaultFont != nullptr', CitroG.caches.get(path));
@@ -155,10 +155,12 @@ class CitroText extends CitroObject {
 		}
 		return success;
 		#else
+		var success:Bool = false;
 		untyped __cpp__('
 			this->defaultFont = TTF_OpenFont(path.c_str(), 24);
-			return this->defaultFont != nullptr;
+			success = (this->defaultFont != nullptr);
 		');
+		return success;
 		#end
 	}
 
