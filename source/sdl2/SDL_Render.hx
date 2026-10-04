@@ -1,10 +1,8 @@
 package sdl2;
 
 import cpp.Pointer;
-import cpp.Float;
 import cpp.UInt8;
 import cpp.UInt32;
-import cpp.Int;
 import sdl2.SDL_Rect.SDL_Rect;
 import sdl2.SDL_Rect.SDL_FRect;
 import sdl2.SDL_Rect.SDL_Point;
