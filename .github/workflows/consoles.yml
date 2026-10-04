@@ -64,12 +64,27 @@ jobs:
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools wiiu-dev
           fi
 
-      - name: Setup Haxelib
+      - name: Setup HXCPP 3DS
+        if: inputs.name == 'Nintendo 3DS'
         run: |
           mkdir -p .haxelib
           haxelib setup .haxelib
           
           haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet
+          
+          cd .haxelib/hxcpp/git/tools/run
+          haxe compile.hxml
+          cd ../hxcpp
+          haxe compile.hxml
+          cd $GITHUB_WORKSPACE
+
+      - name: Setup HXCPP Wii U
+        if: inputs.name == 'Wii U'
+        run: |
+          mkdir -p .haxelib
+          haxelib setup .haxelib
+          
+          haxelib git hxcpp https://github.com/Ethantobot11/hxcpp-wiiu --quiet
           
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
