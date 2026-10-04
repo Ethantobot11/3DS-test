@@ -9,7 +9,7 @@ enum abstract FSMediaType(Int) {
 	var CARD = 2;
 }
 
-#if !wiiu
+#if HAXE3DS
 @:cppFileCode('
 int getHashTableLength(int numEntries) {
 	int count = numEntries;
