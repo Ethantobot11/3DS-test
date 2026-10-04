@@ -166,6 +166,7 @@ class FS {
 		#else
 		#end
 	}
+}
 
 	/**
  * The Application Title Metadata.

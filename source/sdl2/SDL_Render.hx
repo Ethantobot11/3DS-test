@@ -1,14 +1,5 @@
 package sdl2;
 
-import cpp.Pointer;
-import cpp.RawPointer;
-import cpp.Void;
-import cpp.Int32;
-import cpp.UInt32;
-import cpp.Float;
-import cpp.ConstCharStar;
-import cpp.UInt8;
-
 @:include("SDL2/SDL_render.h")
 @:native("SDL_RendererFlip")
 extern enum SDL_RendererFlip {

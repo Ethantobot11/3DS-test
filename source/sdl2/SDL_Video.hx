@@ -6,16 +6,11 @@ package sdl2;
 @:include("SDL2/SDL_video.h")
 @:native("SDL_DisplayMode")
 extern typedef SDL_DisplayMode = {
-    @:native("format")
-    var format:UInt32;
-    @:native("w")
-    var w:Int;
-    @:native("h")
-    var h:Int;
-    @:native("refresh_rate")
-    var refresh_rate:Int;
-    @:native("driverdata")
-    var driverdata:VoidPtr;
+    @:native("format") var format:UInt32;
+    @:native("w") var w:Int;
+    @:native("h") var h:Int;
+    @:native("refresh_rate") var refresh_rate:Int;
+    @:native("driverdata") var driverdata:cpp.Pointer<cpp.Void>; // FIXED
 }
 
 @:cppInclude("SDL2/SDL_video.h") 

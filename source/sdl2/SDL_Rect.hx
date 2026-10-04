@@ -1,7 +1,6 @@
 package sdl2;
 
 import cpp.Int32;
-import cpp.Float;
 
 @:include("SDL2/SDL_rect.h")
 @:native("SDL_Point")
