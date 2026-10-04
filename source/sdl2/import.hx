@@ -5,8 +5,7 @@ import cpp.RawPointer;
 import cpp.Void;
 import cpp.Char;
 import cpp.ConstCharStar;
-import cpp.Int32;
-import cpp.UInt32;
+import cpp.*;
 import cpp.SizeT;
 
 import sdl2.SDL_Surface.SDL_Surface;
