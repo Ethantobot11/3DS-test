@@ -69,9 +69,7 @@ jobs:
         run: |
           mkdir -p .haxelib
           haxelib setup .haxelib
-          
           haxelib git hxcpp https://github.com/PsychEngine-report/hxcpp --quiet
-          
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp
@@ -83,9 +81,7 @@ jobs:
         run: |
           mkdir -p .haxelib
           haxelib setup .haxelib
-          
           haxelib git hxcpp https://github.com/Ethantobot11/hxcpp-wiiu --quiet
-          
           cd .haxelib/hxcpp/git/tools/run
           haxe compile.hxml
           cd ../hxcpp
@@ -116,6 +112,9 @@ jobs:
         if: inputs.name == 'Wii U'
         run: |
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git beta --quiet
+          haxelib git hxu_sdl2 https://github.com/Ethantobot11/HxU_SDL2 hxcpp_test --quiet
+          haxelib git hxu_jansson https://github.com/Ethantobot11/HxU_Jansson --quiet
+          haxelib git hxu_vorbis https://github.com/Ethantobot11/HxU_Vorbis hxcpp_test --quiet
 
       - name: Compile Application (Unified via haxe3ds tool)
         run: |
