@@ -1,7 +1,5 @@
 package citro.object;
 
-#if (!wiiu || !cafe)
-
 import sys.io.File;
 import citro.object.CitroSprite;
 import citro.object.CitroObject;
@@ -39,6 +37,7 @@ class CitroAnimate extends CitroObject {
     }
 
     function loadCEA(ceaFile:String, defaultAnim:String):Void {
+        #if HAXE3DS
         final file:String = File.getContent(ceaFile);
         var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
         if (dir == "") dir = ".";
@@ -85,74 +84,10 @@ class CitroAnimate extends CitroObject {
             if (defaultAnim == "") defaultAnim = firstAnimFound;
         }
         play(defaultAnim);
+        #else
+        trace("CitroAnimate loadCEA is stubbed for Wii U. Implement loadXML/JSON here.");
+        #end
     }
 
     public function play(animation:String):Bool {
-        if (isDestroyed || atlasSprite == null) return false;
-        final animFormat:String = '$animation-0';
-        if (frames.exists(animFormat)) {
-            timeLeft = 1000 / framerate;
-            finished = false;
-            curAnim = animation;
-            frame = 0;
-            final frm = frames[animFormat];
-            width = frm.frameWidth;
-            height = frm.frameHeight;
-            return true;
-        }
-        return false;
-    }
-
-    public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
-        if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
-        frames = new Map();
-        atlasPath = "";
-        loadCEA(ceaFile, defaultAnim);
-    }
-
-    inline function format():String return '${curAnim}-$frame';
-
-    override function update():Bool {
-        if (isDestroyed || atlasSprite == null) return false;
-
-        if (!visible || alpha <= 0) return false;
-
-        if ((timeLeft -= CitroG.deltaTime) < 1) {
-            timeLeft = 1000 / framerate;
-            frame++;
-            if (!frames.exists(format())) {
-                finished = true;
-                frame = looped ? 0 : frame - 1;
-            } else {
-                final frm = frames[format()];
-                width = frm.frameWidth;
-                height = frm.frameHeight;
-            }
-        }
-
-        if (frames.exists(format()) && visible) {
-            final frm = frames[format()];
-            
-            width = frm.frameWidth;
-            height = frm.frameHeight;
-            atlasSprite.x = x - frm.offsetX;
-            atlasSprite.y = y - frm.offsetY;
-            atlasSprite.scale.x = scale.x;
-            atlasSprite.scale.y = scale.y;
-            atlasSprite.alpha = alpha;
-            atlasSprite.color = color;
-            atlasSprite.setSourceRect(frm.srcX, frm.srcY, frm.srcWidth, frm.srcHeight);
-            
-            return atlasSprite.update();
-        }
-
-        return false;
-    }
-
-    override function destroy() {
-        if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
-        frames = new Map();
-        super.destroy();
-    }
-}
-#end
+        if (isDestroyed || atlasSprite
