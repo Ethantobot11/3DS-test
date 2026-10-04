@@ -2,6 +2,10 @@ package citro.object;
 
 import citro.CitroG;
 import citro.backend.CitroColor;
+import sdl2.SDL;
+import sdl2.SDL_Render;
+import sdl2.SDL_Image;
+import cpp.Pointer;
 
 #if HAXE3DS
 @:headerCode('
@@ -11,11 +15,9 @@ import citro.backend.CitroColor;
 ')
 #else
 @:headerCode('
-#include <coreinit.h>
-#include <gx2.h>
-#include <gx2/draw.h>
-#include <gx2/utils.h>
-#include <gx2/state.h>
+#include <SDL.h>
+#include <SDL_image.h>
+extern "C" SDL_Renderer* gRenderer; 
 ')
 #end
 
@@ -28,9 +30,7 @@ import citro.backend.CitroColor;
 ')
 #else
 @:headerClassCode('
-    GX2Texture* texture = nullptr;
-    GX2Sampler sampler;
-    bool isLoaded = false;
+    SDL_Texture* wiiu_texture = nullptr;
 ')
 #end
 
@@ -55,13 +55,8 @@ class CitroSprite extends CitroObject {
     }
 
     public function setSourceRect(x:Float, y:Float, w:Float, h:Float):Bool {
-        srcX = x;
-        srcY = y;
-        srcWidth = w;
-        srcHeight = h;
-        useSrcRect = true;
-        width = w;
-        height = h;
+        srcX = x; srcY = y; srcWidth = w; srcHeight = h;
+        useSrcRect = true; width = w; height = h;
         return true;
     }
 
@@ -73,7 +68,7 @@ class CitroSprite extends CitroObject {
         untyped __cpp__('
             if (!this->ss) {
                 this->ss = C2D_SpriteSheetLoad(file.c_str());
-                if (!this->s) return false;
+                if (!this->ss) return false;
             }
             this->image = C2D_SpriteSheetGetImage(this->ss, 0);
             width = this->image.subtex->width;
@@ -82,12 +77,15 @@ class CitroSprite extends CitroObject {
         CitroG.caches.set(file, untyped __cpp__('this->ss'));
         #else
         untyped __cpp__('
-            // GX2InitTextureRegs(&this->texture);
-            // GX2SetupTextureEx(&this->texture, ...);
-            // GX2InitSampler(&this->sampler, GX2_TEX_CLAMP_MODE_CLAMP, GX2_TEX_XY_FILTER_MODE_POINT);
-            this->isLoaded = true;
-            this->width = 100;
-            this->height = 100;
+            SDL_Surface* surface = IMG_Load(file.c_str());
+            if (surface) {
+                this->wiiu_texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+                this->width = surface->w;
+                this->height = surface->h;
+                SDL_FreeSurface(surface);
+                return true;
+            }
+            return false;
         ');
         #end
         return true;
@@ -120,13 +118,23 @@ class CitroSprite extends CitroObject {
         ');
         #else
         untyped __cpp__('
-            if (!this->isLoaded || this->texture == nullptr) return true;
+            if (!this->wiiu_texture || !gRenderer) return true;
 
-            GX2SetBlendControl(GX2_RENDER_TARGET_0, GX2_BLEND_MODE_SRC_ALPHA, GX2_BLEND_MODE_INV_SRC_ALPHA, GX2_BLEND_COMBINE_MODE_ADD, TRUE, GX2_BLEND_MODE_SRC_ALPHA, GX2_BLEND_MODE_INV_SRC_ALPHA, GX2_BLEND_COMBINE_MODE_ADD);
+            Uint8 alphaVal = (Uint8)(this->alpha * 255.0f);
+            SDL_SetTextureAlphaMod(this->wiiu_texture, alphaVal);
+            SDL_SetTextureColorMod(this->wiiu_texture, (this->color >> 16) & 0xFF, (this->color >> 8) & 0xFF, this->color & 0xFF);
+
+            SDL_Rect dstRect;
+            dstRect.x = (int)this->x;
+            dstRect.y = (int)this->y;
+            dstRect.w = (int)(this->width * this->scale->x);
+            dstRect.h = (int)(this->height * this->scale->y);
+
+            SDL_Point center;
+            center.x = dstRect.w / 2;
+            center.y = dstRect.h / 2;
             
-            GX2SetPixelTexture(this->texture, 0);
-            GX2SetPixelSampler(&this->sampler, 0);
-            GX2DrawEx(GX2_PRIMITIVE_MODE_QUADS, 4, 0, 1);
+            SDL_RenderCopyEx(gRenderer, this->wiiu_texture, NULL, &dstRect, (double)this->angle, &center, SDL_FLIP_NONE);
         ');
         #end
         return true;
@@ -137,10 +145,9 @@ class CitroSprite extends CitroObject {
         untyped __cpp__('if (this->ss) { this->ss = nullptr; }');
         #else
         untyped __cpp__('
-            if (this->texture != nullptr) {
-                // Free GX2 texture memory (implementation depends on your memory allocator)
-                // GX2Invalidate(GX2_INVALIDATE_MODE_CPU, this->texture->image, this->texture->imageSize);
-                this->texture = nullptr;
+            if (this->wiiu_texture != nullptr) {
+                SDL_DestroyTexture(this->wiiu_texture);
+                this->wiiu_texture = nullptr;
             }
         ');
         #end
