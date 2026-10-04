@@ -6,7 +6,7 @@ import haxe3ds.types.Result;
 @:cppInclude("coreinit.h")
 class RomFS {
 	public static inline function init():Result {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__('romfsInit()');
 		#else
 		return 0; 
@@ -14,7 +14,7 @@ class RomFS {
 	}
 
 	public static inline function exit():Result {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__('romfsExit()');
 		#else
 		return 0;

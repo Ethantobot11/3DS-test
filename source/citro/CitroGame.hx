@@ -12,7 +12,7 @@ import haxe3ds.OS;
  * Unified Engine Setup.
  * Handles 3DS (Citro2D/3D) and Wii U (SDL2) initialization and rendering.
  */
-#if haxe3ds
+#if !wiiu
 @:headerCode("
 #include <citro2d.h>
 #include <citro3d.h>
@@ -51,7 +51,7 @@ class CitroGame {
 				continue;
 			}
 
-			#if haxe3ds
+			#if !wiiu
 			if (member.bottom != bottom) continue;
 			#end
 			member.update();
@@ -59,7 +59,7 @@ class CitroGame {
 	}
 
 	static function renderState(state:CitroState) {
-		#if haxe3ds
+		#if !wiiu
 		for (i in 0...2) {
 			untyped __cpp__("C2D_SceneBegin({0} == 0 ? topScreen : bottomScreen)", i);
 			renderObjectsForScreen(state, i == 1);
@@ -75,7 +75,7 @@ class CitroGame {
 		GFX.init();
 		RomFS.init();
 
-		#if haxe3ds
+		#if !wiiu
 		untyped __cpp__('
 			C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
 			C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
@@ -101,7 +101,7 @@ class CitroGame {
 		while (APT.mainLoop() && !_shouldQuit) {
 			final startTime = OS.time.toInt();
 
-			#if haxe3ds
+			#if !wiiu
 			untyped __cpp__('
 				C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 				C2D_TargetClear(topScreen, 0xFF1D1D24);
@@ -124,7 +124,7 @@ class CitroGame {
 			renderState(CitroG.state);
 			if (sub != null) renderState(sub);
 
-			#if haxe3ds
+			#if !wiiu
 			untyped __cpp__('
 				C2D_Flush();
 				C3D_FrameEnd(1); // 1 = C3D_FRAME_SYNCDRAW
@@ -142,7 +142,7 @@ class CitroGame {
 			CitroG.deltaTime = elapsed;
 		}
 
-		#if haxe3ds
+		#if !wiiu
 		untyped __cpp__('
 			C3D_Fini();
 			C2D_Fini();

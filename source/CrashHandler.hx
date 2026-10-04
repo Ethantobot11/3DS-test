@@ -9,7 +9,7 @@ import citro.state.CitroState;
 using StringTools;
 
 class CrashHandler {
-    #if haxe3ds
+    #if !wiiu
     private static var basePath:String = "sdmc:/Deltarune/";
     #else
     private static var basePath:String = "/vol/external01/Deltarune/";

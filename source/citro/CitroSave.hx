@@ -1,7 +1,7 @@
 package citro;
 
 import haxe.Json;
-#if haxe3ds
+#if !wiiu
 import haxe3ds.Env;
 import haxe3ds.services.FS;
 #end
@@ -35,7 +35,7 @@ enum CitroSaveStatus {
  * This only works if the Save Status is Successful.
  */
 class CitroSave {
-	#if haxe3ds
+	#if !wiiu
 	private static var basePath:String = "sdmc:/Deltarune/";
 	#else
 	private static var basePath:String = "/vol/external01/Deltarune/";
@@ -57,7 +57,7 @@ class CitroSave {
 	 * @param dirs How many directories that should be stored? Leave at 1 if you just want the root only.
 	 */
 	public function new(files:Int = 16, dirs:Int = 1) {
-		#if haxe3ds
+		#if !wiiu
 			#if IS_3DSX
 				trace('Saves are not supported in 3DSX builds. Please use a CIA.');
 				status = USES_3DSX;
@@ -111,7 +111,7 @@ class CitroSave {
 			var savePath = basePath + "save.json";
 			File.saveContent(savePath, Json.stringify(data));
 			
-			#if haxe3ds
+			#if !wiiu
 			#if IS_CIA
 			FS.flushAndCommit();
 			#end

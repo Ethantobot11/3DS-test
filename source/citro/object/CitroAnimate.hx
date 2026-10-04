@@ -37,7 +37,7 @@ class CitroAnimate extends CitroObject {
     }
 
     function loadCEA(ceaFile:String, defaultAnim:String):Void {
-        #if HAXE3DS
+        #if !wiiu
         final file:String = File.getContent(ceaFile);
         var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
         if (dir == "") dir = ".";
@@ -126,7 +126,7 @@ class CitroAnimate extends CitroObject {
         if (isDestroyed || atlasSprite == null) return false;
         if (!visible || alpha <= 0) return false;
 
-        #if HAXE3DS
+        #if !wiiu
         if ((timeLeft -= CitroG.deltaTime) < 1) {
             timeLeft = 1000 / framerate;
             frame++;

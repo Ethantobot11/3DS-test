@@ -9,7 +9,7 @@ import sdl2.SDL_Image;
 import cpp.Pointer;
 #end
 
-#if HAXE3DS
+#if !wiiu
 @:headerCode('
 #include <3ds.h>
 #include <citro2d.h>
@@ -25,7 +25,7 @@ extern "C" SDL_Renderer* gRenderer;
 
 @:headerInclude("citro/object/CitroVector2D.h")
 
-#if HAXE3DS
+#if !wiiu
 @:headerClassCode('
     C2D_SpriteSheet ss;
     C2D_Image image;
@@ -63,7 +63,7 @@ class CitroSprite extends CitroObject {
     }
 
     public function loadGraphic(file:String):Bool {
-        #if HAXE3DS
+        #if !wiiu
         if (CitroG.caches.cache.exists(file)) {
             untyped __cpp__('this->ss = (C2D_SpriteSheet){0}', CitroG.caches.get(file));
         }
@@ -96,7 +96,7 @@ class CitroSprite extends CitroObject {
     override function update():Bool {
         if (!visible || alpha <= 0) return false;
         
-        #if HAXE3DS
+        #if !wiiu
         untyped __cpp__('
             Float sw = this->scale->x, sh = this->scale->y;
             C3D_Mtx matrix;
@@ -143,7 +143,7 @@ class CitroSprite extends CitroObject {
     }
 
     override function destroy() {
-        #if HAXE3DS
+        #if !wiiu
         untyped __cpp__('if (this->ss) { this->ss = nullptr; }');
         #else
         untyped __cpp__('

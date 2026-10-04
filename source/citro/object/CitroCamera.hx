@@ -3,7 +3,7 @@ package citro.object;
 import citro.object.CitroObject;
 import citro.math.CitroMath;
 
-#if HAXE3DS
+#if !wiiu
 @:cppInclude("citro/CitroGame.h")
 @:cppInclude("3ds.h")
 #else
@@ -40,7 +40,7 @@ class CitroCamera extends CitroObject {
 		curY = CitroMath.lerp(curY, y, lerp);
 		bottom = bottomCam;
 
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__('
 			C3D_Mtx camMtx;
 			Mtx_Diagonal(&camMtx, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -67,7 +67,7 @@ class CitroCamera extends CitroObject {
 			spr.update();
 		}
 
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__('C2D_ViewRestore(&camMtx)');
 		#end
 

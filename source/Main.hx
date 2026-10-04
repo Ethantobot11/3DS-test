@@ -11,7 +11,7 @@ class Main {
     public static function main():Void {
         CrashHandler.init();
 
-        #if haxe3ds
+        #if !wiiu
         RomFS.init();
         var plgResult = PLGLDR.init();
         if (plgResult == 0) {
@@ -26,7 +26,7 @@ class Main {
         #end
 
         // AchievementManager.unlock("play_DELTARUNE_3DS");
-        #if HAXE3DS
+        #if !wiiu
         CitroGame.start(new LoadingState());
         #else
         CitroGame.start(new ThreeDSMenuState());

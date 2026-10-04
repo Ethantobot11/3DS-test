@@ -38,7 +38,7 @@ typedef TouchPosition = { var px:Int; var py:Int; }
 typedef AccelVector = { var x:Int; var y:Int; var z:Int; }
 typedef AngularRate = { var x:Int; var y:Int; var z:Int; }
 
-#if HAXE3DS
+#if !wiiu
 @:cppInclude("3ds.h")
 #else
 @:cppInclude("vpad/input.h")
@@ -46,7 +46,7 @@ typedef AngularRate = { var x:Int; var y:Int; var z:Int; }
 #end
 class HID {
 	public static inline function scanInput() {
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__("hidScanInput(); irrstScanInput()");
 		#else
 		untyped __cpp__('
@@ -58,7 +58,7 @@ class HID {
 	}
 
 	public static inline function keyPressed(key:UInt32):Bool {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__("(hidKeysDown() & ({0}))", key);
 		#else
 		return untyped __cpp__('
@@ -86,7 +86,7 @@ class HID {
 	}
 
 	public static inline function keyHeld(key:UInt32):Bool {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__("(hidKeysHeld() & ({0}))", key);
 		#else
 		return untyped __cpp__('
@@ -114,7 +114,7 @@ class HID {
 	}
 
 	public static inline function keyUp(key:UInt32):Bool {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__("(hidKeysUp() & ({0}))", key);
 		#else
 		return untyped __cpp__('
@@ -143,7 +143,7 @@ class HID {
 
 	public static var touch(get, null):TouchPosition;
 	static function get_touch():TouchPosition {
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__("
 			touchPosition temp;
 			hidTouchRead(&temp)

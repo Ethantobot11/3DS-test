@@ -22,7 +22,7 @@ enum abstract BorderStyle(Int) {
 	var SHADOW;
 }
 
-#if HAXE3DS
+#if !wiiu
 @:cppFileCode('
 #include "haxe3ds_Utils.h"
 static C2D_Font fnt = NULL;
@@ -51,7 +51,7 @@ void createText(void* value) {}
 }')
 #end
 
-#if HAXE3DS
+#if !wiiu
 @:headerCode('#include <citro2d.h>\n#include <citro3d.h>')
 @:headerClassCode('C2D_Font defaultFont;')
 #else
@@ -72,7 +72,7 @@ class CitroText extends CitroObject {
 		this.y = y;
 		this.text = Text;
 
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__('
 			if (sbuf == NULL) {
 				fnt = C2D_FontLoadSystem(CFG_REGION_USA);
@@ -88,7 +88,7 @@ class CitroText extends CitroObject {
 	override function update():Bool {
 		if (text.length == 0 || super.update()) return false;
 
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__('
 			textUtil::createText(this);
 			float newX = x, sw = scale->x, sh = scale->y;
@@ -144,7 +144,7 @@ class CitroText extends CitroObject {
 	}
 
 	public function loadFont(path:String):Bool {
-		#if HAXE3DS
+		#if !wiiu
 		var success = false;
 		if (CitroG.caches.cache.exists(path)) {
 			untyped __cpp__('defaultFont = (C2D_Font){0}; success = defaultFont != nullptr', CitroG.caches.get(path));
@@ -171,7 +171,7 @@ class CitroText extends CitroObject {
 
 	override function destroy() {
 		super.destroy();
-		#if HAXE3DS
+		#if !wiiu
 		untyped __cpp__('if (defaultFont) { C2D_FontFree(defaultFont); defaultFont = nullptr; }');
 		#else
 		untyped __cpp__('if (defaultFont != nullptr) { TTF_CloseFont(defaultFont); defaultFont = nullptr; }');

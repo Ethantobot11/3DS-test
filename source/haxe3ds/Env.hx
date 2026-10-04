@@ -5,7 +5,7 @@ package haxe3ds;
 class Env {
 	public static var is3DSX(get, null):Bool;
 	static inline function get_is3DSX():Bool {
-		#if HAXE3DS
+		#if !wiiu
 		return untyped __cpp__('envIsHomebrew()');
 		#else
 		return false;
@@ -14,7 +14,7 @@ class Env {
 
 	public static var isUsing3DS(get, null):Bool;
 	static function get_isUsing3DS():Bool {
-		#if HAXE3DS
+		#if !wiiu
 		var isLuma:Bool = false;
 		untyped __cpp__('
 			Handle lumaCheck;

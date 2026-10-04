@@ -30,7 +30,7 @@ class ThreeDSMainMenuState extends CitroState {
     override public function create() {
         trace("Entering Deltarune-style MainMenuState.create()...");
 
-        #if HAXE3DS
+        #if !wiiu
         SoundPlayer.playSound('romfs:/assets/sounds/home.cwav');
         #end
 
@@ -98,28 +98,28 @@ class ThreeDSMainMenuState extends CitroState {
         var changed = false;
 
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
-            #if HAXE3DS
+            #if !wiiu
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             #end
             navigateGrid(0, -1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
-            #if HAXE3DS
+            #if !wiiu
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             #end
             navigateGrid(0, 1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.CPAD_LEFT)) {
-            #if HAXE3DS
+            #if !wiiu
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             #end
             navigateGrid(-1, 0);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.CPAD_RIGHT)) {
-            #if HAXE3DS
+            #if !wiiu
             SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
             #end
             navigateGrid(1, 0);
@@ -137,7 +137,7 @@ class ThreeDSMainMenuState extends CitroState {
         if (HID.keyPressed(HIDKey.B)) {
             if (menuNo > 0) {
                 menuNo = 0;
-                #if HAXE3DS
+                #if !wiiu
                 SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
                 #end
                 updateVisualSelection();
@@ -220,7 +220,7 @@ class ThreeDSMainMenuState extends CitroState {
                 trace("Exiting game program.");
             }
         }
-        #if HAXE3DS
+        #if !wiiu
         SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
         #end
     }
@@ -236,13 +236,13 @@ class ThreeDSMainMenuState extends CitroState {
             currentSlotData.room = "room_clost";
         }
         CitroG.save.flush();
-        #if HAXE3DS
+        #if !wiiu
         CitroG.switchState(new PlayState());
         #end
     }
 
     override public function destroy() {
-        #if HAXE3DS
+        #if !wiiu
         SoundPlayer.stopSound('romfs:/assets/sounds/home.cwav');
         #end
         super.destroy();

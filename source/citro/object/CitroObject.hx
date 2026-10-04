@@ -33,7 +33,7 @@ class CitroVector2D {
 	u32 finalColor = ((color & 0xFF00FF00) | ((color >> 16) & 0xFF) | ((color & 0xFF) << 16)); \\
 	if (alpha < 1) finalColor = (color & 0x00FFFFFF) | ((u8)((u8)((color >> 24) & 0xFF) * alpha) << 24);
 ')
-#if HAXE3DS
+#if !wiiu
 @:headerInclude("3ds.h")
 #else
 @:headerInclude("coreinit.h")

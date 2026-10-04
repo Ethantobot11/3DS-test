@@ -1,6 +1,6 @@
 package;
 
-#if haxe3ds
+#if !wiiu
 import citro.object.CitroText;
 import citro.backend.CitroTimer;
 import citro.CitroG;
