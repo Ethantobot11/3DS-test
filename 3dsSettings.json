@@ -13,7 +13,7 @@
 		],
 		"defines": [],
 		"compileAsPlugin": true,
-		"compileAsWUP": = true,
+		"compileAsWUP": true,
 		"optimizations": {
 			"o2Flag": true,
 			"gFlag": false
