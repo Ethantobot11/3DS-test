@@ -114,6 +114,12 @@ jobs:
       - name: Install Wii U Specific Haxelibs (Wii U)
         if: inputs.name == 'Wii U'
         run: |
+          rm -rf .haxelib/haxe3ds
+          rm -rf .haxelib/hxcpp
+          rm -rf .haxelib/hxu_sdl2
+          rm -rf .haxelib/hxu_jansson
+          rm -rf .haxelib/hxu_vorbis
+          
           haxelib git haxe3ds https://github.com/Ethantobot11/Haxe3DS.git beta --quiet
           haxelib git hxu_sdl2 https://github.com/Ethantobot11/HxU_SDL2 hxcpp_test --quiet
           haxelib git hxu_jansson https://github.com/Ethantobot11/HxU_Jansson --quiet
