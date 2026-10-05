@@ -2,7 +2,7 @@ package haxe3ds.types;
 
 import cpp.UInt32;
 
-#if haxe3ds
+#if HAXE3DS
 /**
  * The result code that was provided by the application, and gets the level, summary, module and description.
  * 
