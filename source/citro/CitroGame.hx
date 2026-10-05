@@ -25,9 +25,7 @@ C3D_RenderTarget* bottomScreen = nullptr;
 ')
 #else
 @:headerCode("
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL.h>
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
@@ -87,8 +85,6 @@ class CitroGame {
 		#else
 		untyped __cpp__('
 			SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER);
-			IMG_Init(IMG_INIT_PNG);
-			TTF_Init();
 
 			SDL_CreateWindowAndRenderer(1280, 720, 0, &gWindow, &gRenderer);
 			SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
@@ -151,8 +147,6 @@ class CitroGame {
 		untyped __cpp__('
 			SDL_DestroyRenderer(gRenderer);
 			SDL_DestroyWindow(gWindow);
-			TTF_Quit();
-			IMG_Quit();
 			SDL_Quit();
 		');
 		#end
