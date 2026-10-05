@@ -42,8 +42,8 @@ void createText(citro::object::CitroText_obj* value) {
 }')
 #else
 @:cppFileCode('
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 extern "C" SDL_Renderer* gRenderer;
 extern "C" TTF_Font* gDefaultFont;
 namespace textUtil {
@@ -55,7 +55,7 @@ void createText(void* value) {}
 @:headerCode('#include <citro2d.h>\n#include <citro3d.h>')
 @:headerClassCode('C2D_Font defaultFont;')
 #else
-@:headerCode('#include <SDL.h>\n#include <SDL_ttf.h>')
+@:headerCode('#include <SDL2/SDL.h>\n#include <SDL2/SDL_ttf.h>')
 @:headerClassCode('TTF_Font* defaultFont = nullptr;')
 #end
 
