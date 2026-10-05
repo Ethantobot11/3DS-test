@@ -115,7 +115,6 @@ jobs:
         if: inputs.name == 'Wii U'
         run: |
           rm -rf .haxelib/haxe3ds
-          rm -rf .haxelib/hxcpp
           rm -rf .haxelib/hxu_sdl2
           rm -rf .haxelib/hxu_jansson
           rm -rf .haxelib/hxu_vorbis
