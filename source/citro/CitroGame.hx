@@ -25,9 +25,9 @@ C3D_RenderTarget* bottomScreen = nullptr;
 ')
 #else
 @:headerCode("
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
