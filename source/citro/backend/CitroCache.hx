@@ -17,6 +17,18 @@ void SUPER_FREE(void **ptr2ptr) {
 	}
 }
 ')
+#else
+@:cppFileCode('
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
+void SUPER_FREE(void **ptr2ptr) {
+	if (ptr2ptr && *ptr2ptr) {
+		free(*ptr2ptr);
+		*ptr2ptr = NULL;
+	}
+}
+')
 #end
 
 class CitroCache {
@@ -60,24 +72,27 @@ class CitroCache {
 		var extension = key.split(".");
 		var ext = extension[extension.length - 1].toLowerCase();
 		
+		#if HAXE3DS
 		switch (ext) {
-			#if HAXE3DS
 			case "t3x":
-				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet){0});', ptr);
+				untyped __cpp__('C2D_SpriteSheetFree((C2D_SpriteSheet){0}.ptr);', ptr);
 			case "bcfnt":
-				untyped __cpp__('C2D_FontFree((C2D_Font){0});', ptr);
+				untyped __cpp__('C2D_FontFree((C2D_Font){0}.ptr);', ptr);
 			case "cwav":
-				untyped __cpp__('cwavFileFree((CWAV*){0}); free({0});', ptr);
-			#if !HAXE3DS
-			case "png":
-				untyped __cpp__('SDL_FreeSurface((SDL_Surface*){0});', ptr);
-			case "ttf":
-				untyped __cpp__('TTF_CloseFont((TTF_Font*){0});', ptr);
-			#end
+				untyped __cpp__('cwavFileFree((CWAV*){0}.ptr); free({0}.ptr);', ptr);
 			default:
-				untyped __cpp__('SUPER_FREE((void**)&{0});', ptr);
-			#end
+				untyped __cpp__('SUPER_FREE((void**)&{0}.ptr);', ptr);
 		}
+		#else
+		switch (ext) {
+			case "png":
+				untyped __cpp__('SDL_FreeSurface((SDL_Surface*){0}.ptr);', ptr);
+			case "ttf":
+				untyped __cpp__('TTF_CloseFont((TTF_Font*){0}.ptr);', ptr);
+			default:
+				untyped __cpp__('SUPER_FREE((void**)&{0}.ptr);', ptr);
+		}
+		#end
 	}
 
 	public function clear() {
