@@ -1,0 +1,102 @@
+#---------------------------------------------------------------------------------
+.SUFFIXES:
+#---------------------------------------------------------------------------------
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
+endif
+
+TOPDIR ?= $(CURDIR)
+include $(DEVKITPRO)/wut/share/wut_rules
+
+WUT_ROOT := $(DEVKITPRO)/wut
+
+#---------------------------------------------------------------------------------
+TARGET		:= 	output
+BUILD		:=	build
+SOURCES		:=	src
+INCLUDES	:=	include
+#---------------------------------------------------------------------------------
+CFLAGS		:=	-g -Wall -O2 -ffunction-sections $(MACHDEP)
+CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__ [C_DEFINES]
+CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-sequence-point [CPP_DEFINES]
+ASFLAGS		:=	-g $(MACHDEP)
+LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
+
+LIBS		:=	[LIBS] -lwut
+
+LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
+
+#---------------------------------------------------------------------------------
+ifneq ($(BUILD),$(notdir $(CURDIR)))
+#---------------------------------------------------------------------------------
+export OUTPUT_DIR	:=	$(CURDIR)/output
+export OUTPUT_FILE	:=	$(OUTPUT_DIR)/$(TARGET)
+export TOPDIR		:=	$(CURDIR)
+export VPATH		:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
+export DEPSDIR		:=	$(CURDIR)/$(BUILD)
+
+CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+
+ifeq ($(strip $(CPPFILES)),)
+	export LD	:=	$(CC)
+else
+	export LD	:=	$(CXX)
+endif
+
+export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
+export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o) libHAXEWIIU.a libhxcpp.a
+
+export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+				-I$(CURDIR)/$(BUILD)
+export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+.PHONY: $(BUILD) clean all bootstrap rpx wps elf
+
+all : bootstrap
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+
+rpx : bootstrap
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile $@
+
+wps : bootstrap
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile $@
+
+elf : bootstrap
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile $@
+
+bootstrap :
+	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
+	@[ -d $(OUTPUT_DIR) ] || mkdir -p $(OUTPUT_DIR)
+
+clean :
+	@echo clean ...
+	@rm -rf $(BUILD) $(OUTPUT_DIR)
+
+#---------------------------------------------------------------------------------
+else
+.PHONY:	all rpx wps elf
+
+DEPENDS		:=	$(OFILES:.o=.d)
+
+all		:	$(OUTPUT_FILE).rpx $(OUTPUT_FILE).wps
+
+$(OUTPUT_FILE).rpx	:	$(OUTPUT_FILE).elf
+	@echo "built ... $(notdir $@)"
+
+$(OUTPUT_FILE).wps	:	$(OUTPUT_FILE).elf
+	@cp $< $@
+	@echo "built ... $(notdir $@)"
+
+$(OUTPUT_FILE).elf	:	$(OFILES)
+
+rpx : $(OUTPUT_FILE).rpx
+wps : $(OUTPUT_FILE).wps
+elf : $(OUTPUT_FILE).elf
+
+-include $(DEPENDS)
+#---------------------------------------------------------------------------------
+endif
+#---------------------------------------------------------------------------------
