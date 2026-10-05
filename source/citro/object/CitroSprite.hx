@@ -17,8 +17,8 @@ import cpp.Pointer;
 ')
 #else
 @:headerCode('
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 extern "C" SDL_Renderer* gRenderer; 
 ')
 #end
