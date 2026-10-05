@@ -3,21 +3,25 @@ package haxe3ds;
 import cpp.UInt64;
 import cpp.UInt8;
 
+#if !HAXE3DS
 @:cppInclude("3ds.h")
-@:cppInclude("coreinit.h")
+#else
+@:cppInclude("coreinit/time.h")
+@:cppInclude("coreinit/system.h")
+#end
 class OS {
 	public static var time(get, null):UInt64;
 	static function get_time():UInt64 {
-		#if !wiiu
+		#if !HAXE3DS
 		return untyped __cpp__('osGetTime()');
 		#else
-		return untyped __cpp__('(uint64_t)(OSGetTime() / (OSGetSystemInfo()->busSpeed / 1000))');
+		return untyped __cpp__('(uint64_t)(OSGetSystemTime() / (OSGetSystemInfo()->busSpeed / 4))');
 		#end
 	}
 
 	public static var wifiStrength(get, null):UInt8;
 	static function get_wifiStrength():UInt8 {
-		#if !wiiu
+		#if !HAXE3DS
 		return untyped __cpp__('osGetWifiStrength()');
 		#else
 		return 3;
@@ -26,7 +30,7 @@ class OS {
 
 	public static var sliderState3D(get, null):Float;
 	static function get_sliderState3D():Float {
-		#if !wiiu
+		#if !HAXE3DS
 		return untyped __cpp__('osGet3DSliderState()');
 		#else
 		return 0.0;
