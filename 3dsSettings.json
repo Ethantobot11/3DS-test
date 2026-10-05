@@ -12,7 +12,8 @@
 			"libncsnd"
 		],
 		"defines": [],
-		"compileAsPlugin": true,
+		"compileAsPlugin": false,
+		"compileAsCIA": false,
 		"compileAsWUP": true,
 		"optimizations": {
 			"o2Flag": true,
