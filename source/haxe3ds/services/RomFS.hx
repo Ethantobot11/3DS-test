@@ -7,7 +7,7 @@ import haxe3ds.types.Result;
 #end
 class RomFS {
 	public static inline function init():Result {
-		#if !wiiu
+		#if HAXE3DS
 		return untyped __cpp__('romfsInit()');
 		#else
 		return 0; 
@@ -15,7 +15,7 @@ class RomFS {
 	}
 
 	public static inline function exit():Result {
-		#if !wiiu
+		#if HAXE3DS
 		return untyped __cpp__('romfsExit()');
 		#else
 		return 0;
