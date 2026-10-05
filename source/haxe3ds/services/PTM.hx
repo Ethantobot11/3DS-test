@@ -54,3 +54,33 @@ class PTMU {
 		#if HAXE3DS return untyped __cpp__("API_GETTER(bool, PTMU_GetAdapterState, 0)"); #else return true; #end
 	}
 }
+
+#if HAXE3DS
+@:cppInclude("3ds.h")
+#end
+class PTMSYSM {
+	public static function init():Result {
+		#if HAXE3DS return untyped __cpp__('ptmSysmInit()'); #else return 0; #end
+	}
+
+	@:native("ptmSysmExit")
+	public static function exit() {
+		#if HAXE3DS #end
+	}
+
+	public static function requestSleep():Result {
+		#if HAXE3DS return untyped __cpp__('PTMSYSM_RequestSleep()'); #else return 0; #end
+	}
+
+	public static function clearStepHistory():Result {
+		#if HAXE3DS return untyped __cpp__('PTMSYSM_ClearStepHistory()'); #else return 0; #end
+	}
+
+	public static function clearPlayHistory():Result {
+		#if HAXE3DS return untyped __cpp__('PTMSYSM_ClearPlayHistory()'); #else return 0; #end
+	}
+
+	public static function invalidateSystemTime():Result {
+		#if HAXE3DS return untyped __cpp__('PTMSYSM_InvalidateSystemTime()'); #else return 0; #end
+	}
+}
