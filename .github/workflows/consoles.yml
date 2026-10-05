@@ -123,6 +123,8 @@ jobs:
         run: |
           export DEVKITPRO=/opt/devkitpro
           export PATH=${DEVKITPRO}/tools/bin:$PATH
+
+          rm -rf export/obj
           
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
             export DEVKITARM=${DEVKITPRO}/devkitARM
