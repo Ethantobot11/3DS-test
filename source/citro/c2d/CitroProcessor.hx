@@ -5,7 +5,7 @@ package citro.c2d;
  * Note: These are 3DS-specific Citro3D metrics. On Wii U, they safely return 0.
  */
 class CitroProcessor {
-	#if haxe3ds
+	#if HAXE3DS
 	@:cppInclude("citro3d.h")
 	/**
 	 * Retrieves the current command buffer usage.
