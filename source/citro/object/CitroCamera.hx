@@ -7,8 +7,8 @@ import citro.math.CitroMath;
 @:cppInclude("citro/CitroGame.h")
 @:cppInclude("3ds.h")
 #else
-@:cppInclude("coreinit.h")
-@:cppInclude("gx2.h")
+@:cppInclude("SDL2/SDL.h")
+@:headerCode("extern SDL_Renderer* gRenderer;")
 #end
 
 class CitroCamera extends CitroObject {
@@ -51,9 +51,25 @@ class CitroCamera extends CitroObject {
 		', scX, zoom, curX, curY);
 		#else
 		untyped __cpp__('
-			// Basic GX2 stub for camera
-			// GX2SetViewport(...)
-			// GX2SetContextState(...)
+			if (!gRenderer) return true;
+
+			SDL_Rect oldViewport;
+			float oldScaleX, oldScaleY;
+			SDL_RenderGetViewport(gRenderer, &oldViewport);
+			SDL_RenderGetScale(gRenderer, &oldScaleX, &oldScaleY);
+
+			float screenW = 1280.0f;
+			float screenH = 720.0f;
+			float centerX = screenW / 2.0f;
+			float centerY = screenH / 2.0f;
+
+			SDL_Rect camViewport;
+			camViewport.x = (int)(centerX - (curX * zoom));
+			camViewport.y = (int)(centerY - (curY * zoom));
+			camViewport.w = (int)(screenW / zoom);
+			camViewport.h = (int)(screenH / zoom);
+			SDL_RenderSetViewport(gRenderer, &camViewport);
+			SDL_RenderSetScale(gRenderer, zoom, zoom);
 		');
 		#end
 
@@ -69,6 +85,11 @@ class CitroCamera extends CitroObject {
 
 		#if !wiiu
 		untyped __cpp__('C2D_ViewRestore(&camMtx)');
+		#else
+		untyped __cpp__('
+			SDL_RenderSetViewport(gRenderer, &oldViewport);
+			SDL_RenderSetScale(gRenderer, oldScaleX, oldScaleY);
+		');
 		#end
 
 		return true;
