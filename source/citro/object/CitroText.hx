@@ -58,7 +58,7 @@ void createText(void* value) {}
 @:headerCode('#include <SDL2/SDL.h>\n#include <SDL2/SDL_ttf.h>')
 @:headerClassCode('TTF_Font* defaultFont = nullptr;')
 #end
-
+@:headerInclude("citro/object/CitroVector2D.h")
 class CitroText extends CitroObject {
 	public var text:String = "";
 	public var alignment:Align = LEFT;
