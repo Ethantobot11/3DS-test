@@ -1,10 +1,9 @@
 package;
 
-#if (!wiiu || !cafe)
-import cpp.RawPointer;
+#if !wiiu
 import CWAV;
-import cpp.Pointer;
-import cpp.Void;
+import citro.CitroG;
+import cpp.RawPointer;
 
 @:headerCode('
 #include "3ds.h"
@@ -36,7 +35,7 @@ class SoundPlayer
 	
 			var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
 			if (status == 1) {
-				CitroG.caches.set(path, (cast cwavPtr : cpp.Pointer<cpp.Void>));
+				CitroG.caches.set(path, cast cwavPtr);
 				trace('Preloaded sound: $path');
 			} else {
 				trace('ERROR: Failed to preload CWAV file "$path". Status code: $status');
@@ -59,7 +58,7 @@ class SoundPlayer
 			var status:Int = untyped __cpp__("((CWAV*){0})->loadStatus", cwavPtr);
 			
 			if (status == 1) {
-				CitroG.caches.set(path, (cast cwavPtr : cpp.Pointer<cpp.Void>));
+				CitroG.caches.set(path, cast cwavPtr);
 				trace('Successfully cached and loaded sound: $path');
 			} else {
 				trace('ERROR: Failed to load CWAV file "$path". Status code: $status');
