@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app type="complex" access="777">
+  <max_size type="hexBinary" length="8">0000000004000000</max_size>
+  <max_codesize type="hexBinary" length="8">0000000002000000</max_codesize>
+  <avail_size type="hexBinary" length="8">0000000000000000</avail_size>
+  <codegen_size type="hexBinary" length="8">0000000000000000</codegen_size>
+  <codegen_core type="hexBinary" length="4">00000001</codegen_core>
+  <deferred type="hexBinary" length="4">00000000</deferred>
+  <pcc type="hexBinary" length="4">00000000</pcc>
+  <restrict type="complex">
+    <fs_access type="complex">
+      <mode type="unsignedInt" length="4">0</mode>
+      <mask type="unsignedInt" length="4">0</mask>
+    </fs_access>
+  </restrict>
+  <permissions type="complex">
+    <p0 type="complex">
+      <group type="string">z</group>
+      <mask type="hexBinary" length="8">000000000000FF01</mask>
+    </p0>
+  </permissions>
+  <default_stack0 type="complex">
+    <size type="hexBinary" length="8">0000000000100000</size>
+    <flags type="hexBinary" length="4">00000000</flags>
+  </default_stack0>
+  <title_id type="hexBinary" length="8">TITLE_ID</title_id>
+</cos.xml>
