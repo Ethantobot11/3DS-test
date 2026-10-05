@@ -19,7 +19,7 @@ import cpp.Pointer;
 @:headerCode('
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-extern "C" SDL_Renderer* gRenderer; 
+extern SDL_Renderer* gRenderer;
 ')
 #end
 
