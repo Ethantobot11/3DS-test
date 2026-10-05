@@ -9,6 +9,10 @@ import citro.backend.CitroTween;
 import citro.backend.CitroTimer;
 import haxe3ds.services.HID;
 
+#if wiiu
+@:headerInclude("vpad/input.h")
+@:headerInclude("vpadbase/base.h")
+#end
 class ThreeDSMainMenuState extends CitroState {
 
     private var menuNo:Int = 0;
