@@ -62,6 +62,7 @@ jobs:
             rm -rf bannertool.zip bannertool_extracted makerom.zip makerom_extracted
           elif [ "${{ inputs.name }}" = "Wii U" ]; then
             dkp-pacman -S --noconfirm --needed devkitppc-gcc wut wut-tools general-tools wiiu-dev
+            dkp-pacman -S --noconfirm --needed wiiu-sdl2 wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer
           fi
 
       - name: Setup HXCPP 3DS
