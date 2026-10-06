@@ -46,7 +46,7 @@ jobs:
             os: ubuntu-latest
             buildArgs: "wiiu -D final -D cafe"
             artifactName: WiiUBuild
-            artifactPath: "output/wiiuFiles/*.wuhb"
+            artifactPath: output/
     uses: ./.github/workflows/consoles.yml
     with:
       name: ${{ matrix.name }}
@@ -73,10 +73,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
            name: WiiUBuild
-           path: output/wiiuFiles/
-
-      - name: Move WiiUBuild Whub
-        run: mv output/wiiuFiles/*.wuhb output/wiiuFiles/${{ env.PROJECT_NAME }}.wuhb
+           path: output/
 
       - name: Publish The Release
         uses: softprops/action-gh-release@v2
@@ -87,4 +84,4 @@ jobs:
           #prerelease: false
           files: |
             buildFiles/*cia
-            output/wiiuFiles/*wuhb
+            output/WiiU_WUP_Build.zip
