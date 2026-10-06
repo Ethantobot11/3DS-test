@@ -180,6 +180,15 @@ jobs:
             buildFiles/
           if-no-files-found: ignore
 
+      - name: Zip Wii U Build (if applicable)
+        if: inputs.name == 'Wii U'
+        run: |
+          echo "Zipping installable_build directory..."
+          cd installable_build
+          zip -r ../WiiU_WUP_Build.zip .
+          cd ..
+          echo "Zip created successfully!"
+
       - name: Upload Final Artifact
         uses: actions/upload-artifact@main
         with:
