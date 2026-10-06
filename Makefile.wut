@@ -1,4 +1,3 @@
-# Wii U BUILD V2
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -12,6 +11,7 @@ include $(DEVKITPRO)/wut/share/wut_rules
 WUT_ROOT := $(DEVKITPRO)/wut
 
 HXCPP_PATH := $(shell haxelib path hxcpp | head -n 1)
+HXCPP_LIB_PATH := $(TOPDIR)
 
 #---------------------------------------------------------------------------------
 TARGET		:= 	output
@@ -27,7 +27,7 @@ LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
 LIBS		:=	-lHAXE_CONSOLE -lSDL2_ttf -lfreetype -lharfbuzz -lSDL2_image -lwebp -lSDL2_mixer -lvorbis -logg -lSDL2 -lhxcpp -lwut
 
-LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
+LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT) $(HXCPP_LIB_PATH)
 
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
@@ -50,7 +50,7 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
-export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o) libHAXE_CONSOLE.a libhxcpp.a
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -58,8 +58,8 @@ export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 				-I$(HXCPP_PATH)/include
 				
 export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
-				-L$(CURDIR) \
-				-L$(CURDIR)/build
+				-L$(TOPDIR) \
+				-L$(TOPDIR)/build
 
 .PHONY: $(BUILD) clean all bootstrap rpx wps elf
 
