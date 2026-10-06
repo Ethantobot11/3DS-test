@@ -8,6 +8,10 @@
 
 extern "C" void __hxcpp_main();
 
+extern "C" void __hxcpp_exit(int status) {
+    std::exit(status);
+}
+
 static void SaveCallback() {
 }
 
