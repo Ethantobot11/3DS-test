@@ -1,3 +1,5 @@
+#include <hxcpp.h>
+
 #ifdef __WIIU__
 #include <wut.h>
 #include <proc_ui/procui.h>
@@ -7,8 +9,16 @@
 #include <cstdlib>
 
 extern "C" void __hxcpp_main();
+extern "C" void __hxcpp_lib_main();
 
 static void SaveCallback() {
+}
+
+#include <malloc.h>
+#include <sys/socket.h>
+
+void __hxcpp_exit(int status) {
+    std::exit(status);
 }
 
 extern "C" int main(int argc, char **argv) {
