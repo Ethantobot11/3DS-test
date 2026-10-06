@@ -11,14 +11,17 @@
 extern "C" void __hxcpp_main();
 extern "C" void __hxcpp_lib_main();
 
-static void SaveCallback() {
-}
+extern int _hxcpp_argc;
+extern char **_hxcpp_argv;
 
 #include <malloc.h>
 #include <sys/socket.h>
 
 void __hxcpp_exit(int status) {
     std::exit(status);
+}
+
+static void SaveCallback() {
 }
 
 extern "C" int main(int argc, char **argv) {
