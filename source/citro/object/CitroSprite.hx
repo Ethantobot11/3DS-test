@@ -63,34 +63,34 @@ class CitroSprite extends CitroObject {
     }
 
     public function loadGraphic(file:String):Bool {
-        #if !wiiu
-        if (CitroG.caches.cache.exists(file)) {
-            untyped __cpp__('this->ss = (C2D_SpriteSheet){0}', CitroG.caches.get(file));
-        }
-        untyped __cpp__('
-            if (!this->ss) {
-                this->ss = C2D_SpriteSheetLoad(file.c_str());
-                if (!this->ss) return false;
-            }
-            this->image = C2D_SpriteSheetGetImage(this->ss, 0);
-            width = this->image.subtex->width;
-            height = this->image.subtex->height;
-        ');
-        CitroG.caches.set(file, untyped __cpp__('this->ss'));
-        #else
-        untyped __cpp__('
-            SDL_Surface* surface = IMG_Load(file.c_str());
-            if (surface) {
-                this->wiiu_texture = SDL_CreateTextureFromSurface(gRenderer, surface);
-                this->width = surface->w;
-                this->height = surface->h;
-                SDL_FreeSurface(surface);
-                return true;
-            }
-            return false;
-        ');
-        #end
-        return true;
+    	#if !wiiu
+    	if (CitroG.caches.cache.exists(file)) {
+    		untyped __cpp__('this->ss = (C2D_SpriteSheet){0}.ptr', CitroG.caches.get(file));
+    	}
+    	untyped __cpp__('
+    		if (!this->ss) {
+    			this->ss = C2D_SpriteSheetLoad(file.c_str());
+    			if (!this->ss) return false;
+    		}
+    		this->image = C2D_SpriteSheetGetImage(this->ss, 0);
+    		width = this->image.subtex->width;
+    		height = this->image.subtex->height;
+    	');
+    	CitroG.caches.set(file, untyped __cpp__('this->ss'));
+    	#else
+    	untyped __cpp__('
+    		SDL_Surface* surface = IMG_Load(file.c_str());
+    		if (surface) {
+    			this->wiiu_texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+    			this->width = surface->w;
+    			this->height = surface->h;
+    			SDL_FreeSurface(surface);
+    			return true;
+    		}
+    		return false;
+    	');
+    	#end
+    	return true;
     }
 
     override function update():Bool {
