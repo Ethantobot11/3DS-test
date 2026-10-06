@@ -1,3 +1,4 @@
+# Wii U BUILD V2
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -49,7 +50,7 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
-export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o) libHAXE_CONSOLE.a libhxcpp.a
+export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -86,7 +87,7 @@ clean :
 else
 .PHONY:	all rpx wps elf
 
-DEPENDS		:=	$(OFILES:.o=.d)
+DEPENDS		:=	$(patsubst %.o,%.d,$(filter %.o,$(OFILES)))
 
 all		:	$(OUTPUT_FILE).rpx $(OUTPUT_FILE).wps
 
