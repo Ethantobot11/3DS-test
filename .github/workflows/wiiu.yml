@@ -1,4 +1,4 @@
-name: Build Chart Editor For All Platforms
+name: Build Wii U
 
 on: workflow_dispatch
 
