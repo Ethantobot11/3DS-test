@@ -184,7 +184,7 @@ jobs:
         if: inputs.name == 'Wii U'
         run: |
           echo "Searching for installable_build directory..."
-          DIR=$(find . -type d -name "installable_build" | head -n 1)
+          DIR=$(find . -type d -name "wup_build" | head -n 1)
           if [ -n "$DIR" ]; then
             echo "Found at: $DIR"
             zip -r WiiU_WUP_Build.zip "$DIR"
