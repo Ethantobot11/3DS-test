@@ -10,10 +10,12 @@ include $(DEVKITPRO)/wut/share/wut_rules
 
 WUT_ROOT := $(DEVKITPRO)/wut
 
+HXCPP_PATH := $(shell haxelib path hxcpp | head -n 1)
+
 #---------------------------------------------------------------------------------
 TARGET		:= 	output
 BUILD		:=	build
-SOURCES		:=	src
+SOURCES		:=	wrapper
 INCLUDES	:=	include
 #---------------------------------------------------------------------------------
 CFLAGS		:=	-g -Wall -O2 -ffunction-sections $(MACHDEP)
@@ -47,11 +49,12 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
-export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 		:=	$(wildcard $(BUILD)/*.o) $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-				-I$(CURDIR)/$(BUILD)
+				-I$(CURDIR)/$(BUILD) \
+				-I$(HXCPP_PATH)/include
 				
 export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
 				-L$(CURDIR) \
