@@ -15,7 +15,7 @@ HXCPP_PATH := $(shell haxelib path hxcpp | head -n 1)
 #---------------------------------------------------------------------------------
 TARGET		:= 	output
 BUILD		:=	build
-SOURCES		:=	wrapper
+SOURCES 	:= ../wrapper
 INCLUDES	:=	include
 #---------------------------------------------------------------------------------
 CFLAGS		:=	-g -Wall -O2 -ffunction-sections $(MACHDEP)
