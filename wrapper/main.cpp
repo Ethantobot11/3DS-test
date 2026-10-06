@@ -8,8 +8,7 @@
 
 extern "C" void __hxcpp_main();
 
-static uint32_t SaveCallback() {
-    return 0;
+static void SaveCallback() {
 }
 
 extern "C" int main(int argc, char **argv) {
