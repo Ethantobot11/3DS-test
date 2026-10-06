@@ -184,9 +184,7 @@ jobs:
         if: inputs.name == 'Wii U'
         run: |
           echo "Zipping installable_build directory..."
-          cd installable_build
-          zip -r ../WiiU_WUP_Build.zip .
-          cd ..
+          zip -r WiiU_WUP_Build.zip export/installable_build/
           echo "Zip created successfully!"
 
       - name: Upload Final Artifact
