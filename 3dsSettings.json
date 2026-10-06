@@ -19,7 +19,7 @@
 			"o2Flag": true,
 			"gFlag": false
 		},
-		"deleteTempFiles": true
+		"deleteTempFiles": false
 	},
 	"metadata": {
 		"title": "Deltarune 3DS",
