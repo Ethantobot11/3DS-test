@@ -25,7 +25,7 @@ CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS		:=	-lHAXE_CONSOLE -lwut -lcoreinit -lfs -lgx2 -lSDL2
+LIBS		:=	-lHAXE_CONSOLE -lwut -lSDL2
 
 LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
 
