@@ -1,4 +1,4 @@
-name: Build Chart Editor For All Platforms
+name: Build 3DS
 
 on: workflow_dispatch
 
