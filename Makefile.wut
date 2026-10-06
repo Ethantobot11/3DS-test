@@ -22,7 +22,7 @@ CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-# Note: [LIBS] is replaced by the Haxe tool. We add -lHAXE_CONSOLE here to link the Haxe output.
+# FIX: Added -lHAXE_CONSOLE to link the Haxe output library
 LIBS		:=	[LIBS] -lHAXE_CONSOLE -lwut
 
 LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
@@ -48,6 +48,8 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
+# FIX: Removed libHAXEWIIU.a and libhxcpp.a from OFILES. They are libraries, not object files.
+# This prevents Make from trying to read them as text files and crashing with "missing separator".
 export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
@@ -96,8 +98,6 @@ $(OUTPUT_FILE).wps	:	$(OUTPUT_FILE).elf
 	@echo "built ... $(notdir $@)"
 
 $(OUTPUT_FILE).elf	:	$(OFILES)
-	@echo "Linking $@"
-	@$(LD) $(LDFLAGS) -o $@ $(OFILES) $(LIBPATHS) $(LIBS)
 
 rpx : $(OUTPUT_FILE).rpx
 wps : $(OUTPUT_FILE).wps
