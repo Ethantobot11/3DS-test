@@ -1,3 +1,4 @@
+#wii u build
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -11,6 +12,7 @@ include $(DEVKITPRO)/wut/share/wut_rules
 WUT_ROOT := $(DEVKITPRO)/wut
 
 HXCPP_PATH := $(shell haxelib path hxcpp | head -n 1)
+HXCPP_LIB_PATH := $(TOPDIR)
 
 #---------------------------------------------------------------------------------
 TARGET		:= 	output
@@ -24,9 +26,10 @@ CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS		:=	-lHAXE_CONSOLE -lSDL2_ttf -lfreetype -lharfbuzz -lSDL2_image -lwebp -lSDL2_mixer -lvorbis -logg -lSDL2 -lwut
+LIBS		:=	-lHAXE_CONSOLE -lSDL2_ttf -lfreetype -lharfbuzz -lSDL2_image -lwebp -lSDL2_mixer -lvorbis -logg -lSDL2 -lhxcpp -lwut
 
-LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
+# FIX: Add $(HXCPP_LIB_PATH) to LIBDIRS so the linker searches the correct folders
+LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT) $(HXCPP_LIB_PATH)
 
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
