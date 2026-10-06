@@ -147,7 +147,7 @@ class CitroText extends CitroObject {
 		#if HAXE3DS
 		var success = false;
 		if (CitroG.caches.cache.exists(path)) {
-			untyped __cpp__('defaultFont = (C2D_Font){0}; success = defaultFont != nullptr', CitroG.caches.get(path));
+			untyped __cpp__('defaultFont = (C2D_Font){0}.ptr; success = defaultFont != nullptr', CitroG.caches.get(path));
 		}
 		if (!success) {
 			success = untyped __cpp__('(defaultFont = C2D_FontLoad(path.c_str())) != NULL');
