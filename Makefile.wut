@@ -22,7 +22,6 @@ CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-# FIX: Added -lHAXE_CONSOLE to link the Haxe output library
 LIBS		:=	[LIBS] -lHAXE_CONSOLE -lwut
 
 LIBDIRS		:=	$(PORTLIBS) $(WUT_ROOT)
@@ -48,8 +47,6 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
-# FIX: Removed libHAXEWIIU.a and libhxcpp.a from OFILES. They are libraries, not object files.
-# This prevents Make from trying to read them as text files and crashing with "missing separator".
 export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
