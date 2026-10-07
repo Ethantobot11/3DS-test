@@ -136,8 +136,6 @@ jobs:
           haxelib git hxu_vorbis https://github.com/Ethantobot11/HxU_Vorbis hxcpp_test --quiet
 
       - name: Compile Application (Unified via haxe3ds tool)
-        env:
-          WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
         run: |
           export DEVKITPRO=/opt/devkitpro
           export PATH=${DEVKITPRO}/tools/bin:$PATH
