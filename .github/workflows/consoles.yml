@@ -18,9 +18,13 @@ on:
       artifactPath:
         required: true
         type: string
+      secrets:
+        type: string
+        required: true
 
 env:
   HAXE_VERSION: 4.3.7
+  WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
 
 jobs:
   build-console:
