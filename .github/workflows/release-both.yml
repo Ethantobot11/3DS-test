@@ -9,6 +9,7 @@ permissions:
 env:
   PROJECT_NAME: Deltarune-3DS
   REPO_PATH: Ethantobot11/3DS-test
+  WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
 
 jobs:
   get-commit-hash:
