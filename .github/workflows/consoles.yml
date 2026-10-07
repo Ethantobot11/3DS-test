@@ -156,7 +156,7 @@ jobs:
             haxelib run haxe3ds -c -Dnx -Dno_pch
           else
             export DEVKITPPC=${DEVKITPRO}/devkitPPC
-            export PATH=${DEVKITPPC}/bin:$PATH
+            export PATH=${DEVKITPPC}/bin:${DEVKITPRO}/wut/bin:$PATH
             export CXX=powerpc-eabi-g++
             export CC=powerpc-eabi-gcc
             export AR=powerpc-eabi-ar
