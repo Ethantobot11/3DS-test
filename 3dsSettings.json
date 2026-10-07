@@ -16,14 +16,14 @@
 		"compileAsCIA": true,
 		"compileAsWUP": true,
 		"optimizations": {
-			"o2Flag": true,
+			"o2Flag": false,
 			"gFlag": false
 		},
 		"deleteTempFiles": false
 	},
 	"metadata": {
-		"title": "Deltarune 3DS",
-		"description": "A fangame of deltarune for the 3DS",
+		"title": "Deltarune Console",
+		"description": "A fangame of deltarune for the 3DS/Wii U",
 		"author": "Ethantobot"
 	}
 }
