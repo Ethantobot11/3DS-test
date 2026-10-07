@@ -18,8 +18,8 @@ on:
       artifactPath:
         required: true
         type: string
-      secrets:
-        type: string
+    secrets:
+      WIIU_COMMON_KEY:
         required: true
 
 env:
