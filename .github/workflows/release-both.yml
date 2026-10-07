@@ -34,6 +34,8 @@ jobs:
           echo "Latest commit hash is $commit_hash"
           echo "::set-output name=COMMIT_HASH::$commit_hash"
   Build-Consoles:
+    secrets:
+      WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
     name: ${{ matrix.name }}
     strategy:
       matrix:
@@ -55,8 +57,6 @@ jobs:
       buildArgs: ${{ matrix.buildArgs }}
       artifactName: ${{ matrix.artifactName }}
       artifactPath: ${{ matrix.artifactPath }}
-    secrets:
-      WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
 
   Releaser:
     needs: [get-commit-hash, Build-Consoles]
