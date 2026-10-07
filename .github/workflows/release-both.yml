@@ -55,6 +55,8 @@ jobs:
       buildArgs: ${{ matrix.buildArgs }}
       artifactName: ${{ matrix.artifactName }}
       artifactPath: ${{ matrix.artifactPath }}
+    secrets:
+      WIIU_COMMON_KEY: ${{ secrets.WIIU_COMMON_KEY }}
 
   Releaser:
     needs: [get-commit-hash, Build-Consoles]
