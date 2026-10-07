@@ -92,7 +92,7 @@ DEPENDS		:=	$(patsubst %.o,%.d,$(filter %.o,$(OFILES)))
 all		:	$(OUTPUT_FILE).rpx $(OUTPUT_FILE).wps
 
 $(OUTPUT_FILE).rpx	:	$(OUTPUT_FILE).elf
-	@elf2rpx $< $@
+	@elf2rpl $< $@
 	@echo "built ... $(notdir $@)"
 
 $(OUTPUT_FILE).wps	:	$(OUTPUT_FILE).elf
