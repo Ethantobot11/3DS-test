@@ -23,7 +23,7 @@ CFLAGS		:=	-g -Wall -O2 -ffunction-sections $(MACHDEP)
 CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__
 CXXFLAGS	:=	$(CFLAGS) -std=c++17 -Wno-unused-function -Wno-unused-variable -Wno-sequence-point
 ASFLAGS		:=	-g $(MACHDEP)
-LDFLAGS		=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
+LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
 LIBS		:=	-lHAXE_CONSOLE -lSDL2_ttf -lfreetype -lharfbuzz -lpng -lz -lbz2 -lbrotlidec -lbrotlicommon -lSDL2_image -lwebp -lSDL2_mixer -lvorbis -logg -lSDL2 -lhxcpp -lwut
 
@@ -50,8 +50,7 @@ endif
 
 export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
 
-# FIX: Only include .o files in OFILES to prevent Make dependency parsing errors
-export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o) libHAXE_CONSOLE.a libhxcpp.a
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
