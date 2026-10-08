@@ -74,7 +74,7 @@ jobs:
             sudo DEBIAN_FRONTEND=noninteractive apt-get update
             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-17-jre-headless imagemagick
             sudo mkdir -p /opt/devkitpro/tools/bin
-            sudo wget -q https://raw.githubusercontent.com/ihaveamac/nuspacker/master/NUSPacker.jar -O /opt/devkitpro/tools/bin/NUSPacker.jar
+            sudo wget -q https://raw.githubusercontent.com/Ethantobot11/nuspacker/master/NUSPacker.jar -O /opt/devkitpro/tools/bin/NUSPacker.jar
             dkp-pacman -S --noconfirm --needed wiiu-sdl2 wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer
             echo "=== Verifying SDL2 Installation ==="
             ls -la /opt/devkitpro/portlibs/wiiu/include/SDL2/ || echo "ERROR: SDL2 directory not found!"
