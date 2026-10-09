@@ -10,26 +10,24 @@ import citro.CitroG;
 import citro.state.CitroState;
 
 class CrashHandler {
+    private static var baseDir:String = "sdmc:/Deltarune";
     private static var logsDir:String = "sdmc:/Deltarune/logs";
     private static var crashDir:String = "sdmc:/Deltarune/crash";
     
-    private static var logPath:String = "sdmc:/Deltarune/logs/game_log.txt";
-    private static var crashPath:String = "sdmc:/Deltarune/crash/latest_crash.txt";
+    private static var logPath:String = "sdmc:/Deltarune/logs/haxe_session.log";
+    private static var crashPath:String = "sdmc:/Deltarune/crash/haxe_exception.log";
     
     private static var originalTrace:Dynamic;
     private static var logOutput:FileOutput = null;
 
     public static function init() {
         try {
-            if (!FileSystem.isDirectory(logsDir)) {
-                FileSystem.createDirectory(logsDir);
-            }
-            if (!FileSystem.isDirectory(crashDir)) {
-                FileSystem.createDirectory(crashDir);
-            }
+            if (!FileSystem.isDirectory(baseDir)) FileSystem.createDirectory(baseDir);
+            if (!FileSystem.isDirectory(logsDir)) FileSystem.createDirectory(logsDir);
+            if (!FileSystem.isDirectory(crashDir)) FileSystem.createDirectory(crashDir);
 
             logOutput = File.append(logPath, false);
-            logOutput.writeString("--- Citro Engine 3DS Session Started ---\n");
+            logOutput.writeString("--- Citro Engine 3DS Haxe Session Started ---\n");
             logOutput.flush();
         } catch (e:Dynamic) {
             trace("CRITICAL: Failed to initialize CrashHandler files: " + e);
@@ -41,7 +39,7 @@ class CrashHandler {
 
             var fileName = (infos != null && infos.fileName != null) ? infos.fileName : "Unknown";
             var lineNumber = (infos != null) ? infos.lineNumber : 0;
-            var msg = '[$fileName:$lineNumber]: $v\n';
+            var msg = '[HAXE LOG] [$fileName:$lineNumber]: $v\n';
             
             appendGeneralLog(msg);
         };
@@ -65,7 +63,7 @@ class CrashHandler {
 
     public static function logException(e:Dynamic, ?customMessage:String = "") {
         var stack = CallStack.toString(CallStack.exceptionStack());
-        var fullLog = '\n[CRASH/ERROR] $customMessage\nException: $e\nCallStack:\n$stack\n-------------------\n';
+        var fullLog = '\n[HAXE CRASH/ERROR] $customMessage\nException: $e\nCallStack:\n$stack\n-------------------\n';
 
         try {
             var file = File.write(crashPath, false);
