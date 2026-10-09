@@ -54,7 +54,7 @@ class FNFPlaystate extends CitroState {
         add(dad);
         
         bf = new CitroSprite(250, 100);
-        bf.makeGraphic(40, 60, CitroColor.CYAN);
+        bf.makeGraphic(40, 60, 0xFF00FFFF);
         add(bf);
         
         healthBarBG = new CitroSprite(50, 210);
@@ -168,7 +168,9 @@ class FNFPlaystate extends CitroState {
         
         // Update Health Bar
         var healthPercent = CitroMath.clamp(health, 0, 2);
-        healthBar.width = 300 * (healthPercent / 2);
+        var barWidth = Std.int(300 * (healthPercent / 2));
+        if (barWidth < 1) barWidth = 1;
+        healthBar.makeGraphic(barWidth, 10, 0xFF00FF00);
         
         super.update(delta);
     }

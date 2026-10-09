@@ -11,7 +11,7 @@
 			"libncsnd"
 		],
 		"defines": [],
-		"compileAsPlugin": true, 
+		"compileAsCIA": true,
 		"optimizations": {
 			"o2Flag": false,
 			"gFlag": false
@@ -19,8 +19,8 @@
 		"deleteTempFiles": true
 	},
 	"metadata": {
-		"title": "Deltarune",
-		"description": "A fangame of deltarune",
+		"title": "Deltarune 3DS",
+		"description": "A fangame of deltarune for the 3DS",
 		"author": "Ethantobot"
 	}
 }
