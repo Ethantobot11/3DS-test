@@ -13,7 +13,7 @@ using StringTools;
 class DSDarkWorldTransition extends CitroObject
 {
     var player:DSPlayer;
-    var susie:DSPlayer;
+    var susie:DSSusie;
     var door:DSDarkDoor;
     var camera:CitroCamera;
     
@@ -41,7 +41,7 @@ class DSDarkWorldTransition extends CitroObject
 
     public var onComplete:Void->Void;
 
-    public function new(player:DSPlayer, door:DSDarkDoor = null, camera:CitroCamera = null, susie:DSPlayer = null)
+    public function new(player:DSPlayer, door:DSDarkDoor = null, camera:CitroCamera = null, susie:DSSusie = null)
     {
         super();
         this.player = player;
@@ -85,7 +85,7 @@ class DSDarkWorldTransition extends CitroObject
         var elapsed:Float = CitroG.deltaTime / 1000.0;
         timer += elapsed;
 
-        if (shakeIntensity > 0) {
+        if (shakeIntensity > 0 && camera != null) {
             shakeIntensity -= shakeDecay * elapsed;
             if (shakeIntensity < 0) shakeIntensity = 0;
         }
@@ -305,8 +305,7 @@ class DSDarkWorldTransition extends CitroObject
                     SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/snd_him_quick.cwav');
                 }
 
-                var animDone = (player.curAnim == "spr_kris_dw_landed" && player.frame >= player.totalFrames - 1);
-                if ((animDone || timer >= 1.5) && timer >= 0.5)
+                if (timer >= 1.5)
                 {
                     player.setDarkWorld(true);
                     player.isBusy = false;
