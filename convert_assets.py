@@ -33,7 +33,9 @@ def main():
         os.path.normpath("assets/resources/audio.wav"),
         os.path.normpath("assets/romfs/resources/audio.wav"),
         os.path.normpath("resources/audio.wav"),
-        os.path.normpath("audio.wav")
+        os.path.normpath("audio.wav"),
+        os.path.normpath("assets/resources/icon.png"),
+        os.path.normpath("assets/resources/banner.png")
     }
     looped_files = { os.path.normpath("assets/sounds/home.ogg") }
 
