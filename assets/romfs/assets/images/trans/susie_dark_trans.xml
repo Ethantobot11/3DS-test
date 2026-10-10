@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="susie_dark_trans.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="spr_susieu_run_00000" x="132" y="110" width="29" height="43" frameX="2" frameY="-5" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susieu_run_10000" x="0" y="164" width="29" height="42" frameX="2" frameY="-3" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susieu_run_20000" x="137" y="56" width="29" height="43" frameX="2" frameY="-5" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susieu_run_30000" x="29" y="164" width="29" height="42" frameX="2" frameY="-3" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susie_lw_fall_u_00000" x="99" y="55" width="33" height="55" frameX="-1" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_u_10000" x="99" y="110" width="33" height="51" frameX="-1" frameY="-3" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_u_20000" x="0" y="110" width="33" height="54" frameX="-1" frameY="0" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_turn_00000" x="99" y="55" width="33" height="55" frameX="-1" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_turn_10000" x="0" y="0" width="36" height="55" frameX="0" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_turn_20000" x="201" y="0" width="31" height="55" frameX="1" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_turn_30000" x="33" y="55" width="33" height="55" frameX="1" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_turn_40000" x="0" y="55" width="33" height="55" frameX="0" frameY="1" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_lw_fall_d_00000" x="0" y="55" width="33" height="55" frameX="2" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_lw_fall_d_10000" x="66" y="110" width="33" height="53" frameX="2" frameY="0" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_lw_fall_d_20000" x="66" y="55" width="33" height="55" frameX="2" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_white_fall_d_00000" x="71" y="0" width="33" height="55" frameX="2" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_white_fall_d_10000" x="33" y="110" width="33" height="53" frameX="2" frameY="0" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_white_fall_d_20000" x="104" y="0" width="33" height="55" frameX="2" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_dw_fall_d_00000" x="169" y="55" width="32" height="55" frameX="1" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_dw_fall_d_10000" x="169" y="110" width="32" height="53" frameX="1" frameY="0" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_dw_fall_d_20000" x="169" y="0" width="32" height="55" frameX="1" frameY="2" frameWidth="29" frameHeight="51"/>
+	<SubTexture name="spr_susie_dw_fall_smear_00000" x="137" y="0" width="32" height="56" frameX="-2" frameY="1" frameWidth="36" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_smear_10000" x="36" y="0" width="35" height="55" frameX="2" frameY="2" frameWidth="36" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_smear_20000" x="201" y="55" width="30" height="51" frameX="-1" frameY="-3" frameWidth="36" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_ball_00000" x="154" y="164" width="32" height="32" frameX="1" frameY="-13" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_ball_10000" x="186" y="164" width="32" height="32" frameX="0" frameY="-14" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_ball_20000" x="232" y="0" width="31" height="32" frameX="-1" frameY="-13" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_fall_ball_30000" x="122" y="164" width="32" height="32" frameX="0" frameY="-12" frameWidth="34" frameHeight="53"/>
+	<SubTexture name="spr_susie_dw_landed_00000" x="90" y="164" width="32" height="37" frameX="-2" frameY="-10" frameWidth="36" frameHeight="48"/>
+	<SubTexture name="spr_susie_dw_landed_10000" x="58" y="164" width="32" height="38" frameX="-2" frameY="-9" frameWidth="36" frameHeight="48"/>
+	<SubTexture name="spr_susie_dw_landed_20000" x="201" y="106" width="30" height="47" frameX="-3" frameY="0" frameWidth="36" frameHeight="48"/>
+</TextureAtlas>
