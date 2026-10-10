@@ -15,7 +15,7 @@ typedef PositionFrame = {
 
 class DSPlayer extends CitroAnimate
 {
-    public var moveSpeed:Float = 120;
+    public var moveSpeed:Float = 80;
     public var facingDir:String = "down";
     public var isBusy:Bool = false;
     public var isDarkWorld:Bool = false;
@@ -107,9 +107,10 @@ class DSPlayer extends CitroAnimate
         
         var currentSpeed:Float = moveSpeed;
         var currentFramerate:Float = 6;
+        
         if (action == "run") {
             currentSpeed = moveSpeed * 1.8; 
-            currentFramerate = 12;          
+            currentFramerate = 10;          
         }
     
         if (up || down || left || right)
@@ -136,8 +137,10 @@ class DSPlayer extends CitroAnimate
             if (Std.int(frame) != lastPlayedFrame) {
                 lastPlayedFrame = Std.int(frame);
                 
-                if (lastPlayedFrame == 0) {
+                if (lastPlayedFrame == 2) {
                     SoundPlayer.playSound('romfs:/assets/sounds/snd_step1.cwav');
+                } else if (lastPlayedFrame == 4) {
+                    SoundPlayer.playSound('romfs:/assets/sounds/snd_step2.cwav');
                 }
             }
         }
