@@ -64,6 +64,13 @@ class DSNoelle extends CitroAnimate
             }
         }
     }
+
+    public function setDarkWorld(darkWorld:Bool):Void {
+        // isDarkWorld = darkWorld;
+        // reloadCEA("romfs:/assets/images/chars/noelle_dark.cea", "spr_noelle_d");
+        // frame = 0;
+        // timeLeft = 999999;
+    }
 }
 
 #end
