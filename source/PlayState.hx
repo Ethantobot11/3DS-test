@@ -10,7 +10,6 @@ import citro.math.CitroMath;
 import citro.util.CitroStringUtil;
 import citro.CitroG;
 import citro.backend.CitroColor;
-
 import haxe3ds.services.HID;
 
 class PlayState extends CitroState
@@ -19,13 +18,13 @@ class PlayState extends CitroState
     public var kris:DSPlayer;
     public var noelle:DSNoelle;
     public var lacie:DSLacie;
+    public var susie:DSSusie;
     public var dialogueBox:DSDialogueBox;
     public var greenBlock:CitroSprite;
     var closetDoor:DSDarkDoor;
 
     var dialogueStage:Int = 0;
     var camera:CitroCamera;
-
     var inputLockout:Float = 0;
 
     function playerChar():String return "kris";
@@ -33,7 +32,6 @@ class PlayState extends CitroState
     override public function create()
     {
         AchievementManager.unlock("first_steps");
-        
         inputLockout = 0.6;
 
         camera = new CitroCamera(false);
@@ -54,6 +52,10 @@ class PlayState extends CitroState
         lacie.target = kris;
         camera.add(lacie);
 
+        susie = new DSSusie(CitroG.WIDTH / 2 + 180, CitroG.HEIGHT / 2, false);
+        susie.target = kris;
+        camera.add(susie);
+
         camera.follow(kris, true);
         camera.target = kris;
 
@@ -63,10 +65,6 @@ class PlayState extends CitroState
 
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
-
-        //greenBlock = new CitroSprite(50, 50);
-        //greenBlock.makeGraphic(40, 40, CitroColor.GREEN); // or hex code 0xFF00FF00
-        //add(greenBlock);
 
         super.create();
     }
@@ -81,10 +79,13 @@ class PlayState extends CitroState
         }
 
         separate(kris, noelle, !noelle.isFollowing);
+        separate(kris, susie, !susie.isFollowing);
         separate(noelle, closetDoor, true);
         separate(lacie, noelle, true);
         separate(lacie, kris, true);
         separate(lacie, closetDoor, true);
+        separate(susie, noelle, true);
+        separate(susie, closetDoor, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                             HID.keyPressed(HIDKey.START) || 
@@ -110,10 +111,9 @@ class PlayState extends CitroState
         {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
             dialogueBox.visible = false;
-            
             kris.isBusy = true;
             
-            var transition = new DSDarkWorldTransition(kris, closetDoor, camera);
+            var transition = new DSDarkWorldTransition(kris, closetDoor, camera, susie.isFollowing ? susie : null);
             transition.onComplete = function() {
                 spawnDarkWorldEntities();
             };
@@ -139,10 +139,7 @@ class PlayState extends CitroState
 
     private function separate(obj1:CitroObject, obj2:CitroObject, condition:Bool = true):Bool
     {
-        if (!condition || !CitroG.overlaps(obj1, obj2))
-        {
-            return false;
-        }
+        if (!condition || !CitroG.overlaps(obj1, obj2)) return false;
 
         var overlapX1 = (obj1.x + (obj1.width * obj1.scale.x)) - obj2.x;
         var overlapX2 = (obj2.x + (obj2.width * obj2.scale.x)) - obj1.x;
@@ -154,45 +151,31 @@ class PlayState extends CitroState
 
         if (minOverlapX < minOverlapY)
         {
-            if (overlapX1 < overlapX2)
-            {
-                obj1.x -= overlapX1;
-            }
-            else
-            {
-                obj1.x += overlapX2;
-            }
+            if (overlapX1 < overlapX2) obj1.x -= overlapX1;
+            else obj1.x += overlapX2;
         }
         else
         {
-            if (overlapY1 < overlapY2)
-            {
-                obj1.y -= overlapY1;
-            }
-            else
-            {
-                obj1.y += overlapY2;
-            }
+            if (overlapY1 < overlapY2) obj1.y -= overlapY1;
+            else obj1.y += overlapY2;
         }
-
         return true;
     }
 
     function startBattle(targetEnemy:DSRudinn):Void
     {
         SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
-        trace('[startBattle()] Entering startBattle function...');
         kris.isBusy = true;
-        
-        var battleState = new BattleState(targetEnemy);
-        
-        CitroG.switchState(battleState);
+        CitroG.switchState(new BattleState(targetEnemy));
     }
 
     function spawnDarkWorldEntities()
     {
-        trace('[spawnDarkWorldEntities] Transition done. Unfreezing Kris and spawning Rudinn.');
+        trace('[spawnDarkWorldEntities] Transition done. Unfreezing Kris and transforming party.');
         kris.isBusy = false;
+        
+        if (noelle.isFollowing) noelle.setDarkWorld(true);
+        if (susie.isFollowing) susie.setDarkWorld(true);
     }
 
     private function handleInputs()
@@ -203,34 +186,19 @@ class PlayState extends CitroState
 
         if (dialogueBox.isChoosing)
         {
-            if (upPressed || downPressed)
-            {
-                dialogueBox.navigateChoices(upPressed, downPressed);
-            }
+            if (upPressed || downPressed) dialogueBox.navigateChoices(upPressed, downPressed);
 
             if (interactPressed)
             {
                 if (dialogueBox.selectedIndex == 0)
                 {
                     noelle.isFollowing = true;
-                    dialogueBox.startDialogue(
-                        CitroStringUtil.capitalize("* great! let's go!"), 
-                        "noelle_face", 
-                        "0", 
-                        "light", 
-                        false
-                    );
+                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* great! let's go!"), "noelle_face", "0", "light", false);
                     dialogueStage = 2;
                 }
                 else
                 {
-                    dialogueBox.startDialogue(
-                        CitroStringUtil.capitalize("* oh... okay, maybe later!"), 
-                        "noelle_face", 
-                        "1", 
-                        "light", 
-                        false
-                    );
+                    dialogueBox.startDialogue(CitroStringUtil.capitalize("* oh... okay, maybe later!"), "noelle_face", "1", "light", false);
                     dialogueStage = 2;
                 }
             }
@@ -243,66 +211,69 @@ class PlayState extends CitroState
             {
                 dialogueBox.skipTyping();
             }
-            else if (dialogueStage == 2)
+            else 
             {
-                dialogueBox.visible = false;
-                kris.isBusy = false;
-                dialogueStage = 0;
+                if (dialogueStage == 1)
+                {
+                    dialogueBox.visible = false;
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
+                else if (dialogueStage == 2)
+                {
+                    dialogueBox.visible = false;
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
+                else if (dialogueStage == 3)
+                {
+                    susie.isFollowing = true;
+                    dialogueBox.visible = false;
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
             }
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingNoelle())
         {
-            dialogueStage = 1;
+            dialogueStage = 2;
             kris.isBusy = true;
-            
-            dialogueBox.startDialogue(
-                "* Hi Kris!\n* Want me to come with you?", 
-                "noelle_face",
-                "0", 
-                "light",
-                true
-            );
+            dialogueBox.startDialogue("* Hi Kris!\n* Want me to come with you?", "noelle_face", "0", "light", true);
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingLacie())
         {
             dialogueStage = 1;
             kris.isBusy = true;
+            dialogueBox.startDialogue("* Hi Kris! I'm Lacie!", "", "0", "light", false);
+        }
+        else if (dialogueStage == 0 && interactPressed && isKrisFacingSusie())
+        {
+            dialogueStage = 3;
+            kris.isBusy = true;
             
-            dialogueBox.startDialogue(
-                "* Hi Kris! I'm Lacie!", 
-                "",
-                "0", 
-                "light",
-                false
-            );
+            if (!susie.isFollowing) {
+                dialogueBox.startDialogue("* Hey. You need backup, don't you?\n* I'm coming with you.", "", "0", "light", false);
+            } else {
+                dialogueBox.startDialogue("* Let's go already.", "", "0", "light", false);
+            }
         }
     }
 
-    private function isKrisFacingNoelle():Bool
+    private function isKrisFacingNoelle():Bool { return checkFacing(kris, noelle); }
+    private function isKrisFacingLacie():Bool { return checkFacing(kris, lacie); }
+    private function isKrisFacingSusie():Bool { return checkFacing(kris, susie); }
+
+    private function checkFacing(player:DSPlayer, target:CitroObject):Bool
     {
-        var distance = CitroMath.distanceBetween(kris, noelle);
+        var distance = CitroMath.distanceBetween(player, target);
         if (distance > 35) return false;
 
-        if (kris.facingDir == "right" && kris.x < noelle.x) return true;
-        if (kris.facingDir == "left" && kris.x > noelle.x) return true;
-        if (kris.facingDir == "up" && kris.y > noelle.y) return true;
-        if (kris.facingDir == "down" && kris.y < noelle.y) return true;
-
-        return false;
-    }
-
-    private function isKrisFacingLacie():Bool
-    {
-        var distance = CitroMath.distanceBetween(kris, lacie);
-        if (distance > 35) return false;
-
-        if (kris.facingDir == "right" && kris.x < lacie.x) return true;
-        if (kris.facingDir == "left" && kris.x > lacie.x) return true;
-        if (kris.facingDir == "up" && kris.y > lacie.y) return true;
-        if (kris.facingDir == "down" && kris.y < lacie.y) return true;
+        if (player.facingDir == "right" && player.x < target.x) return true;
+        if (player.facingDir == "left" && player.x > target.x) return true;
+        if (player.facingDir == "up" && player.y > target.y) return true;
+        if (player.facingDir == "down" && player.y < target.y) return true;
 
         return false;
     }
 }
-
 #end
