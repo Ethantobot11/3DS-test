@@ -13,7 +13,7 @@ class DSDialogueBox extends citro.object.CitroObject
 {
     var boxBg:CitroSprite;
     var boxBorder:CitroSprite;
-    public var portrait:CitroAnimate; // Changed from CitroSprite to CitroAnimate
+    public var portrait:CitroAnimate;
     var textDisplay:CitroText;
 
     public var soulCursor:CitroSprite;
@@ -30,7 +30,7 @@ class DSDialogueBox extends citro.object.CitroObject
     public var isChoosing:Bool = false;
     public var selectedIndex:Int = 0;
 
-    public function new(xPos:Float, yPos:Float)
+    public function new(xPos:Float = 20, yPos:Float = 160)
     {
         super();
         this.x = xPos;
@@ -42,7 +42,7 @@ class DSDialogueBox extends citro.object.CitroObject
 
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
-        boxBorder.visible = false;
+        boxBg.visible = false; // Fixed typo from original code
 
         portrait = new CitroAnimate("romfs:/assets/images/noelle_face.cea", "spr_face_n_matome-0");
         portrait.visible = false;
@@ -50,6 +50,8 @@ class DSDialogueBox extends citro.object.CitroObject
 
         textDisplay = new CitroText(15, 10, "");
         textDisplay.color = CitroColor.WHITE;
+        // textDisplay.wordWrap = true; 
+        // textDisplay.maxWidth = 200;
 
         soulCursor = new CitroSprite(0, 0);
         try {
@@ -112,8 +114,9 @@ class DSDialogueBox extends citro.object.CitroObject
 
             if (portrait.play(frameToPlay)) {
                 portrait.visible = true;
-                textDisplay.x = x + 68;
+                textDisplay.x = x + 65; 
             } else {
+                trace("WARNING: Failed to play frame '" + frameToPlay + "' in noelle_face.cea. Check the CEA file.");
                 portrait.visible = false;
                 textDisplay.x = x + 15;
             }
@@ -231,7 +234,7 @@ class DSDialogueBox extends citro.object.CitroObject
             portrait.update(); 
         }
 
-        textDisplay.x = portrait.visible ? (x + 68) : (x + 15);
+        textDisplay.x = portrait.visible ? (x + 65) : (x + 15);
         textDisplay.y = y + 10;
 
         if (optionYesText.visible)
@@ -272,5 +275,4 @@ class DSDialogueBox extends citro.object.CitroObject
         super.destroy();
     }
 }
-
 #end
