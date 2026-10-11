@@ -42,7 +42,7 @@ class DSDialogueBox extends citro.object.CitroObject
 
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
-        boxBg.visible = false; // Fixed typo from original code
+        boxBg.visible = false;
 
         portrait = new CitroAnimate("romfs:/assets/images/noelle_face.cea", "spr_face_n_matome-0");
         portrait.visible = false;
@@ -50,8 +50,9 @@ class DSDialogueBox extends citro.object.CitroObject
 
         textDisplay = new CitroText(15, 10, "");
         textDisplay.color = CitroColor.WHITE;
-        // textDisplay.wordWrap = true; 
-        // textDisplay.maxWidth = 200;
+        
+        textDisplay.scale.x = 0.6;
+        textDisplay.scale.y = 0.6;
 
         soulCursor = new CitroSprite(0, 0);
         try {
@@ -68,10 +69,14 @@ class DSDialogueBox extends citro.object.CitroObject
         optionYesText = new CitroText(210, 18, "YES");
         optionYesText.color = CitroColor.WHITE;
         optionYesText.visible = false;
+        optionYesText.scale.x = 0.6;
+        optionYesText.scale.y = 0.6;
 
         optionNoText = new CitroText(210, 36, "NO");
         optionNoText.color = CitroColor.WHITE;
         optionNoText.visible = false;
+        optionNoText.scale.x = 0.6;
+        optionNoText.scale.y = 0.6;
 
         visible = false;
 
@@ -80,10 +85,10 @@ class DSDialogueBox extends citro.object.CitroObject
             currentState.add(boxBorder);
             currentState.add(boxBg);
             currentState.add(portrait);
-            currentState.add(textDisplay);
-            currentState.add(soulCursor);
             currentState.add(optionYesText);
             currentState.add(optionNoText);
+            currentState.add(soulCursor);
+            currentState.add(textDisplay);
         }
     }
 
@@ -234,19 +239,19 @@ class DSDialogueBox extends citro.object.CitroObject
             portrait.update(); 
         }
 
-        textDisplay.x = portrait.visible ? (x + 65) : (x + 15);
-        textDisplay.y = y + 10;
+        textDisplay.x = portrait.visible ? (x + 60) : (x + 10);
+        textDisplay.y = y + 8;
 
         if (optionYesText.visible)
         {
-            optionYesText.x = x + 210;
-            optionYesText.y = y + 18;
+            optionYesText.x = x + 190;
+            optionYesText.y = y + 15;
         }
 
         if (optionNoText.visible)
         {
-            optionNoText.x = x + 210;
-            optionNoText.y = y + 36;
+            optionNoText.x = x + 190;
+            optionNoText.y = y + 32;
         }
 
         return true;
