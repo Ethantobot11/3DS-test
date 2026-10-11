@@ -6,10 +6,12 @@ import citro.state.CitroState;
 import citro.object.CitroSprite;
 import citro.object.CitroCamera;
 import citro.object.CitroObject;
+import citro.object.CitroGroup;
 import citro.math.CitroMath;
 import citro.util.CitroStringUtil;
 import citro.CitroG;
 import citro.backend.CitroColor;
+import citro.backend.CitroTween;
 import haxe3ds.services.HID;
 
 class PlayState extends CitroState
@@ -20,12 +22,13 @@ class PlayState extends CitroState
     public var lacie:DSLacie;
     public var susie:DSSusie;
     public var dialogueBox:DSDialogueBox;
-    public var greenBlock:CitroSprite;
     var closetDoor:DSDarkDoor;
 
     var dialogueStage:Int = 0;
     var camera:CitroCamera;
     var inputLockout:Float = 0;
+    
+    var partyGroup:CitroGroup;
 
     function playerChar():String return "kris";
 
@@ -41,25 +44,32 @@ class PlayState extends CitroState
         background.makeGraphic(1280, 720, 0xff1d1d24);
         camera.add(background);
 
+        partyGroup = new CitroGroup();
+        add(partyGroup);
+
         kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2, false, playerChar());
+        partyGroup.add(kris);
         camera.add(kris);
 
         noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
         noelle.target = kris;
+        partyGroup.add(noelle);
         camera.add(noelle);
 
         lacie = new DSLacie(CitroG.WIDTH / 2 + 120, CitroG.HEIGHT / 2);
         lacie.target = kris;
+        partyGroup.add(lacie);
         camera.add(lacie);
 
         susie = new DSSusie(CitroG.WIDTH / 2 + 180, CitroG.HEIGHT / 2, false);
         susie.target = kris;
+        partyGroup.add(susie);
         camera.add(susie);
 
         camera.follow(kris, true);
         camera.target = kris;
 
-        dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT - 70);
+        dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT); 
         dialogueBox.visible = false;
         add(dialogueBox);
 
@@ -110,7 +120,7 @@ class PlayState extends CitroState
         if (dialogueStage == 0 && interactPressed && !kris.isBusy && CitroG.overlaps(kris, closetDoor))
         {
             SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
-            dialogueBox.visible = false;
+            hideDialogueBox();
             kris.isBusy = true;
             
             var transition = new DSDarkWorldTransition(kris, closetDoor, camera, susie.isFollowing ? susie : null);
@@ -149,13 +159,10 @@ class PlayState extends CitroState
         var minOverlapX = overlapX1 < overlapX2 ? overlapX1 : overlapX2;
         var minOverlapY = overlapY1 < overlapY2 ? overlapY1 : overlapY2;
 
-        if (minOverlapX < minOverlapY)
-        {
+        if (minOverlapX < minOverlapY) {
             if (overlapX1 < overlapX2) obj1.x -= overlapX1;
             else obj1.x += overlapX2;
-        }
-        else
-        {
+        } else {
             if (overlapY1 < overlapY2) obj1.y -= overlapY1;
             else obj1.y += overlapY2;
         }
@@ -165,8 +172,7 @@ class PlayState extends CitroState
     function startBattle(targetEnemy:DSRudinn):Void
     {
         SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
-        kris.isBusy = true;
-        CitroG.switchState(new BattleState(targetEnemy));
+        CitroG.switchState(new BattleState());
     }
 
     function spawnDarkWorldEntities()
@@ -176,6 +182,18 @@ class PlayState extends CitroState
         
         if (noelle.isFollowing) noelle.setDarkWorld(true);
         if (susie.isFollowing) susie.setDarkWorld(true);
+    }
+
+    function showDialogueBox() {
+        dialogueBox.visible = true;
+        CitroTween.tweenObject(dialogueBox, { y: CitroG.HEIGHT - 70 }, 0.3, { ease: QUAD_OUT });
+    }
+
+    function hideDialogueBox() {
+        CitroTween.tweenObject(dialogueBox, { y: CitroG.HEIGHT }, 0.3, { 
+            ease: QUAD_IN, 
+            onComplete: function() { dialogueBox.visible = false; }
+        });
     }
 
     private function handleInputs()
@@ -213,43 +231,30 @@ class PlayState extends CitroState
             }
             else 
             {
-                if (dialogueStage == 1)
-                {
-                    dialogueBox.visible = false;
-                    kris.isBusy = false;
-                    dialogueStage = 0;
-                }
-                else if (dialogueStage == 2)
-                {
-                    dialogueBox.visible = false;
-                    kris.isBusy = false;
-                    dialogueStage = 0;
-                }
-                else if (dialogueStage == 3)
-                {
-                    susie.isFollowing = true;
-                    dialogueBox.visible = false;
-                    kris.isBusy = false;
-                    dialogueStage = 0;
-                }
+                hideDialogueBox();
+                kris.isBusy = false;
+                dialogueStage = 0;
             }
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingNoelle())
         {
             dialogueStage = 2;
             kris.isBusy = true;
+            showDialogueBox();
             dialogueBox.startDialogue("* Hi Kris!\n* Want me to come with you?", "noelle_face", "0", "light", true);
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingLacie())
         {
             dialogueStage = 1;
             kris.isBusy = true;
+            showDialogueBox();
             dialogueBox.startDialogue("* Hi Kris! I'm Lacie!", "", "0", "light", false);
         }
         else if (dialogueStage == 0 && interactPressed && isKrisFacingSusie())
         {
             dialogueStage = 3;
             kris.isBusy = true;
+            showDialogueBox();
             
             if (!susie.isFollowing) {
                 dialogueBox.startDialogue("* Hey. You need backup, don't you?\n* I'm coming with you.", "", "0", "light", false);
