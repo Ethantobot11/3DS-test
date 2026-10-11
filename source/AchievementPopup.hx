@@ -37,10 +37,10 @@ class AchievementPopup {
         descText = new CitroText(84, -36, title);
         descText.color = 0xFFFFFFFF;
 
-        CitroTween.tweenObject(background, ["y" => 10], 0.3, { ease: QUAD_OUT });
-        CitroTween.tweenObject(iconSprite, ["y" => 16], 0.3, { ease: QUAD_OUT });
-        CitroTween.tweenObject(titleText, ["y" => 16], 0.3, { ease: QUAD_OUT });
-        CitroTween.tweenObject(descText, ["y" => 34], 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(background, { y: 10 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(iconSprite, { y: 16 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(titleText, { y: 16 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(descText, { y: 34 }, 0.3, { ease: QUAD_OUT });
 
         CitroTimer.start(3.5, function() {
             dismiss();
@@ -48,10 +48,10 @@ class AchievementPopup {
     }
 
     private static function dismiss() {
-        CitroTween.tweenObject(background, ["y" => -60], 0.3, { ease: QUAD_IN });
-        CitroTween.tweenObject(iconSprite, ["y" => -54], 0.3, { ease: QUAD_IN });
-        CitroTween.tweenObject(titleText, ["y" => -54], 0.3, { ease: QUAD_IN });
-        CitroTween.tweenObject(descText, ["y" => -36], 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(background, { y: -60 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(iconSprite, { y: -54 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(titleText, { y: -54 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(descText, { y: -36 }, 0.3, { ease: QUAD_IN });
 
         CitroTimer.start(0.3, function() {
             isShowing = false;
