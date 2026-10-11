@@ -43,7 +43,7 @@ class BattleState extends CitroState
     
     var bulletGroup:CitroGroup;
 
-    public function new()
+    public function new(?enemy:Dynamic)
     {
         super();
 
