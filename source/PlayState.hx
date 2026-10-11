@@ -46,21 +46,24 @@ class PlayState extends CitroState
 
         partyGroup = new CitroGroup();
 
-        kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2, false, playerChar());
+        var centerX = CitroG.WIDTH / 2;
+        var centerY = CitroG.HEIGHT / 2;
+
+        kris = new DSPlayer(centerX - 60, centerY, false, playerChar());
         partyGroup.add(kris);
         camera.add(kris);
 
-        noelle = new DSNoelle(CitroG.WIDTH / 2 + 60, CitroG.HEIGHT / 2);
+        noelle = new DSNoelle(centerX - 20, centerY);
         noelle.target = kris;
         partyGroup.add(noelle);
         camera.add(noelle);
 
-        lacie = new DSLacie(CitroG.WIDTH / 2 + 120, CitroG.HEIGHT / 2);
+        lacie = new DSLacie(centerX + 20, centerY);
         lacie.target = kris;
         partyGroup.add(lacie);
         camera.add(lacie);
 
-        susie = new DSSusie(CitroG.WIDTH / 2 + 180, CitroG.HEIGHT / 2, false);
+        susie = new DSSusie(centerX + 60, centerY, false);
         susie.target = kris;
         partyGroup.add(susie);
         camera.add(susie);
@@ -72,7 +75,7 @@ class PlayState extends CitroState
         dialogueBox.visible = false;
         add(dialogueBox); 
 
-        closetDoor = new DSDarkDoor(300, 100);
+        closetDoor = new DSDarkDoor(600, 300);
         camera.add(closetDoor);
 
         super.create();
@@ -150,24 +153,26 @@ class PlayState extends CitroState
 
     private function separate(obj1:CitroObject, obj2:CitroObject, condition:Bool = true):Bool
     {
-        if (!condition || !CitroG.overlaps(obj1, obj2)) return false;
-
-        var overlapX1 = (obj1.x + (obj1.width * obj1.scale.x)) - obj2.x;
-        var overlapX2 = (obj2.x + (obj2.width * obj2.scale.x)) - obj1.x;
-        var overlapY1 = (obj1.y + (obj1.height * obj1.scale.y)) - obj2.y;
-        var overlapY2 = (obj2.y + (obj2.height * obj2.scale.y)) - obj1.y;
-
-        var minOverlapX = overlapX1 < overlapX2 ? overlapX1 : overlapX2;
-        var minOverlapY = overlapY1 < overlapY2 ? overlapY1 : overlapY2;
-
-        if (minOverlapX < minOverlapY) {
-            if (overlapX1 < overlapX2) obj1.x -= overlapX1;
-            else obj1.x += overlapX2;
-        } else {
-            if (overlapY1 < overlapY2) obj1.y -= overlapY1;
-            else obj1.y += overlapY2;
+        if (!condition) return false;
+        
+        var hitboxSize = 20.0; 
+        var dx = Math.abs(obj1.x - obj2.x);
+        var dy = Math.abs(obj1.y - obj2.y);
+        
+        if (dx < hitboxSize && dy < hitboxSize) {
+            var overlapX = hitboxSize - dx;
+            var overlapY = hitboxSize - dy;
+            
+            if (overlapX < overlapY) {
+                if (obj1.x < obj2.x) { obj1.x -= overlapX / 2; obj2.x += overlapX / 2; }
+                else { obj1.x += overlapX / 2; obj2.x -= overlapX / 2; }
+            } else {
+                if (obj1.y < obj2.y) { obj1.y -= overlapY / 2; obj2.y += overlapY / 2; }
+                else { obj1.y += overlapY / 2; obj2.y -= overlapY / 2; }
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     function startBattle(targetEnemy:DSRudinn):Void
@@ -251,11 +256,36 @@ class PlayState extends CitroState
                 else if (dialogueStage == 3)
                 {
                     susie.isFollowing = true; 
-                    
                     hideDialogueBox();
                     kris.isBusy = false;
                     dialogueStage = 0;
                 }
+            }
+        }
+        else if (dialogueStage == 0 && interactPressed && isKrisFacingNoelle())
+        {
+            dialogueStage = 2;
+            kris.isBusy = true;
+            showDialogueBox();
+            dialogueBox.startDialogue("* Hi Kris!\n* Want me to come with you?", "noelle_face", "0", "light", true);
+        }
+        else if (dialogueStage == 0 && interactPressed && isKrisFacingLacie())
+        {
+            dialogueStage = 1;
+            kris.isBusy = true;
+            showDialogueBox();
+            dialogueBox.startDialogue("* Hi Kris! I'm Lacie!", "", "0", "light", false);
+        }
+        else if (dialogueStage == 0 && interactPressed && isKrisFacingSusie())
+        {
+            dialogueStage = 3;
+            kris.isBusy = true;
+            showDialogueBox();
+            
+            if (!susie.isFollowing) {
+                dialogueBox.startDialogue("* Hey. You need backup, don't you?\n* I'm coming with you.", "", "0", "light", false);
+            } else {
+                dialogueBox.startDialogue("* Let's go already.", "", "0", "light", false);
             }
         }
     }
