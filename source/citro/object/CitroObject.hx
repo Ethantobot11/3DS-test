@@ -75,17 +75,23 @@ class CitroObject {
 	public function new() {}
 
 	public function destroy() {
-		isDestroyed = true;
-		acceleration = null;
-		scale = null;
-	}
+        isDestroyed = true;
+        exists = false;
+        acceleration = null;
+        scale = null;
+    }
 
 	public function update():Bool {
-		x += acceleration.x;
-		y += acceleration.y;
-		angle += acceleration.angle;
-		return isOnScreen() || isDestroyed;
-	};
+        if (isDestroyed) return false;
+
+        if (acceleration != null) {
+            x += acceleration.x;
+            y += acceleration.y;
+            angle += acceleration.angle;
+        }
+
+        return isOnScreen() || isDestroyed;
+    }
 
 	public function screenCenter(pos:CitroAxes = XY) {
 		final newW:Float = width * scale.x;
@@ -100,12 +106,12 @@ class CitroObject {
 	}
 	
 	public function isOnScreen():Bool {
-		if (!visible || alpha <= 0) return false; 
-		final w = CitroG.WIDTH;
-		final h = CitroG.HEIGHT;
-		final sw = width * scale.x;
-		final sh = height * scale.y;
+        if (!visible || alpha <= 0) return false; 
+        if (scale == null) return false; 
 
-		return x + sw > 0 && x < (bottom ? 320 : w) && y + sh > 0 && y < h;
-	}
+        return x - (width * scale.x) > 0 &&
+               x < (bottom ? 320 : 400) &&
+               y - (height * scale.y) > 0 &&
+               y < 240;
+    }
 }
