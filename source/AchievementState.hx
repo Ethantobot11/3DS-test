@@ -2,116 +2,60 @@ package;
 
 #if (!wiiu || !cafe)
 import citro.CitroG;
-import citro.object.CitroObject;
 import citro.object.CitroSprite;
 import citro.object.CitroText;
-import citro.state.CitroState;
-import haxe3ds.services.HID;
+import citro.backend.CitroTween;
+import citro.backend.CitroTimer;
 
-class AchievementState extends CitroState {
-    private var selectedIndex:Int = 0;
-    private var achievements:Array<{id:String, title:String, desc:String, unlocked:Bool}> = [];
-    private var uiElements:Array<CitroSprite> = [];
-    private var iconElements:Array<CitroSprite> = [];
-    private var soulCursor:CitroSprite;
+class AchievementPopup {
+    private static var background:CitroSprite;
+    private static var iconSprite:CitroSprite;
+    private static var titleText:CitroText;
+    private static var descText:CitroText;
+    private static var isShowing:Bool = false;
 
-    override public function create() {
-        super.create();
+    /**
+     * Triggers an achievement notification banner on screen.
+     */
+    public static function show(title:String, description:String, iconPath:String) {
+        if (isShowing) return;
+        isShowing = true;
 
-        loadAchievements();
+        SoundPlayer.playSound('romfs:/assets/sounds/snd_save.cwav');
 
-        var bg = new CitroSprite(0, 0);
-        bg.makeGraphic(CitroG.WIDTH, CitroG.HEIGHT, 0xFF0A0A1E);
-        add(bg);
-
-        var titleText = new CitroText(50, 10, "ACHIEVEMENTS");
-        titleText.color = 0xFFFFFFFF;
-        add(titleText);
-
-        for (i in 0...achievements.length) {
-            var ach = achievements[i];
-            
-            var box = new CitroSprite(40, 35 + (i * 45));
-            box.makeGraphic(320, 40, ach.unlocked ? 0xFF1B3B1B : 0xFF222244);
-            add(box);
-            uiElements.push(box);
-
-            var icon = new CitroSprite(45, 39 + (i * 45));
-            var assetPath = 'romfs:/assets/sprites/achievements/${ach.id}.t3x';
-            
-            if (!icon.loadGraphic(assetPath)) {
-                icon.makeGraphic(32, 32, ach.unlocked ? 0xFF00FF00 : 0xFF555555);
-            }
-            add(icon);
-            iconElements.push(icon);
-
-            var displayText = ach.unlocked ? '${ach.title}\n${ach.desc}' : '???\nLocked Achievement';
-            var txt = new CitroText(85, 39 + (i * 45), displayText);
-            txt.color = ach.unlocked ? 0xFFFFFFFF : 0xFF888888;
-            add(txt);
+        background = new CitroSprite(40, -60);
+        background.makeGraphic(320, 50, 0xFF11112B);
+        
+        iconSprite = new CitroSprite(46, -54);
+        if (!iconSprite.loadGraphic(iconPath)) {
+            iconSprite.makeGraphic(32, 32, 0xFF00FF00);
         }
 
-        soulCursor = new CitroSprite(25, 51);
-        soulCursor.makeGraphic(8, 8, 0xFFFF0000);
-        add(soulCursor);
+        titleText = new CitroText(84, -54, "ACHIEVEMENT UNLOCKED!");
+        titleText.color = 0xFFFFD700;
 
-        updateVisualSelection();
+        descText = new CitroText(84, -36, title);
+        descText.color = 0xFFFFFFFF;
+
+        CitroTween.tweenObject(background, { y: 10 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(iconSprite, { y: 16 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(titleText, { y: 16 }, 0.3, { ease: QUAD_OUT });
+        CitroTween.tweenObject(descText, { y: 34 }, 0.3, { ease: QUAD_OUT });
+
+        CitroTimer.start(3.5, function() {
+            dismiss();
+        });
     }
 
-    override public function update(delta:Int) {
-        super.update(delta);
+    private static function dismiss() {
+        CitroTween.tweenObject(background, { y: -60 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(iconSprite, { y: -54 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(titleText, { y: -54 }, 0.3, { ease: QUAD_IN });
+        CitroTween.tweenObject(descText, { y: -36 }, 0.3, { ease: QUAD_IN });
 
-        if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            selectedIndex--;
-            if (selectedIndex < 0) selectedIndex = achievements.length - 1;
-            updateVisualSelection();
-        }
-
-        if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            selectedIndex++;
-            if (selectedIndex >= achievements.length) selectedIndex = 0;
-            updateVisualSelection();
-        }
-
-        if (HID.keyPressed(HIDKey.B)) {
-            SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            CitroG.switchState(new ThreeDSMainMenuState());
-        }
-    }
-
-    private function loadAchievements() {
-        if (CitroG.save.data.achievements == null) {
-            CitroG.save.data.achievements = {};
-        }
-
-        var saved = CitroG.save.data.achievements;
-        achievements = [];
-
-        for (id in AchievementManager.registry.keys()) {
-            var info = AchievementManager.registry.get(id);
-            var isUnlocked = Reflect.field(saved, id) == true;
-
-            achievements.push({
-                id: id,
-                title: info.title,
-                desc: info.desc,
-                unlocked: isUnlocked
-            });
-        }
-    }
-
-    private function updateVisualSelection() {
-        for (i in 0...uiElements.length) {
-            var ach = achievements[i];
-            if (i == selectedIndex) {
-                uiElements[i].makeGraphic(320, 40, ach.unlocked ? 0xFF2A5A2A : 0xFF444488);
-            } else {
-                uiElements[i].makeGraphic(320, 40, ach.unlocked ? 0xFF1B3B1B : 0xFF222244);
-            }
-        }
-        soulCursor.y = 51 + (selectedIndex * 45);
+        CitroTimer.start(0.3, function() {
+            isShowing = false;
+        });
     }
 }
 #end
