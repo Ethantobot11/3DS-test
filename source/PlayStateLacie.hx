@@ -186,7 +186,7 @@ class PlayStateLacie extends CitroState
         
         var battleState = new BattleState(targetEnemy);
         
-        CitroG.switchState(battleState);
+        CitroG.switchState();
     }
 
     function spawnDarkWorldEntities()
