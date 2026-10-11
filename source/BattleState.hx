@@ -26,7 +26,7 @@ class BattleState extends CitroState
     var currentPhase:BattlePhase = MENU;
     
     var selectedOption:Int = 0;
-    var menuOptions:Array<String> = ["FIGHT", "ACT", "ITEM", "MERCY", "DEFEND"];
+    var menuOptions:Array<String> = [];
     var menuTextGroup:Array<CitroText> = [];
     var infoText:CitroText;
 
@@ -39,21 +39,19 @@ class BattleState extends CitroState
     
     var krisBattle:CitroAnimate;
     var susieBattle:CitroAnimate;
-    var rudinn:CitroAnimate;
     
     var bulletGroup:CitroGroup;
+    
+    var isSusieTurn:Bool = false;
+    var enemyAttackTimer:Float = 0;
+    var soulHit:Bool = false;
 
-    public function new(?enemy:Dynamic)
+    public function new()
     {
         super();
 
         arenaX = (CitroG.WIDTH - arenaW) / 2;
         arenaY = (CitroG.HEIGHT - arenaH) / 2;
-
-        rudinn = new CitroAnimate("romfs:/assets/images/chars/Rudinn.cea", "spr_diamondm_idle");
-        rudinn.x = (CitroG.WIDTH / 2) - (rudinn.width / 2);
-        rudinn.y = 40;
-        add(rudinn);
 
         krisBattle = new CitroAnimate("romfs:/assets/images/chars/battle/kris_battle.cea", "spr_krisb_idle");
         krisBattle.x = 40;
@@ -65,14 +63,14 @@ class BattleState extends CitroState
         susieBattle.y = 140;
         add(susieBattle);
 
+        updateMenuOptions();
+
         infoText = new CitroText(30, CitroG.HEIGHT - 110, "* Rudinn blocks the way!");
         infoText.color = CitroColor.WHITE;
         add(infoText);
 
-        var startX:Float = 30;
-        var spacingX:Float = 110;
         for (i in 0...menuOptions.length) {
-            var optionText = new CitroText(startX + (i * spacingX), CitroG.HEIGHT - 50, menuOptions[i]);
+            var optionText = new CitroText(30 + (i * 110), CitroG.HEIGHT - 50, menuOptions[i]);
             optionText.color = CitroColor.WHITE;
             menuTextGroup.push(optionText);
             add(optionText);
@@ -85,16 +83,33 @@ class BattleState extends CitroState
 
         bulletGroup = new CitroGroup(50);
         add(bulletGroup);
+    }
 
-        updateMenuText();
+    function updateMenuOptions() {
+        menuOptions = isSusieTurn ? ["FIGHT", "SPELL", "ITEM", "MERCY"] : ["FIGHT", "ACT", "ITEM", "MERCY"];
         
-        CitroTween.tweenObject(krisBattle, { y: 140 }, 0.4, { ease: BOUNCE_OUT });
-        CitroTween.tweenObject(susieBattle, { y: 140 }, 0.5, { ease: BOUNCE_OUT });
+        for (i in 0...menuOptions.length) {
+            if (i < menuTextGroup.length) {
+                menuTextGroup[i].text = menuOptions[i];
+                menuTextGroup[i].visible = true;
+            } else {
+                var optionText = new CitroText(30 + (i * 110), CitroG.HEIGHT - 50, menuOptions[i]);
+                optionText.color = CitroColor.WHITE;
+                menuTextGroup.push(optionText);
+                add(optionText);
+            }
+        }
+        for (i in menuOptions.length...menuTextGroup.length) {
+            menuTextGroup[i].visible = false;
+        }
+        updateMenuText();
     }
 
     override public function update(delta:Int):Void
     {
-        var elapsed:Float = CitroG.deltaTime / 1000.0;
+        super.update(delta);
+
+        var elapsed:Float = delta / 1000.0;
 
         switch (currentPhase) {
             case MENU:
@@ -111,24 +126,72 @@ class BattleState extends CitroState
                 }
 
             case PLAYER_ATTACK:
-                infoText.text = "* You attacked Rudinn!";
-                rudinn.play("spr_diamondm_hurt");
+                if (isSusieTurn && selectedOption == 1) {
+                    infoText.text = "* Susie used Rude Buster!";
+                    susieBattle.play("spr_susie_rudebuster");
+                } else {
+                    infoText.text = "* You attacked Rudinn!";
+                    if (Math.random() > 0.5) {
+                        krisBattle.play("spr_krisb_hurt");
+                    } else {
+                        susieBattle.play("spr_susieb_hurt");
+                    }
+                }
                 
                 CitroTimer.start(1.0, function() {
                     startEnemyTurn();
                 }, 1);
 
             case ENEMY_TURN:
-                handleSoulMovement();
-                bulletGroup.update();
+                handleEnemyTurn(elapsed);
 
             case VICTORY:
                 if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START)) {
                     CitroG.switchState(new PlayState());
                 }
         }
+    }
 
-        super.update(delta);
+    function handleEnemyTurn(elapsed:Float) {
+        enemyAttackTimer += elapsed;
+        
+        if (Std.int(enemyAttackTimer * 2) % 2 == 0 && Std.int(enemyAttackTimer * 10) % 5 == 0) {
+            var bullet = cast bulletGroup.recycle(CitroSprite);
+            bullet.makeGraphic(8, 8, CitroColor.WHITE);
+            bullet.x = arenaX + (Math.random() * arenaW);
+            bullet.y = arenaY;
+            bullet.visible = true;
+        }
+        
+        bulletGroup.forEach(function(b:CitroSprite) {
+            if (b.visible) {
+                b.y += 120 * elapsed;
+                
+                if (CitroG.overlaps(b, soul) && !soulHit) {
+                    soulHit = true;
+                    
+                    soul.visible = true;
+                    
+                    if (Math.random() > 0.5) {
+                        krisBattle.play("spr_krisb_hurt");
+                    } else {
+                        susieBattle.play("spr_susieb_hurt");
+                    }
+                    
+                    CitroTimer.start(0.5, function() {
+                        soulHit = false;
+                    }, 1);
+                }
+                
+                if (b.y > arenaY + arenaH) {
+                    b.visible = false;
+                }
+            }
+        });
+
+        if (enemyAttackTimer >= 4.0) {
+            endEnemyTurn();
+        }
     }
 
     function handleMenuInput():Void
@@ -156,18 +219,15 @@ class BattleState extends CitroState
             case "FIGHT":
                 setMenuVisible(false);
                 currentPhase = TARGET_SELECT;
-            case "ACT":
-                infoText.text = "* Rudinn seems docile.";
+            case "ACT", "SPELL":
+                setMenuVisible(false);
+                currentPhase = PLAYER_ATTACK;
             case "ITEM":
                 infoText.text = "* You don't have any items.";
             case "MERCY":
                 setMenuVisible(false);
                 infoText.text = "* You spared Rudinn!";
                 currentPhase = VICTORY;
-            case "DEFEND":
-                setMenuVisible(false);
-                infoText.text = "* You took a defensive stance.";
-                startEnemyTurn();
         }
     }
 
@@ -196,32 +256,19 @@ class BattleState extends CitroState
     {
         setMenuVisible(false);
         currentPhase = ENEMY_TURN;
+        enemyAttackTimer = 0;
         infoText.text = "* Rudinn attacks!";
         soul.visible = true;
-        rudinn.play("spr_diamondm_idle");
-        
-        //bulletGroup.recycle();
+        soulHit = false;
     }
 
-    function handleSoulMovement():Void
+    function endEnemyTurn():Void
     {
-        var speed:Float = 140;
-        var vx:Float = 0;
-        var vy:Float = 0;
-
-        if (HID.keyHeld(HIDKey.UP)) vy = -speed;
-        if (HID.keyHeld(HIDKey.DOWN)) vy = speed;
-        if (HID.keyHeld(HIDKey.LEFT)) vx = -speed;
-        if (HID.keyHeld(HIDKey.RIGHT)) vx = speed;
-
-        var elapsed:Float = CitroG.deltaTime / 1000.0;
-        soul.x += vx * elapsed;
-        soul.y += vy * elapsed;
-
-        if (soul.x < arenaX + 2) soul.x = arenaX + 2;
-        if (soul.x > arenaX + arenaW - 12) soul.x = arenaX + arenaW - 12;
-        if (soul.y < arenaY + 2) soul.y = arenaY + 2;
-        if (soul.y > arenaY + arenaH - 12) soul.y = arenaY + arenaH - 12;
+        soul.visible = false;
+        currentPhase = MENU;
+        setMenuVisible(true);
+        infoText.text = "* What will you do?";
+        updateMenuText();
     }
 
     override public function destroy()
@@ -231,7 +278,6 @@ class BattleState extends CitroState
         if (soul != null) soul.destroy();
         if (krisBattle != null) krisBattle.destroy();
         if (susieBattle != null) susieBattle.destroy();
-        if (rudinn != null) rudinn.destroy();
         if (bulletGroup != null) bulletGroup.destroy();
         super.destroy();
     }
