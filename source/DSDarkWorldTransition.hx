@@ -296,7 +296,7 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-            case 9: 
+                        case 9: 
                 positionOverlay();
 
                 if (!himPlayed && timer >= 0.45)
@@ -308,6 +308,7 @@ class DSDarkWorldTransition extends CitroObject
                 if (timer >= 1.5)
                 {
                     trace("Transition finishing: Applying dark world state...");
+                    
                     player.setDarkWorld(true);
                     player.isBusy = false;
                     
@@ -317,21 +318,19 @@ class DSDarkWorldTransition extends CitroObject
                     }
 
                     if (camera != null) {
-                        if (!Math.isNaN(player.x) && !Math.isNaN(player.y)) {
-                            camera.follow(player, true);
-                        } else {
-                            trace("WARNING: Player coordinates are NaN! Skipping camera follow.");
-                        }
+                        camera.follow(player, true);
                         shakeIntensity = 0;
                     }
 
                     if (bgOverlay != null) bgOverlay.destroy();
                     if (whiteOverlay != null) whiteOverlay.destroy();
-
-                    trace("Transition complete. Calling onComplete...");
-                    if (onComplete != null) onComplete();
                     
-                    trace("Destroying transition object...");
+                    if (onComplete != null) onComplete();
+
+                    visible = false; 
+                    exists = false; 
+                    
+                    trace("Transition complete. Destroying...");
                     destroy();
                 }
         }
