@@ -2,17 +2,18 @@ package;
 
 #if (!wiiu || !cafe)
 
+import citro.state.CitroState;
 import citro.object.CitroSprite;
 import citro.object.CitroText;
+import citro.object.CitroAnimate;
+import citro.object.CitroGroup;
 import citro.backend.CitroColor;
 import citro.backend.CitroTimer;
+import citro.backend.CitroTween;
 import citro.CitroG;
-import citro.c2d.CitroObjectDraw;
 import haxe3ds.services.HID;
-import citro.state.CitroState;
 
-enum BattlePhase
-{
+enum BattlePhase {
     MENU;
     TARGET_SELECT;
     PLAYER_ATTACK;
@@ -35,56 +36,75 @@ class BattleState extends CitroState
     var arenaH:Float = 100;
 
     var soul:CitroSprite;
-    var enemy:DSRudinn;
-    var enemyTurnTimer:Float = 0;
-    var attackTimerStarted:Bool = false;
+    
+    var krisBattle:CitroAnimate;
+    var susieBattle:CitroAnimate;
+    var rudinn:CitroAnimate;
+    
+    var bulletGroup:CitroGroup;
 
-    public function new(enemy:DSRudinn)
+    public function new()
     {
         super();
-        this.enemy = enemy;
 
         arenaX = (CitroG.WIDTH - arenaW) / 2;
         arenaY = (CitroG.HEIGHT - arenaH) / 2;
 
-        infoText = new CitroText(30, CitroG.HEIGHT - 110, "* Rudinn drew near!");
+        rudinn = new CitroAnimate("romfs:/assets/images/chars/Rudinn.cea", "spr_diamondm_idle");
+        rudinn.x = (CitroG.WIDTH / 2) - (rudinn.width / 2);
+        rudinn.y = 40;
+        add(rudinn);
+
+        krisBattle = new CitroAnimate("romfs:/assets/images/chars/battle/kris_battle.cea", "spr_krisb_idle");
+        krisBattle.x = 40;
+        krisBattle.y = 140;
+        add(krisBattle);
+
+        susieBattle = new CitroAnimate("romfs:/assets/images/chars/battle/susie_battle.cea", "spr_susieb_idle");
+        susieBattle.x = 100;
+        susieBattle.y = 140;
+        add(susieBattle);
+
+        infoText = new CitroText(30, CitroG.HEIGHT - 110, "* Rudinn blocks the way!");
         infoText.color = CitroColor.WHITE;
+        add(infoText);
 
         var startX:Float = 30;
         var spacingX:Float = 110;
-        for (i in 0...menuOptions.length)
-        {
+        for (i in 0...menuOptions.length) {
             var optionText = new CitroText(startX + (i * spacingX), CitroG.HEIGHT - 50, menuOptions[i]);
             optionText.color = CitroColor.WHITE;
             menuTextGroup.push(optionText);
+            add(optionText);
         }
 
         soul = new CitroSprite(arenaX + 76, arenaY + 46);
         soul.makeGraphic(8, 8, CitroColor.RED);
         soul.visible = false;
+        add(soul);
+
+        bulletGroup = new CitroGroup(50);
+        add(bulletGroup);
 
         updateMenuText();
+        
+        CitroTween.tweenObject(krisBattle, { y: 140 }, 0.4, { ease: BOUNCE_OUT });
+        CitroTween.tweenObject(susieBattle, { y: 140 }, 0.5, { ease: BOUNCE_OUT });
     }
 
     override public function update(delta:Int):Void
     {
         var elapsed:Float = CitroG.deltaTime / 1000.0;
 
-        switch (currentPhase)
-        {
+        switch (currentPhase) {
             case MENU:
                 handleMenuInput();
 
             case TARGET_SELECT:
                 infoText.text = "* Select target: Rudinn";
-                
-                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START) || CitroG.isTouching(soul) || HID.keyPressed(HIDKey.TOUCH))
-                {
+                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START)) {
                     currentPhase = PLAYER_ATTACK;
-                    attackTimerStarted = false;
-                }
-                else if (HID.keyPressed(HIDKey.B) || HID.keyPressed(HIDKey.SELECT))
-                {
+                } else if (HID.keyPressed(HIDKey.B) || HID.keyPressed(HIDKey.SELECT)) {
                     currentPhase = MENU;
                     infoText.text = "* Choose an action.";
                     setMenuVisible(true);
@@ -92,41 +112,20 @@ class BattleState extends CitroState
 
             case PLAYER_ATTACK:
                 infoText.text = "* You attacked Rudinn!";
-                if (!attackTimerStarted)
-                {
-                    attackTimerStarted = true;
-                    CitroTimer.start(1.0, function() {
-                        startEnemyTurn();
-                    }, 1);
-                }
+                rudinn.play("spr_diamondm_idle");
+                
+                CitroTimer.start(1.0, function() {
+                    startEnemyTurn();
+                }, 1);
 
             case ENEMY_TURN:
                 handleSoulMovement();
-                enemyTurnTimer += elapsed;
-
-                if (enemyTurnTimer >= 4.0)
-                {
-                    endEnemyTurn();
-                }
+                bulletGroup.update();
 
             case VICTORY:
-                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START) || HID.keyPressed(HIDKey.TOUCH))
-                {
-                    destroy();
+                if (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START)) {
+                    CitroG.switchState(new PlayState());
                 }
-        }
-
-        CitroObjectDraw.drawRect(arenaX, arenaY, arenaW, arenaH, [CitroColor.WHITE]);
-        CitroObjectDraw.drawRect(arenaX + 3, arenaY + 3, arenaW - 6, arenaH - 6, [CitroColor.BLACK]);
-
-        infoText.update();
-        for (opt in menuTextGroup) {
-            if (opt.visible) opt.update();
-        }
-
-        if (soul.visible)
-        {
-            soul.update();
         }
 
         super.update(delta);
@@ -138,49 +137,22 @@ class BattleState extends CitroState
         var rightPressed = HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.DRIGHT);
         var confirmPressed = HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.START);
 
-        if (leftPressed)
-        {
+        if (leftPressed) {
             selectedOption = (selectedOption - 1 + menuOptions.length) % menuOptions.length;
             updateMenuText();
-        }
-        else if (rightPressed)
-        {
+        } else if (rightPressed) {
             selectedOption = (selectedOption + 1) % menuOptions.length;
             updateMenuText();
         }
 
-        if (HID.keyHeld(HIDKey.TOUCH))
-        {
-            final t = HID.touch;
-            for (i in 0...menuTextGroup.length)
-            {
-                var btn = menuTextGroup[i];
-                if (t.px >= btn.x && t.px <= btn.x + btn.width &&
-                    t.py >= btn.y && t.py <= btn.y + btn.height)
-                {
-                    if (selectedOption != i)
-                    {
-                        selectedOption = i;
-                        updateMenuText();
-                    }
-                    if (HID.keyPressed(HIDKey.TOUCH))
-                    {
-                        confirmPressed = true;
-                    }
-                }
-            }
-        }
-
-        if (confirmPressed)
-        {
+        if (confirmPressed) {
             executeMenuOption(menuOptions[selectedOption]);
         }
     }
 
     function executeMenuOption(option:String):Void
     {
-        switch (option)
-        {
+        switch (option) {
             case "FIGHT":
                 setMenuVisible(false);
                 currentPhase = TARGET_SELECT;
@@ -201,16 +173,12 @@ class BattleState extends CitroState
 
     function updateMenuText():Void
     {
-        for (i in 0...menuTextGroup.length)
-        {
+        for (i in 0...menuTextGroup.length) {
             var textObj = menuTextGroup[i];
-            if (i == selectedOption)
-            {
+            if (i == selectedOption) {
                 textObj.color = CitroColor.YELLOW;
                 textObj.text = "> " + menuOptions[i];
-            }
-            else
-            {
+            } else {
                 textObj.color = CitroColor.WHITE;
                 textObj.text = menuOptions[i];
             }
@@ -219,8 +187,7 @@ class BattleState extends CitroState
 
     function setMenuVisible(isVisible:Bool):Void
     {
-        for (textObj in menuTextGroup)
-        {
+        for (textObj in menuTextGroup) {
             textObj.visible = isVisible;
         }
     }
@@ -229,18 +196,11 @@ class BattleState extends CitroState
     {
         setMenuVisible(false);
         currentPhase = ENEMY_TURN;
-        enemyTurnTimer = 0;
         infoText.text = "* Rudinn attacks!";
         soul.visible = true;
-    }
-
-    function endEnemyTurn():Void
-    {
-        soul.visible = false;
-        currentPhase = MENU;
-        setMenuVisible(true);
-        infoText.text = "* What will you do?";
-        updateMenuText();
+        rudinn.play("idle");
+        
+         bulletGroup.recycle();
     }
 
     function handleSoulMovement():Void
@@ -258,13 +218,6 @@ class BattleState extends CitroState
         soul.x += vx * elapsed;
         soul.y += vy * elapsed;
 
-        if (HID.keyHeld(HIDKey.TOUCH))
-        {
-            final t = HID.touch;
-            soul.x = t.px - (soul.width / 2);
-            soul.y = t.py - (soul.height / 2);
-        }
-
         if (soul.x < arenaX + 2) soul.x = arenaX + 2;
         if (soul.x > arenaX + arenaW - 12) soul.x = arenaX + arenaW - 12;
         if (soul.y < arenaY + 2) soul.y = arenaY + 2;
@@ -276,8 +229,11 @@ class BattleState extends CitroState
         if (infoText != null) infoText.destroy();
         for (textObj in menuTextGroup) textObj.destroy();
         if (soul != null) soul.destroy();
+        if (krisBattle != null) krisBattle.destroy();
+        if (susieBattle != null) susieBattle.destroy();
+        if (rudinn != null) rudinn.destroy();
+        if (bulletGroup != null) bulletGroup.destroy();
         super.destroy();
     }
 }
-
 #end
