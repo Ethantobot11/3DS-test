@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Rudinn.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="spr_diamondm_idle_00000" x="46" y="0" width="39" height="44" frameX="2" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_idle_10000" x="0" y="51" width="38" height="44" frameX="2" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_idle_20000" x="123" y="44" width="37" height="43" frameX="2" frameY="1" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_idle_30000" x="85" y="0" width="38" height="44" frameX="2" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_spared_00000" x="123" y="0" width="37" height="44" frameX="0" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_spared_10000" x="75" y="51" width="37" height="44" frameX="0" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_spared_20000" x="38" y="51" width="37" height="44" frameX="0" frameY="2" frameWidth="35" frameHeight="40"/>
+	<SubTexture name="spr_diamondm_hurt0000" x="0" y="0" width="46" height="51" frameX="-3" frameY="2" frameWidth="47" frameHeight="47"/>
+</TextureAtlas>
