@@ -50,9 +50,9 @@ class DSPlayer extends CitroAnimate
         return 'romfs:/assets/images/chars/spr_kris${suffix}.cea';
     }
 
-    function animFor(action:String, dir:String):String {
+        function animFor(action:String, dir:String):String {
         if (charName == "lacie") {
-            return action + "_" + dir;
+            return action + "_" + dir; 
         }
         
         var suffix = isDarkWorld ? "_dark" : "";
