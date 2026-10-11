@@ -130,18 +130,19 @@ class CitroTween {
 	/**
 	 * Creates and starts a new tween from object.
 	 * @param object Object to use as.
-	 * @param props A mapper for the properties to use for this object.
+	 * @param props A dynamic object mapper for the properties to use for this object (e.g., { x: 100, y: 50 }).
 	 * @param duration How long in seconds do you want it to tween for?
 	 * @param options The current options to set up for the tween, can be null for default settings.
 	 */
-	public static function tweenObject(object:Dynamic, props:Map<String, Float>, duration:Float = 1, options:Null<CitroTweenOptions> = null):Bool {
+	public static function tweenObject(object:Dynamic, props:Dynamic, duration:Float = 1, options:Null<CitroTweenOptions> = null):Bool {
 		if (object == null || !Reflect.isObject(object)) {
 			return false;
 		}
 
 		final propStates:Array<CitroTweenProps> = [];
-		for (prop => item in props.keyValueIterator()) {
-			final fieldPaths:Array<String> = prop.split(".");
+		for (pName in Reflect.fields(props)) {
+			final item:Float = Reflect.field(props, pName);
+			final fieldPaths:Array<String> = pName.split(".");
 
 			var field = object;
 			if (fieldPaths.length > 1) {
@@ -149,7 +150,6 @@ class CitroTween {
 					if (index == fieldPaths.length-1) {
 						break;
 					}
-
 					field = Reflect.getProperty(field, path);
 					if (!Reflect.isObject(field)) {
 						throw 'Object Property "$path" is not an object.';
@@ -158,14 +158,14 @@ class CitroTween {
 			}
 
 			if (field == null) {
-				throw 'Object does not have the property "$prop"';
+				throw 'Object does not have the property "$pName"';
 			}
 
-			final pName:String = fieldPaths.pop();
+			final name:String = fieldPaths.pop();
 			propStates.push({
-				variableToUse: pName,
+				variableToUse: name,
 				destination: item,
-				oldValue: Reflect.getProperty(field, pName),
+				oldValue: Reflect.getProperty(field, name),
 				prop: field
 			});
 		}
@@ -192,7 +192,7 @@ class CitroTween {
 	 * @param toColor The destination CitroColor.
 	 * @param duration How long in seconds.
 	 * @param options Tween options (ease, onComplete, etc.).
-	 */
+	 *
 	public static function tweenColor(object:Dynamic, prop:String, toColor:CitroColor, duration:Float = 1, options:Null<CitroTweenOptions> = null):Bool {
 		if (object == null || !Reflect.isObject(object)) return false;
 
@@ -234,7 +234,7 @@ class CitroTween {
 				}
 			}
 		}) != 0;
-	}
+	}*/
 
 	/**
 	 * Updates all tweens, should not be used.
