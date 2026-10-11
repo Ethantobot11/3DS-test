@@ -44,6 +44,8 @@ class PlayState extends CitroState
         background.makeGraphic(1280, 720, 0xff1d1d24);
         camera.add(background);
 
+        partyGroup = new CitroGroup();
+
         kris = new DSPlayer(CitroG.WIDTH / 2 - 160, CitroG.HEIGHT / 2, false, playerChar());
         partyGroup.add(kris);
         camera.add(kris);
