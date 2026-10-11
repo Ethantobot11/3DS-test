@@ -81,6 +81,10 @@ class DSSusie extends CitroAnimate
         if (!isBusy && isFollowing && target != null) {
             handleFollow();
         } else if (!isBusy && !isFollowing) {
+            var idleAnim = animFor("walk", facingDir); 
+            if (curAnim != idleAnim) {
+                play(idleAnim);
+            }
             frame = 0;
             timeLeft = 999999;
         }
