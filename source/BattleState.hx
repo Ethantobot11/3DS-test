@@ -112,7 +112,7 @@ class BattleState extends CitroState
 
             case PLAYER_ATTACK:
                 infoText.text = "* You attacked Rudinn!";
-                rudinn.play("spr_diamondm_idle");
+                rudinn.play("spr_diamondm_hurt");
                 
                 CitroTimer.start(1.0, function() {
                     startEnemyTurn();
