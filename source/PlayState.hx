@@ -70,7 +70,6 @@ class PlayState extends CitroState
 
         dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT); 
         dialogueBox.visible = false;
-        add(dialogueBox);
 
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
@@ -236,35 +235,26 @@ class PlayState extends CitroState
             }
             else 
             {
-                hideDialogueBox();
-                kris.isBusy = false;
-                dialogueStage = 0;
-            }
-        }
-        else if (dialogueStage == 0 && interactPressed && isKrisFacingNoelle())
-        {
-            dialogueStage = 2;
-            kris.isBusy = true;
-            showDialogueBox();
-            dialogueBox.startDialogue("* Hi Kris!\n* Want me to come with you?", "noelle_face", "0", "light", true);
-        }
-        else if (dialogueStage == 0 && interactPressed && isKrisFacingLacie())
-        {
-            dialogueStage = 1;
-            kris.isBusy = true;
-            showDialogueBox();
-            dialogueBox.startDialogue("* Hi Kris! I'm Lacie!", "", "0", "light", false);
-        }
-        else if (dialogueStage == 0 && interactPressed && isKrisFacingSusie())
-        {
-            dialogueStage = 3;
-            kris.isBusy = true;
-            showDialogueBox();
-            
-            if (!susie.isFollowing) {
-                dialogueBox.startDialogue("* Hey. You need backup, don't you?\n* I'm coming with you.", "", "0", "light", false);
-            } else {
-                dialogueBox.startDialogue("* Let's go already.", "", "0", "light", false);
+                if (dialogueStage == 1)
+                {
+                    hideDialogueBox();
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
+                else if (dialogueStage == 2)
+                {
+                    hideDialogueBox();
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
+                else if (dialogueStage == 3)
+                {
+                    susie.isFollowing = true; 
+                    
+                    hideDialogueBox();
+                    kris.isBusy = false;
+                    dialogueStage = 0;
+                }
             }
         }
     }
