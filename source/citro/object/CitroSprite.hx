@@ -69,6 +69,31 @@ class CitroSprite extends CitroObject {
         return true;
     }
 
+    /**
+     * Copies the graphic data from another CitroSprite.
+     * This is highly efficient as it shares the same texture memory reference 
+     * without reloading the file from disk. Perfect for particle systems.
+     */
+    public function loadGraphicFromSprite(Sprite:CitroSprite):Bool {
+        if (Sprite == null) return false;
+        
+        untyped __cpp__('
+            this->ss = Sprite->ss;
+            this->image = Sprite->image;
+        ');
+        
+        width = Sprite.width;
+        height = Sprite.height;
+        
+        srcX = Sprite.srcX;
+        srcY = Sprite.srcY;
+        srcWidth = Sprite.srcWidth;
+        srcHeight = Sprite.srcHeight;
+        useSrcRect = Sprite.useSrcRect;
+        
+        return true;
+    }
+
     override function update():Bool {
 
         if (!visible || alpha <= 0) return false;
