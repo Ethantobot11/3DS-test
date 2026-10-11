@@ -65,7 +65,8 @@ class DSRudinn extends CitroAnimate
                 }
 
             case HIT:
-                break;
+                play("spr_diamondm_hurt");
+                //break;
         }
 
         return super.update();
