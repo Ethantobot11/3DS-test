@@ -132,13 +132,15 @@ class PlayState extends CitroState
             return;
         }
 
-        if (rudinn != null)
+        if (rudinn != null && !rudinn.isHit)
         {
             var distanceVal = CitroMath.distanceBetween(kris, rudinn);
-            var isNear = distanceVal < 30;
-
-            if (!kris.isBusy && (CitroG.overlaps(kris, rudinn) || isNear))
+            
+            if (!kris.isBusy && (CitroG.overlaps(kris, rudinn) || distanceVal < 25))
             {
+                rudinn.isHit = true;
+                rudinn.play("spr_diamondm_hurt");
+                
                 kris.isBusy = true;
                 startBattle(rudinn);
             }
@@ -182,6 +184,10 @@ class PlayState extends CitroState
         
         if (noelle.isFollowing) noelle.setDarkWorld(true);
         if (susie.isFollowing) susie.setDarkWorld(true);
+        
+        rudinn = new DSRudinn(kris.x + 200, kris.y);
+        rudinn.target = kris;
+        camera.add(rudinn);
     }
 
     function showDialogueBox() {
