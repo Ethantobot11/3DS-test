@@ -7,6 +7,7 @@ import citro.object.CitroSprite;
 import citro.object.CitroText;
 import citro.object.CitroAnimate;
 import citro.object.CitroGroup;
+import citro.object.CitroObject;
 import citro.backend.CitroColor;
 import citro.backend.CitroTimer;
 import citro.backend.CitroTween;
