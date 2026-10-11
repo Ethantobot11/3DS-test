@@ -24,7 +24,6 @@ class CitroGroup extends CitroObject
     {
         if (members.indexOf(Object) == -1) {
             members.push(Object);
-            if (CitroG.state != null) CitroG.state.add(Object);
         }
         Object.exists = true;
         return Object;
