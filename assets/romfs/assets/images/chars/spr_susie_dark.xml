@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="spr_susie_dark.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="spr_susied_dark_0000" x="40" y="0" width="30" height="47" frameX="2" frameY="0" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susied_dark_0001" x="29" y="92" width="29" height="46" frameX="2" frameY="-1" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susied_dark_0002" x="40" y="0" width="30" height="47" frameX="2" frameY="0" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susied_dark_0003" x="58" y="92" width="29" height="46" frameX="2" frameY="-1" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susiel_dark_0000" x="99" y="0" width="29" height="47" frameX="2" frameY="0" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susiel_dark_0001" x="116" y="92" width="29" height="46" frameX="2" frameY="-1" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susiel_dark_0002" x="99" y="0" width="29" height="47" frameX="2" frameY="0" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susiel_dark_0003" x="87" y="92" width="29" height="46" frameX="2" frameY="-1" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susier_dark_0000" x="70" y="0" width="29" height="47" frameX="2" frameY="0" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susier_dark_0001" x="157" y="0" width="29" height="46" frameX="2" frameY="-1" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susier_dark_0002" x="70" y="0" width="29" height="47" frameX="2" frameY="0" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susier_dark_0003" x="128" y="0" width="29" height="46" frameX="2" frameY="-1" frameWidth="25" frameHeight="46"/>
+	<SubTexture name="spr_susieu_dark_0000" x="0" y="45" width="30" height="47" frameX="2" frameY="0" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susieu_dark_0001" x="128" y="46" width="29" height="46" frameX="1" frameY="-1" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susieu_dark_0002" x="0" y="45" width="30" height="47" frameX="2" frameY="0" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susieu_dark_0003" x="0" y="92" width="29" height="46" frameX="1" frameY="-1" frameWidth="26" frameHeight="46"/>
+	<SubTexture name="spr_susie_point_right0000" x="0" y="0" width="40" height="45" frameX="2" frameY="2" frameWidth="36" frameHeight="41"/>
+</TextureAtlas>
