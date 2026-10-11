@@ -158,7 +158,7 @@ class CitroAnimate extends CitroObject {
         
         if (!foundAny) {
             trace("WARNING: Animation '" + animation + "' not found in CEA file!");
-            return false;
+            return false; 
         }
         
         return true;
