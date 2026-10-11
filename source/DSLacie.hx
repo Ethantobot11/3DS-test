@@ -20,17 +20,15 @@ class DSLacie extends CitroAnimate
         looped = true;
     }
 
-    override public function update():Bool
-    {
-        if (!isFollowing)
-        {
-            if (curAnim != "walk_down") play("walk_down");
-            
-            timeLeft = 999999;
+    override public function update():Bool {
+        if (!isFollowing) {
+            var idleAnim = "walk_down";
+            if (curAnim != idleAnim) {
+                play(idleAnim);
+            }
             frame = 0;
-        }
-        else
-        {
+            timeLeft = 999999;
+        } else {
             if (target != null) followPathTrail();
         }
         return super.update();
