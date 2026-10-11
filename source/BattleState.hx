@@ -163,7 +163,7 @@ class BattleState extends CitroState
             bullet.visible = true;
         }
         
-        bulletGroup.forEach(function(b:CitroSprite) {
+        bulletGroup.forEach(function(b:CitroObject) {
             if (b.visible) {
                 b.y += 120 * elapsed;
                 
