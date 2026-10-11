@@ -70,6 +70,7 @@ class PlayState extends CitroState
 
         dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT); 
         dialogueBox.visible = false;
+        add(dialogueBox); 
 
         closetDoor = new DSDarkDoor(300, 100);
         camera.add(closetDoor);
@@ -88,12 +89,12 @@ class PlayState extends CitroState
 
         separate(kris, noelle, !noelle.isFollowing);
         separate(kris, susie, !susie.isFollowing);
-        separate(noelle, closetDoor, true);
-        separate(lacie, noelle, true);
-        separate(lacie, kris, true);
-        separate(lacie, closetDoor, true);
-        separate(susie, noelle, true);
-        separate(susie, closetDoor, true);
+        separate(kris, lacie, !lacie.isFollowing);
+        separate(kris, closetDoor, true);
+
+        if (noelle.isFollowing) separate(noelle, closetDoor, true);
+        if (susie.isFollowing) separate(susie, closetDoor, true);
+        if (lacie.isFollowing) separate(lacie, closetDoor, true);
 
         var interactPressed = HID.keyPressed(HIDKey.A) || 
                             HID.keyPressed(HIDKey.START) || 
