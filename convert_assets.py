@@ -83,6 +83,10 @@ def main():
                 other_files.append((root, name, ext, file_path))
 
     for root, name, xml_path, png_path in sprite_sheets:
+        if os.path.normpath(png_path) in excluded_files:
+            print(f"\nSkipping excluded image: {name} (in {root})")
+            continue
+
         t3x_name = name + ".t3x"
         t3x_path = os.path.join(root, t3x_name)
         cea_path = os.path.join(root, name + ".cea") if xml_path else None
@@ -125,6 +129,7 @@ def main():
 
         if xml_path:
             print(f"  [2/2] Generating 10-column {cea_path} from {xml_path}...")
+            cea_generated = False
             try:
                 tree = ET.parse(xml_path)
                 root_elem = tree.getroot()
@@ -154,7 +159,7 @@ def main():
 
                     frame_name = subtex.get("name")
                     
-                    match = re.search(r'^(.*?)(?:[_\-])(\d+)$', frame_name)
+                    match = re.search(r'^(.*?)(?:[_\-])?(\d+)$', frame_name)
                     
                     if match:
                         anim_name = match.group(1)
@@ -175,22 +180,22 @@ def main():
                 
                 with open(cea_path, "w", encoding="utf-8") as f:
                     f.write("\n".join(cea_lines) + "\n")
+                cea_generated = True
                     
             except Exception as e:
                 print(f"  ERROR: Failed to parse XML {xml_path}: {e}")
-        else:
-            print(f"  [2/2] Standalone PNG detected. Skipping CEA generation.")
-
+        
         print(f"  Cleaning up...")
         if tex3ds_success:
             try:
-                if os.path.exists(png_path): os.remove(png_path)
-                if xml_path and os.path.exists(xml_path): os.remove(xml_path)
-                print(f"  SUCCESS: {name} fully converted and cleaned up.")
+                if cea_generated or xml_path is None:
+                    if os.path.exists(png_path): os.remove(png_path)
+                    if xml_path and os.path.exists(xml_path): os.remove(xml_path)
+                    print(f"  SUCCESS: {name} fully converted and cleaned up.")
+                else:
+                    print(f"  WARNING: Kept PNG/XML because CEA generation failed. Please fix the XML.")
             except Exception as e:
                 print(f"  WARNING: Could not delete original files: {e}")
-        else:
-            print(f"  WARNING: Kept PNG/XML for debugging since tex3ds failed.")
 
     for root, name, ext, file_path in other_files:
         if not os.path.exists(file_path): continue
