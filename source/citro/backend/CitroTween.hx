@@ -186,6 +186,57 @@ class CitroTween {
 	}
 
 	/**
+	 * Creates and starts a new color tween on an object.
+	 * @param object Object containing the color property (e.g., a CitroSprite).
+	 * @param prop The string name of the color property (e.g., "color" or "alpha").
+	 * @param toColor The destination CitroColor.
+	 * @param duration How long in seconds.
+	 * @param options Tween options (ease, onComplete, etc.).
+	 */
+	public static function tweenColor(object:Dynamic, prop:String, toColor:CitroColor, duration:Float = 1, options:Null<CitroTweenOptions> = null):Bool {
+		if (object == null || !Reflect.isObject(object)) return false;
+
+		final currentColor:CitroColor = Reflect.getProperty(object, prop);
+		
+		final startR = currentColor.red;
+		final startG = currentColor.green;
+		final startB = currentColor.blue;
+		final startA = currentColor.alpha;
+
+		final endR = toColor.red;
+		final endG = toColor.green;
+		final endB = toColor.blue;
+		final endA = toColor.alpha;
+
+		return cta.push({
+			variable: object,
+			props: [{
+				variableToUse: prop,
+				destination: 1,
+				oldValue: 0,
+				prop: { startR: startR, startG: startG, startB: startB, startA: startA, endR: endR, endG: endG, endB: endB, endA: endA, targetObj: object, targetProp: prop }
+			}],
+			oldTime: OS.time.toInt(),
+			length: Std.int(duration * 1000),
+			state: CitroG.substate == null,
+			tweenType: OBJECT,
+			options: {
+				ease: options != null && options.ease != null ? options.ease : LINEAR,
+				onComplete: options != null ? options.onComplete : null,
+				onUpdate: function(t:Float) {
+					final p = prop.prop;
+					final newR = Std.int(p.startR + (p.endR - p.startR) * t);
+					final newG = Std.int(p.startG + (p.endG - p.startG) * t);
+					final newB = Std.int(p.startB + (p.endB - p.startB) * t);
+					final newA = Std.int(p.startA + (p.endA - p.startA) * t);
+					
+					Reflect.setProperty(p.targetObj, p.targetProp, CitroColor.fromRGB(newR, newG, newB, newA));
+				}
+			}
+		}) != 0;
+	}
+
+	/**
 	 * Updates all tweens, should not be used.
 	 * @param delta Time since last frame in milliseconds.
 	 */
