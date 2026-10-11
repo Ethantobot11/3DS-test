@@ -184,9 +184,9 @@ class PlayStateLacie extends CitroState
         trace('[startBattle()] Entering startBattle function...');
         lacie.isBusy = true;
         
-        var battleState = new BattleState(targetEnemy);
+        var battleState = new BattleState();
         
-        CitroG.switchState();
+        CitroG.switchState(battleState);
     }
 
     function spawnDarkWorldEntities()
