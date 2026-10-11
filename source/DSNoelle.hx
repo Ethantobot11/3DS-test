@@ -21,25 +21,19 @@ class DSNoelle extends CitroAnimate
         looped = true;
     }
 
-    override public function update():Bool
-    {
-        if (!isFollowing)
-        {
-            if (curAnim != "spr_noelle_walk_down_lw") {
-                play("spr_noelle_walk_down_lw");
+    override public function update():Bool {
+        if (!isFollowing) {
+            var idleAnim = "spr_noelle_walk_down_lw";
+            if (curAnim != idleAnim) {
+                play(idleAnim);
             }
-
-            timeLeft = 999999;
             frame = 0;
-        }
-        else
-        {
-            if (target != null)
-            {
+            timeLeft = 999999;
+        } else {
+            if (target != null) {
                 followPathTrail();
             }
         }
-        
         return super.update();
     }
 
