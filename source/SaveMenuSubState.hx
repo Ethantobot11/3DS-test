@@ -81,7 +81,6 @@ class SaveMenuSubState extends CitroSubState
 
         if (HID.keyPressed(HIDKey.A)) {
             if (selectedSlot < 3) {
-                // Save game logic for slots 0, 1, 2
                 SoundPlayer.playSound('romfs:/assets/sounds/snd_save.cwav');
                 CitroG.save.data.slots[selectedSlot] = {
                     created: true,
@@ -112,7 +111,7 @@ class SaveMenuSubState extends CitroSubState
 
         var targetY = 83 + (selectedSlot * 35);
         CitroTween.cancelTweensFrom(soulCursor);
-        CitroTween.tweenObject(soulCursor, ["y" => targetY], 0.1, { ease: QUAD_OUT });
+        CitroTween.tweenObject(soulCursor, { y: targetY }, 0.1, { ease: QUAD_OUT });
     }
 }
 
