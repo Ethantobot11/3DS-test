@@ -22,12 +22,25 @@ class DSSusie extends CitroAnimate
 
     public function new(x:Float, y:Float, darkWorld:Bool = false) {
         isDarkWorld = darkWorld;
-        super(ceaPath(), "");
         this.x = x;
         this.y = y;
         framerate = 6;
         looped = true;
-        play(animFor("walk", facingDir));
+
+        var path = ceaPath();
+        var anim = animFor("walk", facingDir);
+
+        try {
+            super(path, anim);
+        } catch (e:Dynamic) {
+            trace("WARNING: Could not load Susie CEA at " + path + ". Error: " + e);
+            trace("Falling back to light world sprite to prevent crash.");
+            try {
+                super("romfs:/assets/images/chars/spr_susie.cea", anim);
+            } catch (e2:Dynamic) {
+                trace("CRITICAL: All Susie assets failed to load!");
+            }
+        }
     }
 
     function ceaPath():String {
@@ -53,11 +66,11 @@ class DSSusie extends CitroAnimate
         var newPath = ceaPath();
         var newAnim = animFor("walk", facingDir);
         
-        if (sys.FileSystem.exists(newPath)) {
+        try {
             reloadCEA(newPath, newAnim);
             trace("SUCCESS: Susie switched to dark world sprite: " + newPath);
-        } else {
-            trace("ERROR: Susie dark world sprite NOT FOUND at: " + newPath);
+        } catch (e:Dynamic) {
+            trace("ERROR: Susie dark world sprite NOT FOUND at: " + newPath + ". Keeping current sprite.");
         }
         
         frame = 0;
