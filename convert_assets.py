@@ -154,10 +154,11 @@ def main():
 
                     frame_name = subtex.get("name")
                     
-                    match = re.search(r'^(.*?)(\d+)$', frame_name)
+                    match = re.search(r'^(.*?)(?:[_\-])(\d+)$', frame_name)
+                    
                     if match:
                         anim_name = match.group(1)
-                        if anim_name.endswith('_'):
+                        if anim_name.endswith('_') or anim_name.endswith('-'):
                             anim_name = anim_name[:-1]
                             
                         if anim_name not in anim_counters:
