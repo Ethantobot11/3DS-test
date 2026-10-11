@@ -200,7 +200,7 @@ class BattleState extends CitroState
         soul.visible = true;
         rudinn.play("spr_diamondm_idle");
         
-        bulletGroup.recycle();
+        //bulletGroup.recycle();
     }
 
     function handleSoulMovement():Void
