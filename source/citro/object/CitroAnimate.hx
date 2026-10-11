@@ -41,57 +41,69 @@ class CitroAnimate extends CitroObject {
         }
     }
 
-    public function loadCEA(ceaFile:String, defaultAnim:String):Void {
+    function loadCEA(ceaFile:String, defaultAnim:String):Void {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
         frames = new Map();
         atlasPath = "";
 
-        final file:String = File.getContent(ceaFile);
-        var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
-        if (dir == "") dir = ".";
+        try {
+            final file:String = File.getContent(ceaFile);
+            var dir:String = ceaFile.substr(0, ceaFile.lastIndexOf("/"));
+            if (dir == "") dir = ".";
 
-        if (file != "") {
-            var firstAnimFound:String = "";
-            for (line in file.split("\n")) {
-                line = line.trim();
-                if (line == "" || line.startsWith("#")) continue; 
-                
-                final row:Array<String> = line.split("?");
-                if (row.length < 10) continue;
+            if (file != "") {
+                var firstAnimFound:String = "";
+                for (line in file.split("\n")) {
+                    line = line.trim();
+                    if (line == "" || line.startsWith("#")) continue; 
+                    
+                    final row:Array<String> = line.split("?");
+                    if (row.length < 10) continue;
 
-                final atlasFile:String = row[0].trim();
-                final srcX:Float = Std.parseFloat(row[1]);
-                final srcY:Float = Std.parseFloat(row[2]);
-                final srcWidth:Float = Std.parseFloat(row[3]);
-                final srcHeight:Float = Std.parseFloat(row[4]);
-                final offsetX:Float = Std.parseFloat(row[5]);
-                final offsetY:Float = Std.parseFloat(row[6]);
-                final frameWidth:Float = Std.parseFloat(row[7]);
-                final frameHeight:Float = Std.parseFloat(row[8]);
-                final fullKey:String = row[9].trim();
+                    final atlasFile:String = row[0].trim();
+                    final srcX:Float = Std.parseFloat(row[1]);
+                    final srcY:Float = Std.parseFloat(row[2]);
+                    final srcWidth:Float = Std.parseFloat(row[3]);
+                    final srcHeight:Float = Std.parseFloat(row[4]);
+                    final offsetX:Float = Std.parseFloat(row[5]);
+                    final offsetY:Float = Std.parseFloat(row[6]);
+                    final frameWidth:Float = Std.parseFloat(row[7]);
+                    final frameHeight:Float = Std.parseFloat(row[8]);
+                    final fullKey:String = row[9].trim();
 
-                if (atlasPath == "") {
-                    atlasPath = '$dir/$atlasFile';
-                    atlasSprite = new CitroSprite();
-                    if (!atlasSprite.loadGraphic(atlasPath)) {
-                        atlasSprite.destroy();
-                        atlasSprite = null;
-                        return; 
+                    if (atlasPath == "") {
+                        atlasPath = '$dir/$atlasFile';
+                        atlasSprite = new CitroSprite();
+                        if (!atlasSprite.loadGraphic(atlasPath)) {
+                            atlasSprite.destroy();
+                            atlasSprite = null;
+                            return; 
+                        }
                     }
+
+                    var separatorIndex:Int = fullKey.lastIndexOf("-");
+                    if (separatorIndex == -1) separatorIndex = fullKey.lastIndexOf("_");
+                    final animName:String = separatorIndex != -1 ? fullKey.substr(0, separatorIndex) : fullKey;
+                    if (firstAnimFound == "") firstAnimFound = animName;
+
+                    frames.set(fullKey, {
+                        srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight,
+                        offsetX: offsetX, offsetY: offsetY, frameWidth: frameWidth, frameHeight: frameHeight
+                    });
                 }
-
-                final dashIndex:Int = fullKey.lastIndexOf("-");
-                final animName:String = dashIndex != -1 ? fullKey.substr(0, dashIndex) : fullKey;
-                if (firstAnimFound == "") firstAnimFound = animName;
-
-                frames.set(fullKey, {
-                    srcX: srcX, srcY: srcY, srcWidth: srcWidth, srcHeight: srcHeight,
-                    offsetX: offsetX, offsetY: offsetY, frameWidth: frameWidth, frameHeight: frameHeight
-                });
+                if (defaultAnim == "") defaultAnim = firstAnimFound;
             }
-            if (defaultAnim == "") defaultAnim = firstAnimFound;
+            play(defaultAnim);
+        } catch (e:Dynamic) {
+            trace("⚠️ CRITICAL: Could not load CEA file: " + ceaFile);
+            trace("⚠️ Error: " + e);
+            trace("⚠️ Creating a magenta placeholder to prevent crash.");
+            
+            atlasSprite = new CitroSprite();
+            atlasSprite.makeGraphic(32, 32, 0xFFFF00FF);
+            frames.set("placeholder-0", { srcX: 0, srcY: 0, srcWidth: 32, srcHeight: 32, offsetX: 0, offsetY: 0, frameWidth: 32, frameHeight: 32 });
+            play("placeholder");
         }
-        play(defaultAnim);
     }
 
     public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
