@@ -70,7 +70,18 @@ class DSPlayer extends CitroAnimate
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
         if (charName == "lacie") return; 
-        reloadCEA(ceaPath(), animFor("walk", facingDir));
+        
+        var newPath = ceaPath();
+        var newAnim = animFor("walk", facingDir);
+        
+        if (sys.FileSystem.exists(newPath)) {
+            reloadCEA(newPath, newAnim);
+            trace("SUCCESS: Switched to dark world sprite: " + newPath);
+        } else {
+            trace("ERROR: Dark world sprite NOT FOUND at: " + newPath);
+            trace("Falling back to current sprite to prevent crash.");
+        }
+        
         frame = 0;
         timeLeft = 999999;
     }
