@@ -27,7 +27,7 @@ class CitroGroup extends CitroObject
             if (CitroG.state != null) CitroG.state.add(Object);
         }
         Object.exists = true;
-        return Object
+        return Object;
     }
 
     public function remove(Object:CitroObject, Splice:Bool = false):CitroObject 
