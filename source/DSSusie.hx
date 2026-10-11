@@ -49,7 +49,17 @@ class DSSusie extends CitroAnimate
     public function setDarkWorld(darkWorld:Bool):Void {
         if (isDarkWorld == darkWorld) return;
         isDarkWorld = darkWorld;
-        reloadCEA(ceaPath(), animFor("walk", facingDir));
+        
+        var newPath = ceaPath();
+        var newAnim = animFor("walk", facingDir);
+        
+        if (sys.FileSystem.exists(newPath)) {
+            reloadCEA(newPath, newAnim);
+            trace("SUCCESS: Susie switched to dark world sprite: " + newPath);
+        } else {
+            trace("ERROR: Susie dark world sprite NOT FOUND at: " + newPath);
+        }
+        
         frame = 0;
         timeLeft = 999999;
     }
