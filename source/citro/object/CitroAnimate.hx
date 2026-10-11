@@ -93,6 +93,13 @@ class CitroAnimate extends CitroObject {
         }
         play(defaultAnim);
     }
+
+    public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
+        if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
+        frames = new Map();
+        atlasPath = "";
+        loadCEA(ceaFile, defaultAnim);
+    }
     
     public function loadFromAtlas(atlas:CitroAtlas, animPrefix:String, totalFrames:Int):Void {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
