@@ -128,7 +128,9 @@ class CitroAnimate extends CitroObject {
 
     public function play(animation:String):Bool {
         if (isDestroyed || atlasSprite == null) return false;
+        
         final animFormat:String = '$animation-0';
+        
         if (frames.exists(animFormat)) {
             timeLeft = 1000 / framerate;
             finished = false;
@@ -139,7 +141,27 @@ class CitroAnimate extends CitroObject {
             height = frm.frameHeight;
             return true;
         }
-        return false;
+        
+        var foundAny = false;
+        for (key => value in frames) {
+            if (key.startsWith('$animation-')) {
+                curAnim = animation;
+                frame = 0;
+                timeLeft = 1000 / framerate;
+                finished = false;
+                width = value.frameWidth;
+                height = value.frameHeight;
+                foundAny = true;
+                break;
+            }
+        }
+        
+        if (!foundAny) {
+            trace("WARNING: Animation '" + animation + "' not found in CEA file!");
+            return false;
+        }
+        
+        return true;
     }
 
     inline function format():String return '${curAnim}-$frame';
