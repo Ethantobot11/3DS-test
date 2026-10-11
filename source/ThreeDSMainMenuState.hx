@@ -161,7 +161,7 @@ class ThreeDSMainMenuState extends CitroState {
         menuCoords[menuNo] = currentSelection;
     }
 
-    private function updateVisualSelection() {
+        private function updateVisualSelection() {
         var sel = menuCoords[menuNo];
         var targetX = 65;
         var targetY = 72;
@@ -189,7 +189,7 @@ class ThreeDSMainMenuState extends CitroState {
         }
 
         CitroTween.cancelTweensFrom(soulCursor);
-        CitroTween.tweenObject(soulCursor, ["x" => targetX, "y" => targetY], 0.1, { ease: QUAD_OUT });
+        CitroTween.tweenObject(soulCursor, { x: targetX, y: targetY }, 0.1, { ease: QUAD_OUT });
     }
 
     private function executeAction() {
