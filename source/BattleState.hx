@@ -198,9 +198,9 @@ class BattleState extends CitroState
         currentPhase = ENEMY_TURN;
         infoText.text = "* Rudinn attacks!";
         soul.visible = true;
-        rudinn.play("idle");
+        rudinn.play("spr_diamondm_idle");
         
-         bulletGroup.recycle();
+        bulletGroup.recycle();
     }
 
     function handleSoulMovement():Void
