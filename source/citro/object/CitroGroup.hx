@@ -67,7 +67,9 @@ class CitroGroup extends CitroObject
     override public function update():Bool 
     {
         for (member in members) {
-            if (member.exists) member.update();
+            if (member.exists && !member.isDestroyed) {
+                member.update();
+            }
         }
         return super.update();
     }
