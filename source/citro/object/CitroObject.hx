@@ -96,17 +96,6 @@ class CitroObject {
 	 */
 	public var index(get, set):UInt16;
 
-	/**
-	 * Checker if this object is destroyed or not.
-	 */
-	@:noCompletion
-	public var isDestroyed(default, null):Bool = false;
-
-	/**
-	 * Whether this object currently exists and should be updated/rendered.
-	 */
-	public var exists:Bool = true;
-
 	function get_index():UInt16 {
 		final pos = CitroG.state.members.indexOf(this);
 		if (pos == -1 && CitroG.substate != null) {
@@ -136,6 +125,11 @@ class CitroObject {
 	 */
 	@:noCompletion
 	public var isDestroyed(default, null):Bool = false;
+
+	/**
+	 * Whether this object currently exists and should be updated/rendered.
+	 */
+	public var exists:Bool = true;
 
 	/**
 	 * Current scale for the current object.
