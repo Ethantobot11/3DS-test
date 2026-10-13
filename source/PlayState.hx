@@ -178,8 +178,11 @@ class PlayState extends CitroState
 
     function startBattle(targetEnemy:DSRudinn):Void
     {
+        trace("Starting battle...");
         SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
+        trace("Sound played, switching state...");
         CitroG.switchState(new BattleState());
+        trace("State switched successfully");
     }
 
     function spawnDarkWorldEntities()
