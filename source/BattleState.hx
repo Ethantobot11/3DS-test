@@ -139,13 +139,13 @@ class BattleState extends CitroState
             case PLAYER_ATTACK:
                 if (isSusieTurn && selectedOption == 1) {
                     infoText.text = "* Susie used Rude Buster!";
-                    susieBattle.play("spr_susie_rudebuster");
+                    if (susieBattle != null) susieBattle.play("spr_susie_rudebuster");
                 } else {
                     infoText.text = "* You attacked Rudinn!";
                     if (Math.random() > 0.5) {
-                        krisBattle.play("spr_krisb_hurt");
+                        if (krisBattle != null) krisBattle.play("spr_krisb_hurt");
                     } else {
-                        susieBattle.play("spr_susieb_hurt");
+                        if (susieBattle != null) susieBattle.play("spr_susieb_hurt");
                     }
                 }
                 
@@ -180,13 +180,12 @@ class BattleState extends CitroState
                 
                 if (CitroG.overlaps(b, soul) && !soulHit) {
                     soulHit = true;
-                    
                     soul.visible = true;
                     
                     if (Math.random() > 0.5) {
-                        krisBattle.play("spr_krisb_hurt");
+                        if (krisBattle != null) krisBattle.play("spr_krisb_hurt");
                     } else {
-                        susieBattle.play("spr_susieb_hurt");
+                        if (susieBattle != null) susieBattle.play("spr_susieb_hurt");
                     }
                     
                     CitroTimer.start(0.5, function() {
