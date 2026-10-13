@@ -54,15 +54,25 @@ class BattleState extends CitroState
         arenaX = (CitroG.WIDTH - arenaW) / 2;
         arenaY = (CitroG.HEIGHT - arenaH) / 2;
 
-        krisBattle = new CitroAnimate("romfs:/assets/images/chars/battle/kris_battle.cea", "spr_krisb_idle");
-        krisBattle.x = 40;
-        krisBattle.y = 140;
-        add(krisBattle);
-
-        susieBattle = new CitroAnimate("romfs:/assets/images/chars/battle/susie_battle.cea", "spr_susieb_idle");
-        susieBattle.x = 100;
-        susieBattle.y = 140;
-        add(susieBattle);
+        try {
+            krisBattle = new CitroAnimate("romfs:/assets/images/chars/battle/kris_battle.cea", "spr_krisb_idle");
+            krisBattle.x = 40;
+            krisBattle.y = 140;
+            add(krisBattle);
+        } catch (e:Dynamic) {
+            trace("ERROR: Failed to load kris_battle.cea: " + e);
+            krisBattle = null;
+        }
+    
+        try {
+            susieBattle = new CitroAnimate("romfs:/assets/images/chars/battle/susie_battle.cea", "spr_susieb_idle");
+            susieBattle.x = 100;
+            susieBattle.y = 140;
+            add(susieBattle);
+        } catch (e:Dynamic) {
+            trace("ERROR: Failed to load susie_battle.cea: " + e);
+            susieBattle = null;
+        }
 
         updateMenuOptions();
 
