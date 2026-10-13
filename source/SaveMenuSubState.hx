@@ -54,7 +54,8 @@ class SaveMenuSubState extends CitroSubState
         add(menuText);
 
         soulCursor = new CitroSprite(60, 83);
-        soulCursor.makeGraphic(8, 8, 0xFFFF0000); 
+        soulCursor.loadGraphic("romfs:/soul/iconOG.t3x");
+        //soulCursor.makeGraphic(8, 8, 0xFFFF0000); 
         add(soulCursor);
 
         super.create();
