@@ -35,24 +35,28 @@ class DSDialogueBox extends citro.object.CitroObject
         super();
         this.x = xPos;
         this.y = yPos;
+        this.bottom = true;
 
         boxBorder = new CitroSprite(0, 0);
         boxBorder.makeGraphic(280, 68, CitroColor.WHITE);
         boxBorder.visible = false;
+        boxBorder.bottom = true;
 
         boxBg = new CitroSprite(3, 3);
         boxBg.makeGraphic(274, 62, CitroColor.BLACK);
         boxBg.visible = false;
+        boxBg.bottom = true;
 
         portrait = new CitroAnimate("romfs:/assets/images/noelle_face.cea", "spr_face_n_matome-0");
         portrait.visible = false;
         portrait.framerate = 12;
+        portrait.bottom = true;
 
         textDisplay = new CitroText(15, 10, "");
         textDisplay.color = CitroColor.WHITE;
-        
         textDisplay.scale.x = 0.6;
         textDisplay.scale.y = 0.6;
+        textDisplay.bottom = true;
 
         soulCursor = new CitroSprite(0, 0);
         try {
@@ -65,18 +69,21 @@ class DSDialogueBox extends citro.object.CitroObject
             soulCursor.makeGraphic(8, 8, CitroColor.RED);
         }
         soulCursor.visible = false;
+        soulCursor.bottom = true;
 
         optionYesText = new CitroText(210, 18, "YES");
         optionYesText.color = CitroColor.WHITE;
         optionYesText.visible = false;
         optionYesText.scale.x = 0.6;
         optionYesText.scale.y = 0.6;
+        optionYesText.bottom = true;
 
         optionNoText = new CitroText(210, 36, "NO");
         optionNoText.color = CitroColor.WHITE;
         optionNoText.visible = false;
         optionNoText.scale.x = 0.6;
         optionNoText.scale.y = 0.6;
+        optionNoText.bottom = true;
 
         visible = false;
 
