@@ -1,5 +1,6 @@
-#if wiiu
-import cxx.*;
-import cxx.num.*;
-import cxx.num.Int64;
-#end
+import citro.*;
+import citro.backend.*;
+import citro.object.*;
+import citro.c2d.*;
+import citro.state.*;
+import citro.util.*;
