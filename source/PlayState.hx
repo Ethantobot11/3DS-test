@@ -73,7 +73,8 @@ class PlayState extends CitroState
 
         dialogueBox = new DSDialogueBox(60, CitroG.HEIGHT); 
         dialogueBox.visible = false;
-        add(dialogueBox); 
+        dialogueBox.bottom = true;
+        camera.add(dialogueBox);
 
         closetDoor = new DSDarkDoor(600, 300);
         camera.add(closetDoor);
@@ -129,7 +130,7 @@ class PlayState extends CitroState
             transition.onComplete = function() {
                 spawnDarkWorldEntities();
             };
-            add(transition);
+            camera.add(transition);
             inputLockout = 0.6;
             return;
         }
