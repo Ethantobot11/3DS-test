@@ -23,13 +23,11 @@ class CitroSoundSystem {
     public function load(path:String):CitroSound {
         var sound = new CitroSound(path);
         sound.volume = muted ? 0.0 : this.volume;
+        sound.load();
         activeSounds.push(sound);
         return sound;
     }
 
-    /**
-     * Stops a specific CitroSound instance and removes it from the active list.
-     */
     public function stopSound(sound:CitroSound):Void {
         if (sound != null) {
             sound.stop();
@@ -41,9 +39,6 @@ class CitroSoundSystem {
         stopByPath(path);
     }
 
-    /**
-     * Stops any active sound that matches the given file path.
-     */
     public function stopByPath(path:String):Void {
         var i = activeSounds.length;
         while (i-- > 0) {
@@ -55,10 +50,6 @@ class CitroSoundSystem {
         }
     }
 
-    /**
-     * Stops all currently playing sounds and clears the active list.
-     * Useful for scene transitions or muting everything instantly.
-     */
     public function stopAll():Void {
         for (sound in activeSounds) {
             if (sound != null) {

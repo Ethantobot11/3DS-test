@@ -208,8 +208,7 @@ def main():
         elif ext in [".wav", ".ogg"] and os.path.normpath(file_path) not in excluded_files:
             out_path = os.path.join(root, name + ".cwav")
             try:
-                cmd = [cwavtool_path, "-i", file_path, "-o", out_path, "-e", "ima-adpcm"]
-                
+                cmd = [cwavtool_path, "-i", file_path, "-o", out_path, "-e", "imaadpcm"]
                 if os.path.normpath(file_path) in looped_files: 
                     cmd.extend(["-ls", "0", "-le", "end"])
                 
