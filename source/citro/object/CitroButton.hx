@@ -19,18 +19,41 @@ class CitroButton extends CitroSprite
         makeGraphic(Width, Height, 0xFF444444);
         baseColor = 0xFF444444;
         hoverColor = 0xFFFFD700;
-        
         label = new CitroText(X + (Width / 2), Y + (Height / 2), LabelText);
-        label.alignment = Center;
+        label.alignment = CENTER;
+        label.bottom = this.bottom;
         
         onClicked = OnClick;
     }
 
     override public function update():Bool 
     {
-        if (isHovered && HID.keyPressed(HIDKey.A || HIDKey.TOUCH)) {
+        label.x = this.x + (width / 2);
+        label.y = this.y + (height / 2);
+        label.bottom = this.bottom;
+        
+        if (!label.isDestroyed) {
+            label.update();
+        }
+
+        if (bottom && HID.keyHeld(HIDKey.TOUCH)) {
+            var touch = HID.touch;
+            isHovered = (touch.px >= x && touch.px <= x + width && 
+                        touch.py >= y && touch.py <= y + height);
+        } else {
+            isHovered = false;
+        }
+        
+        if (isHovered && (HID.keyPressed(HIDKey.A) || HID.keyPressed(HIDKey.TOUCH))) {
             if (onClicked != null) onClicked();
         }
+        
+        if (isHovered) {
+            color = hoverColor;
+        } else {
+            color = baseColor;
+        }
+        
         return super.update();
     }
 

@@ -24,7 +24,7 @@ typedef CitroFrame = {
 class CitroAnimate extends CitroObject {
     var timeLeft:Float = 0;
     public var frames:Map<String, CitroFrame>;
-    var atlasSprite:CitroSprite = null;
+    public var atlasSprite:CitroSprite = null;
     var atlasPath:String = "";
 
     public var framerate:Float = 24;
@@ -32,10 +32,12 @@ class CitroAnimate extends CitroObject {
     public var curAnim:String = "";
     public var finished:Bool = false;
     public var looped:Bool = false;
+    public var animations:Map<String, Array<Int>>;
 
     public function new(?ceaFile:String, defaultAnim:String = "") {
         super();
         frames = new Map();
+        animations = new Map();
         if (ceaFile != null) {
             loadCEA(ceaFile, defaultAnim);
         }
@@ -44,6 +46,7 @@ class CitroAnimate extends CitroObject {
     function loadCEA(ceaFile:String, defaultAnim:String):Void {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
         frames = new Map();
+        animations = new Map();
         atlasPath = "";
 
         try {
@@ -96,7 +99,7 @@ class CitroAnimate extends CitroObject {
             play(defaultAnim);
         } catch (e:Dynamic) {
             trace("⚠️ CRITICAL: Could not load CEA file: " + ceaFile);
-            trace("⚠️ Error: " + e);
+            trace("️ Error: " + e);
             trace("⚠️ Creating a magenta placeholder to prevent crash.");
             
             atlasSprite = new CitroSprite();
@@ -105,10 +108,66 @@ class CitroAnimate extends CitroObject {
             play("placeholder");
         }
     }
+    
+    /**
+     * Load multiple animations from a single T3X atlas (Grid-based)
+     * @param t3xPath Path to the T3X file
+     * @param frameWidth Width of each frame
+     * @param frameHeight Height of each frame
+     * @param animDefs Animation definitions: [animName => [frameIndices]]
+     */
+    public function loadFromT3XWithAnims(t3xPath:String, frameWidth:Float, frameHeight:Float, animDefs:Map<String, Array<Int>>):Void {
+        if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
+        frames = new Map();
+        animations = new Map();
+        atlasPath = t3xPath;
+        
+        atlasSprite = new CitroSprite();
+        if (!atlasSprite.loadGraphic(t3xPath, frameWidth, frameHeight)) {
+            atlasSprite.destroy();
+            atlasSprite = null;
+            trace("ERROR: Failed to load T3X file: " + t3xPath);
+            return;
+        }
+
+        var framesPerRow:Int = Std.int(atlasSprite.sheetWidth / frameWidth);
+        var framesPerCol:Int = Std.int(atlasSprite.sheetHeight / frameHeight);
+        var maxFrames:Int = framesPerRow * framesPerCol;     
+        
+        for (i in 0...maxFrames) {
+            final frameKey:String = 'frame-$i';
+            var frameX:Int = i % framesPerRow;
+            var frameY:Int = Std.int(i / framesPerRow);
+            
+            final srcX:Float = frameX * frameWidth;
+            final srcY:Float = frameY * frameHeight;
+            
+            frames.set(frameKey, {
+                srcX: srcX,
+                srcY: srcY,
+                srcWidth: frameWidth,
+                srcHeight: frameHeight,
+                offsetX: 0,
+                offsetY: 0,
+                frameWidth: frameWidth,
+                frameHeight: frameHeight
+            });
+        }
+        
+        for (animName => frameIndices in animDefs) {
+            animations.set(animName, frameIndices);
+        }
+        
+        for (animName in animDefs.keys()) {
+            play(animName);
+            break;
+        }
+    }
 
     public function reloadCEA(ceaFile:String, defaultAnim:String):Void {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
         frames = new Map();
+        animations = new Map();
         atlasPath = "";
         loadCEA(ceaFile, defaultAnim);
     }
@@ -116,6 +175,7 @@ class CitroAnimate extends CitroObject {
     public function loadFromAtlas(atlas:CitroAtlas, animPrefix:String, totalFrames:Int):Void {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
         frames = new Map();
+        animations = new Map();
         atlasPath = atlas.texturePath;
         
         atlasSprite = new CitroSprite();
@@ -138,8 +198,29 @@ class CitroAnimate extends CitroObject {
         play(animPrefix);
     }
 
+    public function addAnim(name:String, frames:Array<Int>):Void {
+        animations.set(name, frames);
+    }
+
     public function play(animation:String):Bool {
         if (isDestroyed || atlasSprite == null) return false;
+        if (animations.exists(animation)) {
+            curAnim = animation;
+            frame = 0;
+            timeLeft = 1000 / framerate;
+            finished = false;
+            
+            final frameIndices = animations[animation];
+            if (frameIndices.length > 0) {
+                final frameKey = 'frame-${frameIndices[0]}';
+                if (frames.exists(frameKey)) {
+                    final frm = frames[frameKey];
+                    width = frm.frameWidth;
+                    height = frm.frameHeight;
+                    return true;
+                }
+            }
+        }
         
         final animFormat:String = '$animation-0';
         
@@ -169,35 +250,50 @@ class CitroAnimate extends CitroObject {
         }
         
         if (!foundAny) {
-            trace("WARNING: Animation '" + animation + "' not found in CEA file!");
+            trace("WARNING: Animation '" + animation + "' not found!");
             return false; 
         }
         
         return true;
     }
 
-    inline function format():String return '${curAnim}-$frame';
+    inline function format():String {
+        if (animations.exists(curAnim)) {
+            final frameIndices = animations[curAnim];
+            final actualFrame = frame < frameIndices.length ? frameIndices[frame] : frameIndices[frameIndices.length - 1];
+            return 'frame-$actualFrame';
+        }
+        return '${curAnim}-$frame';
+    }
 
     override function update():Bool {
         if (isDestroyed || atlasSprite == null) return false;
         if (!visible || alpha <= 0) return false;
+        super.update(); 
 
         if ((timeLeft -= CitroG.deltaTime) < 1) {
             timeLeft = 1000 / framerate;
             frame++;
-            if (!frames.exists(format())) {
-                finished = true;
-                frame = looped ? 0 : frame - 1;
+            var maxFrame:Int = 0;
+            if (animations.exists(curAnim)) {
+                maxFrame = animations[curAnim].length;
             } else {
-                final frm = frames[format()];
-                width = frm.frameWidth;
-                height = frm.frameHeight;
+                for (key in frames.keys()) {
+                    if (key.startsWith('$curAnim-')) {
+                        maxFrame++;
+                    }
+                }
+            }
+            
+            if (frame >= maxFrame) {
+                finished = true;
+                frame = looped ? 0 : maxFrame - 1;
             }
         }
 
-        if (frames.exists(format()) && visible) {
-            final frm = frames[format()];
-            
+        final frameKey = format();
+        if (frames.exists(frameKey) && visible) {
+            final frm = frames[frameKey];
             width = frm.frameWidth;
             height = frm.frameHeight;
             atlasSprite.x = x - frm.offsetX;
@@ -217,6 +313,7 @@ class CitroAnimate extends CitroObject {
     override function destroy() {
         if (atlasSprite != null) { atlasSprite.destroy(); atlasSprite = null; }
         frames = new Map();
+        animations = new Map();
         super.destroy();
     }
 }
