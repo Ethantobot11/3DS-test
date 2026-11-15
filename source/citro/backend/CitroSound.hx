@@ -13,7 +13,7 @@ class CitroSound {
     
     private var cwavPtr:VoidPtr;
     private static var initialized:Bool = false;
-    private var wasPlaying:Bool = false;
+     public var wasPlaying:Bool = false;
 
     public function new(path:String) {
         this.path = path;

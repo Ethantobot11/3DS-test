@@ -37,6 +37,10 @@ class CitroSoundSystem {
         }
     }
 
+    public function stop(path:String):Void {
+        stopByPath(path);
+    }
+
     /**
      * Stops any active sound that matches the given file path.
      */

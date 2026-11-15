@@ -29,8 +29,6 @@ class DeltaruneLogoIntro extends CitroSprite
     public var skiptimer:Float = 0;
     public var draw_screen:Bool = true;
 
-    var music:CitroSound;
-
     public function new(xPos:Float, yPos:Float, isIngame:Bool = true)
     {
         super(xPos, yPos);
@@ -41,11 +39,7 @@ class DeltaruneLogoIntro extends CitroSprite
         w = width;
         h = height;
 
-        music = CitroG.sound.load('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
-        music.looped = true;
-        music.play();
-
-        //SoundPlayer.playSound();
+        CitroG.sound.play('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav', 1.0, false);
 
         siner = 0;
         factor = 1;
@@ -101,12 +95,16 @@ class DeltaruneLogoIntro extends CitroSprite
         if (HID.keyPressed(HIDKey.START) || HID.keyPressed(HIDKey.A))
         {
             trace("DeltaruneLogoIntro: Skip key detected (A or START pressed)!");
-            music = CitroG.sound.stopSound('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
+            CitroG.sound.stopByPath('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
             skipped = 1;
         }
         
         return true;
     }
-}
 
+    override public function destroy():Void {
+        CitroG.sound.stopByPath('romfs:/assets/sounds/audiogroup_default/external/AUDIO_INTRONOISE.cwav');
+        super.destroy();
+    }
+}
 #end
