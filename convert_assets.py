@@ -208,11 +208,15 @@ def main():
         elif ext in [".wav", ".ogg"] and os.path.normpath(file_path) not in excluded_files:
             out_path = os.path.join(root, name + ".cwav")
             try:
-                cmd = [cwavtool_path, "-i", file_path, "-o", out_path]
-                if os.path.normpath(file_path) in looped_files: cmd.extend(["-ls", "0", "-le", "end"])
+                cmd = [cwavtool_path, "-i", file_path, "-o", out_path, "-e", "ima-adpcm"]
+                
+                if os.path.normpath(file_path) in looped_files: 
+                    cmd.extend(["-ls", "0", "-le", "end"])
+                
                 subprocess.run(cmd, check=True, env=os.environ)
                 if ext == ".wav": os.remove(file_path)
-            except Exception as e: print(f"Error converting {file_path} to CWAV: {e}")
+            except Exception as e: 
+                print(f"Error converting {file_path} to CWAV: {e}")
 
 if __name__ == "__main__":
     main()

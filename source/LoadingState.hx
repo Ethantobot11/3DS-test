@@ -57,6 +57,10 @@ class LoadingState extends CitroState
             for (item in FileSystem.readDirectory(path)) {
                 var fullPath = '$path/$item';
                 if (FileSystem.isDirectory(fullPath)) {
+                    if (item == "songs" || item == "music") {
+                        trace('Skipping music directory: $fullPath (Will load on-demand instead)');
+                        continue;
+                    }
                     scanDirectory(fullPath);
                 } else if (item.endsWith(".cwav") || item.endsWith(".t3x")) {
                     filesToLoad.push(fullPath);
@@ -84,7 +88,7 @@ class LoadingState extends CitroState
             var fullPath = filesToLoad[currentIndex];
             
             if (fullPath.endsWith(".cwav")) {
-                SoundPlayer.preload(fullPath);
+                CitroG.sound.load(fullPath);
             } else if (fullPath.endsWith(".t3x")) {
                 var dummy = new CitroSprite();
                 dummy.loadGraphic(fullPath);
