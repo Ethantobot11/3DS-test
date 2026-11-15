@@ -24,7 +24,6 @@ class ThreeDSMainMenuState extends CitroState {
     private var footerText:CitroText;
 
     private var soulCursor:CitroSprite;
-    var music:CitroSound;
 
     public function new() {
         super();
@@ -35,9 +34,7 @@ class ThreeDSMainMenuState extends CitroState {
 
         //SoundPlayer.playSound('romfs:/assets/sounds/home.cwav');
 
-        music = CitroG.sound.load('romfs:/assets/sounds/home.cwav');
-        music.looped = true;
-        music.play();
+        CitroG.sound.play('romfs:/assets/sounds/home.cwav', 1.0, true);
 
         if (CitroG.save.data == null) {
             CitroG.save.data = {};
@@ -113,29 +110,25 @@ class ThreeDSMainMenuState extends CitroState {
         if (HID.keyPressed(HIDKey.UP) || HID.keyPressed(HIDKey.CPAD_UP)) {
             
             //SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            music = CitroG.sound.load('romfs:/assets/sounds/snd_select.cwav');
-            music.play();
+            CitroG.sound.play('romfs:/assets/sounds/snd_select.cwav', 1.0, false);
             navigateGrid(0, -1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.DOWN) || HID.keyPressed(HIDKey.CPAD_DOWN)) {
             //SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            music = CitroG.sound.load('romfs:/assets/sounds/snd_select.cwav');
-            music.play();
+            CitroG.sound.play('romfs:/assets/sounds/snd_select.cwav', 1.0, false);
             navigateGrid(0, 1);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.LEFT) || HID.keyPressed(HIDKey.CPAD_LEFT)) {
             //SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            music = CitroG.sound.load('romfs:/assets/sounds/snd_select.cwav');
-            music.play();
+            CitroG.sound.play('romfs:/assets/sounds/snd_select.cwav', 1.0, false);
             navigateGrid(-1, 0);
             changed = true;
         }
         if (HID.keyPressed(HIDKey.RIGHT) || HID.keyPressed(HIDKey.CPAD_RIGHT)) {
             //SoundPlayer.playSound('romfs:/assets/sounds/snd_select.cwav');
-            music = CitroG.sound.load('romfs:/assets/sounds/snd_select.cwav');
-            music.play();
+            CitroG.sound.play('romfs:/assets/sounds/snd_select.cwav', 1.0, false);
             navigateGrid(1, 0);
             changed = true;
         }
@@ -152,8 +145,7 @@ class ThreeDSMainMenuState extends CitroState {
             if (menuNo > 0) {
                 menuNo = 0;
                 //SoundPlayer.playSound('romfs:/assets/sounds/snd_error.cwav');
-                music = CitroG.sound.load('romfs:/assets/sounds/snd_error.cwav');
-                music.play();
+                CitroG.sound.play('romfs:/assets/sounds/snd_error.cwav', 1.0, false);
                 updateVisualSelection();
             }
         }
@@ -235,8 +227,7 @@ class ThreeDSMainMenuState extends CitroState {
             }
         }
         //SoundPlayer.playSound('romfs:/assets/sounds/snd_shineselect.cwav');
-        music = CitroG.sound.load('romfs:/assets/sounds/snd_shineselect.cwav');
-        music.play();
+        CitroG.sound.play('romfs:/assets/sounds/snd_shineselect.cwav', 1.0, false);
     }
 
     private function selectSlot(slotIndex:Int) {
@@ -255,7 +246,7 @@ class ThreeDSMainMenuState extends CitroState {
 
     override public function destroy() {
         //SoundPlayer.stopSound('romfs:/assets/sounds/home.cwav');
-        music = CitroG.sound.stop('romfs:/assets/sounds/home.cwav');
+        CitroG.sound.stop('romfs:/assets/sounds/home.cwav');
         super.destroy();
     }
 }
