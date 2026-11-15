@@ -36,8 +36,6 @@ class DSPlayer extends CitroAnimate
         looped = true;
 
         play(animFor("walk", facingDir));
-        frame = 0;
-        timeLeft = 999999;
 
         for (i in 0...25) {
             pathHistory.push({x: x, y: y, anim: curAnim});
@@ -81,14 +79,13 @@ class DSPlayer extends CitroAnimate
             trace("ERROR: Dark world sprite NOT FOUND at: " + newPath);
             trace("Falling back to current sprite to prevent crash.");
         }
-        
-        frame = 0;
-        timeLeft = 999999;
     }
 
     override public function update():Bool {
-        if (!isBusy) handleMovement();
-        else { frame = 0; timeLeft = 999999; }
+        if (!isBusy) {
+            handleMovement();
+        }
+        //else { frame = 0; timeLeft = 999999; }
 
         var curAnimName = (curAnim != "") ? curAnim : animFor("walk", "down");
         pathHistory.unshift({x: x, y: y, anim: curAnimName});
@@ -149,9 +146,9 @@ class DSPlayer extends CitroAnimate
                 lastPlayedFrame = Std.int(frame);
                 
                 if (lastPlayedFrame == 2) {
-                    SoundPlayer.playSound('romfs:/assets/sounds/snd_step1.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/snd_step1.cwav', 0.7);
                 } else if (lastPlayedFrame == 4) {
-                    SoundPlayer.playSound('romfs:/assets/sounds/snd_step2.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/snd_step2.cwav', 0.7);
                 }
             }
         }
@@ -163,9 +160,8 @@ class DSPlayer extends CitroAnimate
             if (curAnim != currentStanding) {
                 play(currentStanding);
             }
-    
-            timeLeft = 999999;
-            frame = 0;
+            //timeLeft = 999999; 
+            //frame = 0;
             lastPlayedFrame = -1;
             framerate = 6;
         }

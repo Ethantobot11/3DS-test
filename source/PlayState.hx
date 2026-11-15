@@ -30,6 +30,9 @@ class PlayState extends CitroState
     
     var partyGroup:CitroGroup;
 
+    var music:CitroSound;
+    var battleStarted:Bool = false;
+
     function playerChar():String return "kris";
 
     override public function create()
@@ -135,7 +138,7 @@ class PlayState extends CitroState
             return;
         }
 
-        if (rudinn != null && !rudinn.isHit)
+        if (rudinn != null && !rudinn.isHit && !battleStarted)
         {
             var distanceVal = CitroMath.distanceBetween(kris, rudinn);
             
@@ -143,8 +146,8 @@ class PlayState extends CitroState
             {
                 rudinn.isHit = true;
                 rudinn.play("spr_diamondm_hurt");
-                
                 kris.isBusy = true;
+                battleStarted = true;
                 startBattle(rudinn);
             }
         }
@@ -178,11 +181,9 @@ class PlayState extends CitroState
 
     function startBattle(targetEnemy:DSRudinn):Void
     {
-        trace("Starting battle...");
-        SoundPlayer.playSound('romfs:/assets/sounds/snd_b.cwav');
-        trace("Sound played, switching state...");
+        CitroG.sound.stopAll(); 
+        CitroG.sound.play('romfs:/assets/sounds/snd_b.cwav');
         CitroG.switchState(new BattleState());
-        trace("State switched successfully");
     }
 
     function spawnDarkWorldEntities()

@@ -99,7 +99,7 @@ class DSDarkWorldTransition extends CitroObject
                 if (timer >= 0.5)
                 {
                     if (door != null) door.setDoorState(DSDarkDoor.STATE_OPEN_FRAME);
-                    SoundPlayer.playSound('romfs:/assets/sounds/snd_locker.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/snd_locker.cwav');
                     statePhase = 1;
                     timer = 0;
                 }
@@ -109,12 +109,10 @@ class DSDarkWorldTransition extends CitroObject
                 {
                     player.framerate = 8;
                     player.play("spr_krisu_fall_lw");
-                    
                     if (susie != null) {
                         susie.framerate = 8;
                         susie.play("spr_susie_lw_fall_turn");
                     }
-                    
                     statePhase = 2;
                     timer = 0;
                 }
@@ -125,7 +123,7 @@ class DSDarkWorldTransition extends CitroObject
                 {
                     squareSoundTimer = 0;
                     squareSoundCount++;
-                    SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_square.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_square.cwav');
                 }
                 if (timer >= 1.4)
                 {
@@ -133,7 +131,7 @@ class DSDarkWorldTransition extends CitroObject
                     player.framerate = 10;
                     player.looped = false;
                     player.play("spr_kris_fall_turnaround");
-                    SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_drone.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_drone.cwav');
                     statePhase = 3;
                     timer = 0;
                 }
@@ -152,13 +150,11 @@ class DSDarkWorldTransition extends CitroObject
                     player.framerate = 6;
                     player.looped = true;
                     player.play("spr_kris_fall_d_lw");
-                    
                     if (susie != null) {
                         susie.framerate = 6;
                         susie.looped = true;
                         susie.play("spr_susie_dw_fall_d");
                     }
-                    
                     statePhase = 4;
                     timer = 0;
                 }
@@ -170,13 +166,11 @@ class DSDarkWorldTransition extends CitroObject
                     player.framerate = 15;
                     player.looped = false;
                     player.play("spr_kris_fall_d_white");
-                    
                     if (susie != null) {
                         susie.framerate = 15;
                         susie.looped = false;
                         susie.play("spr_susie_white_fall_d");
                     }
-                    
                     statePhase = 5;
                     timer = 0;
                 }
@@ -200,7 +194,6 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                     player.framerate = 6;
                     player.play("spr_kris_fall_d_dw");
-                    
                     if (susie != null) {
                         susie.framerate = 6;
                         susie.play("spr_susie_dw_fall_d");
@@ -222,17 +215,15 @@ class DSDarkWorldTransition extends CitroObject
 
                 if (timer >= 0.3)
                 {
-                    SoundPlayer.stopSound('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_drone.cwav');
+                    CitroG.sound.stopByPath('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_drone.cwav');
                     player.framerate = 15;
                     player.looped = false;
                     player.play("spr_kris_fall_smear");
-                    
                     if (susie != null) {
                         susie.framerate = 15;
                         susie.looped = false;
                         susie.play("spr_susie_dw_fall_smear");
                     }
-                    
                     statePhase = 7;
                     timer = 0;
                 }
@@ -245,13 +236,11 @@ class DSDarkWorldTransition extends CitroObject
                     player.framerate = 12;
                     player.looped = true;
                     player.play("spr_kris_fall_ball");
-                    
                     if (susie != null) {
                         susie.framerate = 12;
                         susie.looped = true;
                         susie.play("spr_susie_dw_fall_ball");
                     }
-                    
                     fallSpeed = 400;
                     statePhase = 8;
                     timer = 0;
@@ -262,7 +251,6 @@ class DSDarkWorldTransition extends CitroObject
                 
                 fallSpeed += gravity * elapsed;
                 player.y += fallSpeed * elapsed;
-                
                 if (susie != null) {
                     susie.y += (fallSpeed * 0.95) * elapsed; 
                 }
@@ -272,7 +260,7 @@ class DSDarkWorldTransition extends CitroObject
                 if (!flipPlayed && timer >= 0.65)
                 {
                     flipPlayed = true;
-                    SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_flip.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/audiogroup_default/external/snd_dtrans_flip.cwav');
                     shakeIntensity = 5;
                 }
 
@@ -284,7 +272,6 @@ class DSDarkWorldTransition extends CitroObject
                     player.framerate = 8;
                     player.looped = false;
                     player.play("spr_kris_dw_landed");
-                    
                     if (susie != null) {
                         susie.framerate = 8;
                         susie.looped = false;
@@ -296,13 +283,13 @@ class DSDarkWorldTransition extends CitroObject
                     timer = 0;
                 }
 
-                        case 9: 
+            case 9: 
                 positionOverlay();
 
                 if (!himPlayed && timer >= 0.45)
                 {
                     himPlayed = true;
-                    SoundPlayer.playSound('romfs:/assets/sounds/audiogroup_default/external/snd_him_quick.cwav');
+                    CitroG.sound.play('romfs:/assets/sounds/audiogroup_default/external/snd_him_quick.cwav');
                 }
 
                 if (timer >= 1.5)
