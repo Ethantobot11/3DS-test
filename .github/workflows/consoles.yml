@@ -46,6 +46,9 @@ jobs:
         run: |
           if [ "${{ inputs.name }}" = "Nintendo 3DS" ]; then
             dkp-pacman -S --noconfirm --needed 3ds-dev citro3d citro2d 3ds-portlibs general-tools
+            dpkg --add-architecture i386
+            apt-get update
+            apt-get install -y libc6:i386 libstdc++6:i386 zlib1g:i386
             git clone https://github.com/PabloMK7/libcwav.git --recursive
             cd libcwav
             make install
