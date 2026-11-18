@@ -25,6 +25,7 @@ class Main
         #if haxe3ds
         RomFS.init();
         CrashHandler.init();
+        citro.backend.CitroSound.init;
 
         var plgResult = PLGLDR.init();
         if (plgResult == 0) {
