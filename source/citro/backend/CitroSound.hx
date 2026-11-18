@@ -53,6 +53,7 @@ class CitroSound {
     }
 
     public function play(?force:Bool = false):Void {
+        init();
         if (isPlaying && !force) return;
         
         if (cwavPtr == null) {
